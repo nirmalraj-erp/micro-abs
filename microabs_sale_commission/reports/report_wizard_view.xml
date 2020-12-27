@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="sale_commission_report_tree_view_id" model="ir.ui.view">
+        <field name="name">commission.master.tree.view</field>
+        <field name="model">sale.commission.report</field>
+        <field name="arch" type="xml">
+            <tree string="Commission Master">
+                <field name="name"/>
+                <field name="create_date" string="Paid Date"/>
+            </tree>
+        </field>
+    </record>
+
+	<record id ="commission_sale_report_form" model="ir.ui.view">
+		<field name ="name">commission.sale.report.form</field>
+		<field name ="model">sale.commission.report</field>
+		<field name ="arch" type="xml">
+			<form>
+                <sheet>
+                    <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                    <group>
+                        <field name="period"/>
+                        <field name="company_id"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="commission_line">
+                            <tree string="Commission Line" editable="bottom">
+                                <field name="invoice_no"/>
+                                <field name="invoice_date"/>
+                                <field name="customer_id"/>
+                                <field name="invoice_amount"/>
+                                <field name="actual_received"/>
+                                <field name="commission_amount"/>
+                                <field name="commission_percentage" widget="Percent"/>
+                                <field name="currency_id"/>
+                                <field name="company_id"/>
+                            </tree>
+                            </field>
+                    </group>
+                </sheet>
+			</form>
+		</field>
+	</record>
+	
+	 <record id="action_sale_commission_report" model="ir.actions.act_window">
+        <field name="name">Sale Commission Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.commission.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="sale_commission_report_tree_view_id"/>
+    </record>
+
+	<menuitem id="menu_sale_commission_report"
+		name="Sale Commission Report"
+		action="action_sale_commission_report"
+		parent="menu_sale_commission"
+		sequence="4"/>
+</odoo>

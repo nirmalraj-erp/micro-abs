@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--     Sale Order view Inherit-->
+    <record id="sale_order_view_inherit" model="ir.ui.view">
+        <field name="name">sale.order.view.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!--<field name="partner_shipping_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="partner_invoice_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>-->
+            <field name="expected_date" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="commitment_date" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="partner_shipping_id" position="after">
+				<field name="customer_type" widget="selection"/>
+				<field name="po_no"/>
+                <field name="po_date"/>
+                <field name="po_received_date"/>
+                <field name="order_conf_no"/>
+                <field name="order_conf_date"/>
+                <field name="supplier_expected_date"/>
+                <field name="report_partner_name" invisible="1"/>
+            </field>
+
+            <field name="payment_term_id" position="after">
+                <field name="shipment_mode" widget="selection"/>
+                <field name="freight_forwarder"/>
+                <field name="freight_forwarder_details"/>
+                <field name="destination_ports_id"/>
+            </field>
+
+            <field name="confirmation_date" position="before">
+                <field name="so_commitment_date"/>
+            </field>
+
+            <field name="payment_term_id" position="before">
+                <field name="order_type"/>
+                <field name="res_contact_id" widget= "many2many_tags"/>
+            </field>
+            
+            <field name="fiscal_position_id" position="after">
+                <field name="vat"/>
+                <field name="iec_code"/>
+                <field name="pan_no"/>
+            </field>
+            
+            <field name="note" position="after">
+				<group>
+					<div class="oe_inline">
+						<field name="inherit_order_line"  widget="section_and_note_one2many" mode="tree,kanban" invisible="1">
+							<tree editable="bottom" string="Product Specifications">
+							<field name="sequence" widget="handle"/>
+								<field name="customer_item_code"/>					
+								<field name="offer_no"/>					
+								<field name="offer_date"/>
+								<field name="product_size"/>
+								<field name="product_recess_id"/>
+								<field name="specification"/>
+								<field name="product_kind"/>
+								<field name="application_ids" widget= "many2many_tags"/>
+								<field name="operation_id"/>
+								<field name="drawing_no"/>
+							</tree>
+						</field>
+					</div>
+				</group>
+            </field>
+        </field>
+    </record>
+    
+	<!--SALE ORDER LINE TREE INHERIT-->
+		<record id="sale_order_line_tree_inherit" model="ir.ui.view">
+			<field name="name">sale.order.line.inherit</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">
+					<field name="description"/>						
+					<field name="customer_item_code" invisible ="1"/>
+					<field name="offer_no" invisible ="1" />
+					<field name="offer_date" invisible ="1"/>
+					<field name="product_size" invisible ="1"/>
+					<field name="product_recess_id" invisible ="1"/>
+					<field name="specification" invisible ="1"/>
+					<field name="product_kind" invisible ="1"/>
+					<field name="application_ids" widget= "many2many_tags" invisible ="1"/>
+					<field name="operation_id" invisible ="1"/>
+					<field name="drawing_no" invisible ="1"/>						
+				</xpath>
+				<xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='name']" position="attributes">
+					<attribute name="invisible">1</attribute>			
+				</xpath>
+                <xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='discount']" position="after">
+					<field name="delivery_date"/>
+				</xpath>
+			</field>
+		</record>
+
+    <!--SALE ORDER TREE VIEW INHERIT-->
+		<record id="sale_order_tree_view_inherit" model="ir.ui.view">
+			<field name="name">sale.order.tree.view.inherit</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+			<field name="arch" type="xml">
+                 <field name="name" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="confirmation_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="commitment_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="expected_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_total" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="invoice_status" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="name" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="confirmation_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="name" position="after">
+                    <field name="partner_id"/>
+                    <field name="po_no"/>
+                    <field name="po_date"/>
+                    <field name="po_received_date" string="PO Rcvd Date"/>
+                    <field name="order_conf_no" string="OC No."/>
+                    <field name="order_conf_date" string="OC Date"/>
+                    <field name="supplier_expected_date" string="Supl. Del. Date"/>
+                    <field name="order_type"/>
+                    <field name="freight_forwarder_details" string="FF Details"/>
+                    <field name="so_commitment_date" string="Cust. Reqd. Date"/>
+                    <field name="shipment_mode"/>
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                    <field name="invoice_status"/>
+                </field>
+			</field>
+		</record>
+
+    <!-- Product Master view inherit-->
+    <record id="product_template_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.view.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <div name="options" position="inside">
+                <div>
+                    <field name="no_commission_required"/>
+                    <label for="no_commission_required"/>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Product Master view inherit-->
+    <record id="product_product_view_inherit" model="ir.ui.view">
+        <field name="name">product.product.view.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <div name="options" position="inside">
+                <div>
+                    <field name="no_commission_required"/>
+                    <label for="no_commission_required"/>
+                </div>
+            </div>
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="product_info" string="Product Info">
+				<group>
+                <group>
+					<field name="product_size"/>
+					<field name="product_recess_id"/>
+					<field name="specification"/>
+				</group>
+				<group>
+                    <field name="application_ids" widget= "many2many_tags"/>
+                    <field name="operation_id"/>
+                    <field name="product_kind"/>
+				</group>
+					<field name="offer_details_line"  widget="one2many_list" mode="tree,kanban">
+						<tree editable="bottom" string="Product Specifications">
+							<field name="sequence" widget="handle"/>
+							<field name="partner_id"/>
+							<field name="customer_item_code"/>
+							<field name="offer_no"/>
+							<field name="offer_date"/>
+							<field name="drawing_no"/>
+						</tree>
+					</field>
+				</group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Master Tree View inherit-->
+    <record id="product_product_tree_view_inherit" model="ir.ui.view">
+        <field name="name">product.product.tree.view.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="account.product_product_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="name" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="lst_price" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="taxes_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="supplier_taxes_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+             <field name="default_code" position="before">
+                <field name="specification"/>
+                <field name="product_size"/>
+                <field name="product_recess_id"/>
+                <field name="product_kind" string="Product Type"/>
+                <field name="application_ids" widget= "many2many_tags"/>
+                <field name="operation_id"/>
+                <field name="categ_id"/>
+                <field name="lst_price"/>
+                <field name="weight" string="Weight (kgs)"/>
+                <field name="sale_delay"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Account Invoice view Inherit-->
+    <record id="invoice_view_inherit" model="ir.ui.view">
+        <field name="name">account.invoice.view.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="date_invoice" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            
+            <field name="payment_term_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            
+            <field name="incoterm_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            
+            <field name="date_due" position="attributes">
+               <attribute name="invisible">1</attribute>
+            </field>
+            
+            <field name="partner_shipping_id" position="after">
+                <field name="customer_type" widget="selection"/>
+                <field name="po_no"/>
+                <field name="po_date"/>
+                <field name="po_received_date"/>
+                <field name="order_conf_no"/>
+                <field name="order_conf_date"/>
+                <field name="supplier_expected_date" />
+            </field>
+
+            <field name="partner_id" position="before">
+                <field name="invoice_number"/>
+                <field name="date_invoice"/>
+                <field name="date_due"/>
+            </field>
+
+            <field name="partner_bank_id" position="after">
+                <field name="pan_no"/>
+            </field>
+            
+            <field name="user_id" position="before">
+                 <field name="order_type"/>
+                <field name="res_contact_id" widget= "many2many_tags"/>
+                <field name="payment_term_id"/>
+				<field name="incoterm_id" options="{'no_create': True}"/>
+				<field name="shipment_mode" widget="selection"/>
+                <field name="freight_forwarder"/>
+                <field name="freight_forwarder_details"/>
+                <field name="destination_ports_id"/>
+                <field name="bl_no"/>
+                <field name="bl_date"/>
+            </field>
+        </field>
+    </record>
+
+    <!--ACCOUNT INVOICE TREE VIEW INHERIT-->
+		<record id="account_invoice_tree_view_inherit" model="ir.ui.view">
+			<field name="name">account.invoice.tree.view.inherit</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_tree"/>
+			<field name="arch" type="xml">
+                 <field name="date_invoice" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="number" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="date_due" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="origin" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_untaxed_invoice_signed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_tax_signed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_total_signed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="state" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="residual_signed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="company_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="partner_id" position="before">
+                    <field name="invoice_number" string="Invoice No."/>
+                    <field name="date_invoice"/>
+                    <field name="date_due"/>
+                </field>
+                <field name="partner_id" position="after">
+                    <field name="po_no"/>
+                    <field name="po_date"/>
+                    <field name="po_received_date" string="PO Rcvd Date"/>
+                    <field name="supplier_expected_date"/>
+                    <field name="order_type"/>
+                    <field name="bl_no"/>
+                    <field name="bl_date"/>
+                    <field name="amount_total_signed" string="Total" sum="Total"/>
+                    <field name="residual_signed" string="Amount Due" sum="Amount Due"/>
+                    <field name="state"/>
+                </field>
+			</field>
+		</record>
+    
+     <!--CUSTOMER MASTER FORM INHERIT-->
+        <record id="res_partner_form_inherit_id" model="ir.ui.view">
+            <field name="name">res.partner.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="before">
+                    <field name="customer_code" widget="selection"/>
+                    <field name="customer_type" widget="selection"/>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="pan_no"/>
+                    <field name="iec_code"/>
+                    <field name="incoterm_id"/>
+                    <field name="destination_ports_id"/>
+                    <field name="commission_percentage"/>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="application_ids" widget= "many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+    <!--CUSTOMER MASTER TREE INHERIT-->
+        <record id="res_partner_tree_inherit_id" model="ir.ui.view">
+            <field name="name">res.partner.tree.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                 <field name="phone" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                 <field name="email" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="display_name" position="after">
+                    <field name="city"/>
+                    <field name="property_payment_term_id"/>
+                    <field name="incoterm_id"/>
+                </field>
+            </field>
+        </record>
+
+    <!--RES COMPANY FORM INHERIT-->
+        <record id="res_company_form_inherit_id" model="ir.ui.view">
+            <field name="name">res.company.form.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="agent" invisible="1"/>
+                    <field name="commission" invisible="1"/>
+                </field>
+                <xpath expr="/form/sheet/notebook/page[1]" position="after">
+                    <page string="Commission Agent Details">
+                        <group string="Commission Agent Details">
+                        <group>
+                            <field name="commission_agent"/>
+                            <label for="street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="c_street" placeholder="Street..." class="o_address_street"/>
+                                <field name="c_street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="c_city" placeholder="City" class="o_address_city"/>
+                                <field name="c_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                <field name="c_zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="c_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                            </div>
+                            <field name="current_account_no"/>
+                        </group>
+                            <group>
+                                <field name="signature" widget='image' class="oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                                <field name="contact"/>
+                                <field name="com_logo" widget='image' class="oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Bank details">
+                        <group>
+                        <group string="Intermediary Address Details">
+                            <field name="intermediary"/>
+                            <field name="iban_no"/>
+                            <label for="street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="i_street" placeholder="Street..." class="o_address_street"/>
+                                <field name="i_street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="i_city" placeholder="City" class="o_address_city"/>
+                                <field name="i_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                <field name="i_zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="i_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                            </div>
+                        </group>
+                        <group string="Beneficiary Bank Details">
+                            <field name="bank_name"/>
+                            <field name="bank_branch"/>
+                            <field name="swift"/>
+                            <label for="street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="bb_city" placeholder="City" class="o_address_city"/>
+                                <field name="bb_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                <field name="bb_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                            </div>
+                        </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    <!--PRODUCT CATEGORY FORM INHERIT-->
+        <record id="product_category_form_inherit_id" model="ir.ui.view">
+            <field name="name">product.category.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                 <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                     <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                 </button>
+                </xpath>
+            </field>
+        </record>
+</odoo>

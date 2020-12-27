@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_commission_invoice" model="ir.ui.view">
+            <field name="name">Commission Invoice</field>
+            <field name="model">commission.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Commission Invoice">
+                    <p class="oe_grey">
+                        Commission Invoice will be created as a separate record inorder to review
+                        them in future.
+                    </p>
+                    <footer>
+                        <button name="update_invoice_status" string="Mark as paid " type="object"
+                            class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+            id="action_commission_invoice_list"
+            name="Commission Invoice"
+            res_model="commission.invoice"
+            src_model="sale.commission"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+        />
+</odoo>

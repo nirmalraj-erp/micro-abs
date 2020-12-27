@@ -1,0 +1,293 @@
+<odoo>
+    <data>
+         <record id="product_kind_tree_view_id" model="ir.ui.view">
+            <field name="name">product.kind.tree.view</field>
+            <field name="model">product.kind</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="product_kind_form_view" model="ir.ui.view">
+            <field name="name">product.kind.form.view</field>
+            <field name="model">product.kind</field>
+            <field name="arch" type="xml">
+                <form string="Product Kind">
+                    <sheet string="Product Kind">
+                        <group>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                </group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_product_kind" model="ir.actions.act_window">
+            <field name="name">Product Kind</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.kind</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="product_kind_tree_view_id"/>
+        </record>
+
+        <!--Product Size views-->
+        <record id="product_size_tree_view_id" model="ir.ui.view">
+            <field name="name">product.size.tree.view</field>
+            <field name="model">product.size</field>
+            <field name="arch" type="xml">
+                <tree string="Product Size">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_size_form_view" model="ir.ui.view">
+            <field name="name">product.size.form.view</field>
+            <field name="model">product.size</field>
+            <field name="arch" type="xml">
+                <form string="Product Size">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_product_size" model="ir.actions.act_window">
+            <field name="name">Product Size</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.size</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="product_size_tree_view_id"/>
+        </record>
+
+        <!--Product Operations Tree-->
+        <record id="product_operation_tree_view_id" model="ir.ui.view">
+            <field name="name">product.operation.tree.view</field>
+            <field name="model">product.operation</field>
+            <field name="arch" type="xml">
+                <tree string="Product Operations">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Product Operations Form-->
+        <record id="product_operation_form_view" model="ir.ui.view">
+            <field name="name">product.operation.form.view</field>
+            <field name="model">product.operation</field>
+            <field name="arch" type="xml">
+                <form string="Product Operations">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Product Operations Action-->
+        <record id="action_product_operation" model="ir.actions.act_window">
+            <field name="name">Product Operations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.operation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="product_operation_tree_view_id"/>
+        </record>
+
+        <!--Product Specification Tree-->
+        <record id="product_specification_tree_view_id" model="ir.ui.view">
+            <field name="name">product.specification.tree.view</field>
+            <field name="model">product.specification</field>
+            <field name="arch" type="xml">
+                <tree string="Product Specification">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Product Specification Form-->
+        <record id="product_specification_form_view" model="ir.ui.view">
+            <field name="name">product.specification.form.view</field>
+            <field name="model">product.specification</field>
+            <field name="arch" type="xml">
+                <form string="Product Specification">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+          <!--Product Specification Action-->
+        <record id="action_menu_product_specification" model="ir.actions.act_window">
+            <field name="name">Product Specifications</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.specification</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="product_specification_tree_view_id"/>
+        </record>
+
+        <!--Product Application Tree-->
+        <record id="product_application_tree_view_id" model="ir.ui.view">
+            <field name="name">product.application.tree.view</field>
+            <field name="model">product.application</field>
+            <field name="arch" type="xml">
+                <tree string="Product Application">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Product Application Form-->
+        <record id="product_application_form_view" model="ir.ui.view">
+            <field name="name">product.application.form.view</field>
+            <field name="model">product.application</field>
+            <field name="arch" type="xml">
+                <form string="Product Application">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Product Application Action-->
+        <record id="action_menu_product_application" model="ir.actions.act_window">
+            <field name="name">Product Application</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.application</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="product_application_tree_view_id"/>
+        </record>
+
+        <!--Shipment Mode Tree-->
+        <record id="shipment_mode_tree_view_id" model="ir.ui.view">
+            <field name="name">shipment.mode.tree.view</field>
+            <field name="model">shipment.mode</field>
+            <field name="arch" type="xml">
+                <tree string="Shipment Mode" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Shipment Mode Action-->
+        <record id="action_menu_shipment_mode" model="ir.actions.act_window">
+            <field name="name">Shipment Mode</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shipment.mode</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="shipment_mode_tree_view_id"/>
+        </record>
+
+         <!--Customer Code Tree-->
+        <record id="customer_code_tree_view_id" model="ir.ui.view">
+            <field name="name">customer.code.tree.view</field>
+            <field name="model">customer.code</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Code" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Customer Code Action-->
+        <record id="action_menu_customer_code" model="ir.actions.act_window">
+            <field name="name">Customer Code</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.code</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="customer_code_tree_view_id"/>
+        </record>
+
+        <!--Customer Type Tree-->
+        <record id="customer_type_tree_view_id" model="ir.ui.view">
+            <field name="name">customer.type.tree.view</field>
+            <field name="model">customer.type</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Type" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Customer Type Action-->
+        <record id="action_menu_customer_type" model="ir.actions.act_window">
+            <field name="name">Customer Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.type</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="customer_type_tree_view_id"/>
+        </record>
+
+
+         <!--Product Application Menu-->
+        <menuitem id="menu_product_config" name="Product Configurations" parent="account.menu_finance_configuration" sequence="99"/>
+        <menuitem id="menu_product_application"
+                  name="Product Application"
+                  action="action_menu_product_application"
+                  parent="menu_product_config"
+                  sequence="1"/>
+         <!--Product Specification Menu-->
+        <menuitem id="menu_product_specification"
+                  name="Product Specification"
+                  action="action_menu_product_specification"
+                  parent="menu_product_config"
+                  sequence="2"/>
+         <!--Product Operations Menu-->
+        <menuitem id="menu_product_operation"
+                  name="Product Operations"
+                  action="action_product_operation"
+                  parent="menu_product_config"
+                  sequence="3"/>
+         <!--Product Kind View-->
+        <menuitem id="menu_product_kind"
+          name="Product Kind"
+          parent="menu_product_config"
+          action="action_product_kind"
+          sequence="5"/>
+        <menuitem id="menu_product_size"
+              name="Product Size"
+              action="action_product_size"
+              parent="menu_product_config"
+              sequence="4"/>
+        <!--Shipment Mode View-->
+        <menuitem id="menu_shipment_mode"
+              name="Shipment Mode"
+              action="action_menu_shipment_mode"
+              parent="menu_product_config"
+              sequence="8"/>
+        <!--Customer Code View-->
+        <menuitem id="menu_customer_code"
+              name="Customer Code"
+              action="action_menu_customer_code"
+              parent="menu_product_config"
+              sequence="10"/>
+        <!--Customer Type View-->
+        <menuitem id="menu_customer_type"
+              name="Customer Type"
+              action="action_menu_customer_type"
+              parent="menu_product_config"
+              sequence="12"/>
+
+        <record id="make_invisible" model="res.groups">
+            <field name="name">Invisible</field>
+        </record>
+        <record model="ir.ui.menu" id="sale.menu_product_template_action">
+            <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+        </record>
+    </data>
+</odoo>
