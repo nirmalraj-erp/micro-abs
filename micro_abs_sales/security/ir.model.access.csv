@@ -25,3 +25,7 @@ access_customer_type,customer.type,model_customer_type,sales_team.group_sale_sal
 access_customer_type,customer.type,model_customer_type,sales_team.group_sale_manager,1,1,1,1
 access_customer_code,customer.code,model_customer_code,sales_team.group_sale_salesman,1,1,1,0
 access_customer_code,customer.code,model_customer_code,sales_team.group_sale_manager,1,1,1,1
+access_docs_address,docs.address,model_docs_address,sales_team.group_sale_salesman,1,1,1,0
+access_docs_address,docs.address,model_docs_address,sales_team.group_sale_manager,1,1,1,1
+access_cutting_speed,cutting.speed,model_cutting_speed,sales_team.group_sale_salesman,1,1,1,0
+access_cutting_speed,cutting.speed,model_cutting_speed,sales_team.group_sale_manager,1,1,1,1

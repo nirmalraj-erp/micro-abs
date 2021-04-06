@@ -7,8 +7,26 @@
         report_type="qweb-pdf"
         name="micro_abs_sales.sale_order_report"
         file="micro_abs_sales.sale_order_report"
-        print_report_name = "(object.name+ ',' + str(object.date_order.strftime('%d-%m-%Y'))+ '-' + 'PO -' + str(object.po_no)+ ',' + str(object.po_date)+ '-' + str(object.report_partner_name))"
+        print_report_name = "(object.name+ ',' + ' ' + str(object.date_order.strftime('%d-%m-%Y'))+ ' ' +  '-' + ' ' + 'PO.' + ' ' + str(object.po_no)+ ',' + ' ' + str(object.po_date.strftime('%d-%m-%Y')) + ' ' + '-' + ' ' + str(object.report_partner_name))"
     />
+    <record id="paperformat_custom_sale_order_report" model="report.paperformat">
+        <field name="name">Microabs Sale Order Report</field>
+        <field name="default" eval="False"/>
+        <field name="format">custom</field>
+        <field name="page_width">215</field>
+        <field name="page_height">280</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">120</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">110</field>
+        <field name="dpi">96</field>
+    </record>
+    <record id="micro_abs_sales.sale_order_report_id" model="ir.actions.report">
+        <field name="paperformat_id" ref="micro_abs_sales.paperformat_custom_sale_order_report" />
+    </record>
 
     <template id="sale_order_report">
         <t t-call="web.html_container">
@@ -21,29 +39,24 @@
                 </t>
                 <div class="header">
                     <div class="first-page" style="border-bottom:1px solid gray">
-                        <style>
-                    img {
-                      float: left;
-                    }
-                    </style>
-                    <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
-                    <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
-                    <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-phone" style="color:#0444a6"/>
-                        <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
-                    <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
-                    <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-phone" style="color:#0444a6;"/>
-                        <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                    </div>
-                </div>
-                <div class="article">
-                    <style>
-                        th,td,tr .table{border-collapse:collapse; font-size:14px, font-family:Serif;border-1px solid black;}
-                    </style>
-                   <p style="text-align:center;color:#0444a6;font-size:18px;text-decoration:underline;text-decoration-color:black;"><b>ORDER REQUEST FORM</b></p>
+                            <style>
+                        img {
+                          float: left;
+                        }
+                        </style>
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                        <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
+                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:14%"><i class="fa fa-mobile" style="color:#0444a6"/>
+                            <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
+                        <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
+                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                            <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                     </div>
+                    <p style="text-align:center;color:#0444a6;font-size:18px;text-decoration:underline;text-decoration-color:black;"><b>ORDER REQUEST FORM</b></p>
                     <table style="font-size:14px" width="100%">
                         <tr width="100%" style="border-bottom:1px solid blue">
                             <td width="33%">
@@ -53,269 +66,344 @@
                                 <strong>Date : </strong><span t-field="o.date_order" t-options='{"format": "d MMMM y"}'/>
                             </td>
                             <td  width="33%">
-                                <strong>Commission : </strong><span t-esc="'%.1f'%(o.commission_percentage_total)"/>%<br/>
+                              <b>
+                                  <span style="text-align:right">Page</span>
+                                    <span class="page" />
+                                    of
+                                    <span class="topage" />
+                                </b>
                             </td>
                         </tr>
                     </table>
-                    <table style="font-size:14px;border-bottom:1px solid blue" width="100%">
+                        <table style="font-size:14px;" width="100%">
                         <tr width="100%">
                             <td  width="33%">
                                 <strong>Customer:</strong><br/>
-                                <span t-field="o.partner_id.name"/>,<br/>
-                                <strong style="color:#0444a6">PO. No        : </strong><span t-field="o.po_no"/><br/>
-                                <strong style="color:#0444a6">PO. Date      : </strong><span t-field="o.po_date"/><br/>
-                                <strong style="color:#0444a6">Customer Type : </strong><span t-field="o.customer_type"/><br/>
-                                <strong style="color:#0444a6">Customer Code : </strong><span t-field="o.partner_id.customer_code"/><br/>
-                                <strong style="color:#0444a6">GST : </strong> <span t-field="o.vat"/><br/>
-                                <strong style="color:#0444a6">IEC : </strong> <span t-field="o.iec_code"/><br/>
-                                <strong style="color:#0444a6">PAN : </strong> <span t-field="o.pan_no"/><br/>
+                                <span t-field="o.partner_id.name"/>,
                             </td>
                             <t t-if="o.partner_invoice_id">
                                 <td  width="33%">
                                     <strong>Invoice To:</strong><br/>
                                 <t t-if="o.partner_invoice_id.name">
-                                    <span t-field="o.partner_invoice_id.name"/><br/>
-                                </t>
-                                <t t-if="o.partner_invoice_id.street">
-                                    <span t-field="o.partner_invoice_id.street"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.street2">
-                                    <span t-field="o.partner_shipping_id.street2"/><br/>
-                                </t>
-                                <t t-if="o.partner_invoice_id.city">
-                                    <span t-field="o.partner_invoice_id.city"/><br/>
-                                </t>
-                                <t t-if="o.partner_invoice_id.state_id.name">
-                                    <span t-field="o.partner_invoice_id.state_id.name"/><br/>
-                                </t>
-                                <t t-if="o.partner_invoice_id.country_id.name">
-                                    <span t-field="o.partner_invoice_id.country_id.name"/> - <span t-field="o.partner_invoice_id.zip"/><br/>
-                                </t>
-                                <t t-if="o.partner_invoice_id.mobile">
-                                    <i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.partner_invoice_id.mobile"/><br/>
-                                </t>
-                                <t t-if="o.partner_invoice_id.email">
-                                    <i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.partner_invoice_id.email"/><br/>
+                                    <span t-field="o.partner_invoice_id.name"/>
                                 </t>
                                 </td>
                             </t>
                             <td  width="33%">
                                 <strong>Ship To:</strong><br/>
                                 <t t-if="o.partner_shipping_id.name">
-                                    <span t-field="o.partner_shipping_id.name"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.street">
-                                    <span t-field="o.partner_shipping_id.street"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.street2">
-                                    <span t-field="o.partner_shipping_id.street2"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.city">
-                                    <span t-field="o.partner_shipping_id.city"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.state_id.name">
-                                    <span t-field="o.partner_shipping_id.state_id.name"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.country_id.name">
-                                    <span t-field="o.partner_shipping_id.country_id.name"/> - <span t-field="o.partner_shipping_id.zip"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.mobile">
-                                    <i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.partner_shipping_id.mobile"/><br/>
-                                </t>
-                                <t t-if="o.partner_shipping_id.email">
-                                    <i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.partner_shipping_id.email"/><br/>
+                                    <span t-field="o.partner_shipping_id.name"/>
                                 </t>
                                 <br/>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">PO. No : </strong><span t-field="o.po_no"/>
+                            </td>
+                            <td  width="33%">
+                                <t t-if="o.partner_invoice_id.street">
+                                    <span t-field="o.partner_invoice_id.street"/>
+                                </t>
+                            </td>
+                            <td  width="33%">
+                                <t t-if="o.partner_shipping_id.street">
+                                    <span t-field="o.partner_shipping_id.street"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">PO. Date      : </strong><span t-field="o.po_date"/>
+                            </td>
+                            <td  width="33%">
+                               <t t-if="o.partner_shipping_id.street2">
+                                    <span t-field="o.partner_shipping_id.street2"/>
+                                </t>
+                            </td>
+                            <td  width="33%">
+                                 <t t-if="o.partner_shipping_id.street2">
+                                    <span t-field="o.partner_shipping_id.street2"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">Customer Type : </strong><span t-field="o.partner_id.customer_type.name"/>
+                            </td>
+                            <td  width="33%">
+                               <t t-if="o.partner_invoice_id.city">
+                                    <span t-field="o.partner_invoice_id.city"/>
+                                </t>
+                            </td>
+                            <td  width="33%">
+                                 <t t-if="o.partner_shipping_id.city">
+                                    <span t-field="o.partner_shipping_id.city"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">Customer Code : </strong><span t-field="o.partner_id.customer_code.name"/>
+                            </td>
+                            <td  width="33%">
+                               <t t-if="o.partner_invoice_id.state_id.name">
+                                    <span t-field="o.partner_invoice_id.state_id.name"/>
+                                </t>
+                            </td>
+                            <td  width="33%">
+                                 <t t-if="o.partner_shipping_id.state_id.name">
+                                    <span t-field="o.partner_shipping_id.state_id.name"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">GST : </strong> <span t-field="o.vat"/>
+                            </td>
+                            <td  width="33%">
+                                <t t-if="o.partner_invoice_id.country_id.name">
+                                    <span t-field="o.partner_invoice_id.country_id.name"/> - <span t-field="o.partner_invoice_id.zip"/>
+                                </t>
+                            </td>
+                            <td  width="33%">
+                                 <t t-if="o.partner_shipping_id.country_id.name">
+                                    <span t-field="o.partner_shipping_id.country_id.name"/> - <span t-field="o.partner_shipping_id.zip"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">IEC : </strong> <span t-field="o.iec_code"/>
+                            </td>
+                            <td  width="33%">
+                                <t t-if="o.partner_invoice_id.mobile">
+                                    <i class="fa fa-mobile" style="color:#0444a6"/> <span t-field="o.partner_invoice_id.mobile"/>
+                                </t>
+                            </td>
+                            <td  width="33%">
+                                 <t t-if="o.partner_shipping_id.mobile">
+                                    <i class="fa fa-mobile" style="color:#0444a6"/> <span t-field="o.partner_shipping_id.mobile"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;border-bottom:1px solid blue" width="100%">
+                        <tr width="100%">
+                            <td  width="33%">
+                                <strong style="color:#0444a6">PAN : </strong> <span t-field="o.pan_no"/>
+                            </td>
+                            <td  width="66%">
+                               <strong >Dispatch documents to be sent to: </strong> <span t-field="o.docs_address_id.name"/>
                             </td>
                         </tr>
                     </table>
                     <table style="width:100%;font-size:14px;" col="6">
-                        <tr  col="6">
-                            <td>
+                        <tr  col="6" width="100%">
+                            <td width="15%">
                                 <strong>Payment Term</strong>
                             </td>
-                            <td>
+                            <td width="2">
                                 <strong>:</strong>
                             </td>
-                            <td>
+                            <td width="33%">
                                 <span t-field="o.payment_term_id.name"/>
                             </td>
-                            <td>
+                            <td width="15%">
                                 <strong>Order Type</strong>
                             </td>
-                            <td>
+                            <td width="2%">
                                 <strong>:</strong>
                             </td>
-                            <td>
+                            <td width="33%">
                                 <span t-field="o.order_type.name"/> Supply
                             </td>
                         </tr>
                        <tr>
-                           <td>
+                           <td width="15%">
                                <strong>Incoterm</strong>
                            </td>
-                           <td>
+                           <td width="2%">
                                <strong>:</strong>
                            </td>
-                           <td>
+                           <td width="33%">
                                <span t-field="o.incoterm.name"/>
                            </td>
-                           <td>
+                           <td width="15%">
                                 <strong>Destination Port</strong>
                             </td>
-                            <td>
+                            <td width="2%">
                                 <strong>:</strong>
                             </td>
-                            <td>
+                            <td width="33%">
                                <span t-field="o.destination_ports_id.name"/>
                             </td>
                        </tr>
                         <tr>
-                            <td>
+                            <td width="15%">
                                 <strong>FF Details</strong>
                             </td>
-                            <td>
+                            <td width="2%">
                                 <strong>:</strong>
                             </td>
-                            <td>
+                            <td width="33%">
                                 <span t-field="o.freight_forwarder_details"/>
                             </td>
-                            <td>
+                            <td width="15%">
                                 <strong>Shipment Mode</strong>
                             </td>
-                            <td>
+                            <td width="2%">
                                 <strong>:</strong>
                             </td>
-                            <td>
+                            <td width="33%">
                                 <span t-field="o.shipment_mode.name"/>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                            <strong style="color:#0444a6">Official Contact</strong>
+                    </table>
+                    <table style="width:100%;font-size:14px;border-top:1px solid blue;" col="4">
+                        <tr col="6" width="100%" style="padding-bottom:30%">
+                            <td width="15%">
+                                <strong style="color:#0444a6">Official Contact</strong>
                            </td>
-                           <td>
+                           <td width="2%">
                                <strong>:</strong>
                            </td>
-                            <t t-if="o.res_contact_id">
-                            <t t-foreach="o.res_contact_id[0]" t-as="l">
+                            <td width="33%">
+                                <t t-if="o.official_contact_id.mobile"><span t-field="o.official_contact_id.title"/>.</t> <span t-field="o.official_contact_id.name"/><br/>
+                                <t t-if="o.official_contact_id.mobile"><i class="fa fa-mobile" style="color:#0444a6"/>  <span t-field="o.official_contact_id.mobile"/></t><br/>
+                            </td>
+                             <td width="33%">
+                                 <t t-if="o.official_contact_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_id.email"/></t><br/>
+                                 <t t-if="o.official_contact_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_id.phone"/></t>
+                            </td>
                             <td>
-                                <span t-field="l.title"/>. <span t-field="l.name"/>,<br/>
-                                <i class="fa fa-phone" style="color:#0444a6"/>  <span t-field="l.mobile"/>,<br/>
-                                <i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="l.email"/>
                             </td>
-                             <td>
-                                 <t t-if="l.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="l.phone"/></t><br/>
-                                <i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="l.email"/>
+                            <td>
                             </td>
-                             </t>
-                            </t>
                         </tr>
                     </table>
-                    <t t-set="display_discount" t-value="any([l.discount for l in docs.order_line])"/>
-                    <table class="table table-sm" style="font-size:14px;">
-                        <thead>
-                            <tr>
-                                <th style="border-color:#0444a6 !important;color:#0444a6">Sl.No</th>
-                                <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Description</th>
-                                <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Qty</th>
-                                <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Unit Price <span  t-field="o.currency_id.symbol"/></th>
-                                <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Disc.(%)</th>
-                                <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Total <span  t-field="o.currency_id.symbol"/></th>
-                                <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Delivery Date</th>
-                            </tr>
-                           </thead>
-                        <tbody class="sale_tbody">
-                        <t t-set="counter" t-value="1"/>
-                        <tr t-foreach="docs.order_line" t-as="line">
-<!--                                <t t-foreach="wkno" t-as="wkno"/>-->
-                             <td style="border-color:#0444a6 !important;background-color:#E8E8E8;;width:5%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
-                                <span t-esc="counter"/><t t-set="counter" t-value="counter+1"/>
-                             </td>
-                             <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:40%;padding-left:2px;">
-                                <span t-field="line.description"/><br/>
-                             </td>
-                             <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:3%;text-align:center;padding-left:2px;">
-                                <span t-field="line.product_uom_qty"/>
-                             </td>
-                             <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:14%;text-align:center;padding-right:2px;">
-                                <span t-field="line.price_unit"/>
-                             </td>
-                             <td style="border-bottom:1px solid black;border-color:#0444a6 !important;width:5%;text-align:center;padding-right:2px;">
-                                <span t-field="line.discount"/>
-                             </td>
-                            <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:10%;text-align:right;padding-left:2px;">
-                                <span t-field="line.price_total"/>
-                             </td>
-                            <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:23%;text-align:center;padding-right:2px;">
-                                <span t-field="line.delivery_date" t-options='{"format": "dd/MM/yyyy"}'/> <br/>
-                                <p style="font-size:12px">Week No. <span t-esc="wkno"/>/<span t-field="line.delivery_date" t-options='{"format": "yyyy"}'/></p>
+                </div>
+                <div class="article">
+                    <div class="page">
+                        <style>
+                            th,td,tr .table{border-collapse:collapse; font-size:14px, font-family:Serif;border-1px solid black;}
+                        </style>
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="border-color:#0444a6 !important;background-color:#E8E8E8;width:5%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
-                            </td>
-                            <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:40%;padding-left:2px;">
-                            </td>
-                            <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:5%;text-align:center;padding-left:2px;">
-                            </td>
-                            <td class="text-right" style="border-bottom:1px solid black;border-color:#0444a6 !important;width:14%;text-align:center;padding-right:2px;">
-                            </td>
-                            <td style="color:#0444a6;border-color:#0444a6 !important;border-bottom:1px solid black;width:12%;text-align:center;padding-right:2px;">
-                             <strong>Order Value</strong>
-                            </td>
-                            <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:10%;text-align:right;padding-left:2px;">
-                            <strong><span t-field="o.amount_untaxed"/></strong>
-                            </td>
-                            <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:23%;text-align:center;padding-right:2px;">
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div style="border-top: 1px solid blues;font-size:14px;">
+                      <t t-set="display_discount" t-value="any([l.discount for l in docs.order_line])"/>
+                        <table class="table table-sm" style="font-size:14px;">
+                            <thead>
+                                <tr>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6">Sl.No</th>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Description</th>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Qty</th>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Unit Price <span  t-field="o.currency_id.symbol"/></th>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Disc.(%)</th>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Total <span  t-field="o.currency_id.symbol"/></th>
+                                    <th style="border-color:#0444a6 !important;color:#0444a6" class="text-center">Delivery Date</th>
+                                </tr>
+                               </thead>
+                            <tbody class="sale_tbody">
+                            <t t-set="counter" t-value="1"/>
+                            <tr t-foreach="docs.order_line" t-as="line">
+                                 <td style="border-color:#0444a6 !important;background-color:#E8E8E8;;width:5%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
+                                    <span t-esc="counter"/><t t-set="counter" t-value="counter+1"/>
+                                 </td>
+                                 <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:40%;padding-left:2px;">
+                                    <span t-field="line.description"/><br/>
+                                 </td>
+                                 <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:3%;text-align:center;padding-left:2px;">
+                                    <span t-field="line.product_uom_qty"/>
+                                 </td>
+                                 <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:14%;text-align:center;padding-right:2px;">
+                                    <span t-field="line.price_unit"/>
+                                 </td>
+                                 <td style="border-bottom:1px solid black;border-color:#0444a6 !important;width:5%;text-align:center;padding-right:2px;">
+                                    <span t-field="line.discount"/>
+                                 </td>
+                                <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:10%;text-align:right;padding-left:2px;">
+                                    <span t-field="line.price_total"/>
+                                 </td>
+                                <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:23%;text-align:center;padding-right:2px;">
+                                    <t t-if="line.delivery_date">
+                                        <span t-field="line.delivery_date" t-options='{"format": "dd/MM/yyyy"}'/> <br/>
+                                        <p style="font-size:12px">Week No. <span t-field="line.wkno"/>/<span t-field="line.delivery_date" t-options='{"format": "yyyy"}'/></p>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border-color:#0444a6 !important;background-color:#E8E8E8;width:5%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
+                                </td>
+                                <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:40%;padding-left:2px;">
+                                </td>
+                                <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:5%;text-align:center;padding-left:2px;">
+                                </td>
+                                <td class="text-right" style="border-bottom:1px solid black;border-color:#0444a6 !important;width:14%;text-align:center;padding-right:2px;">
+                                </td>
+                                <td style="color:#0444a6;border-color:#0444a6 !important;border-bottom:1px solid black;width:12%;text-align:center;padding-right:2px;">
+                                 <strong>Order Value</strong>
+                                </td>
+                                <td style="border-color:#0444a6 !important;border-bottom:1px solid black;background-color:#E8E8E8;width:10%;text-align:right;padding-left:2px;">
+                                <strong><span t-field="o.amount_untaxed"/></strong>
+                                </td>
+                                <td style="border-color:#0444a6 !important;border-bottom:1px solid black;width:23%;text-align:center;padding-right:2px;">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                         <t t-set="counter" t-value="0"/>
-                        <tr style="border-top: 1px solid blue">
-                            <td style="color:#0444a6;text-align:left;border-top: 1px solid blue">
-                                <strong style="color:#0444a6;">Notes: </strong>
-                            </td>
-                        </tr>
-                        <tr t-foreach="docs.order_line" t-as="line">
-                            <td>
-                                <t t-if="o.note"> <span t-field="o.note"/></t><br/>
-                            <strong>Product Internal notes : </strong><t t-if="line.product_id.description"><span t-field="line.product_id.description"/></t><t t-if="not line.product_id.description">None</t><br/>
-                            </td>
-                            <td style="width:70%;padding-left:2px;">
-                                <t t-if="line.product_id.description">
-                                    <t t-set="counter" t-value="counter+1"/>
+                        <table style="font-size:14px;">
+                            <t t-if="o.note">
+                                <tr>
+                                    <td style="font-size:14px"><b>Internal Notes: </b></td>
+                                    <tr>
+                                        <td style="padding-left:30px;padding-bottom:12px;font-size:14px;text-align:justify"><li><span style="padding-left:1%;" t-field="o.note"/></li></td>
+                                    </tr>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td style="font-size:14px"><b>Customer Related Notes : </b>
+                                    <tr>
+                                        <td>
+                                           <t t-if="o.partner_id.comment">
+                                                <li style="padding-left:30px;padding-bottom:12px;font-size:14px;text-align:justify"><span style="padding-left:1%;" t-field="o.partner_id.comment"/></li><br/>
+                                            </t>
+                                            <t t-if="not o.partner_id.comment">
+                                                <span>None</span><br/>
+                                            </t>
+                                        </td>
+                                    </tr>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:14px;padding-bottom:10px"><b>Product Related Notes : </b></td><br/>
+                                <tr  t-foreach="docs.order_line" t-as="line">
+                                <td style="padding-left:30px;font-size:14px;text-align:justify">
                                     <t t-if="line.product_id.description">
-                                    <strong>Sl. No. <span t-esc="counter"/> Related : </strong>
-                                    <span t-field="line.product_id.description"/>
+                                        <t t-set="counter" t-value="counter+1"/>
+                                        <t t-if="line.product_id.description">
+                                        <b style="font-size:14px;">Sl. No. <span t-esc="counter"/> Related : </b>
+                                            <li style="padding-left:30px;"><span style="padding-left:1%;" t-field="line.product_id.description"/></li>
+                                        </t>
                                     </t>
-                                </t>
-                                <t t-if="not line.product_id.description">
-                                    <t t-set="counter" t-value="counter+1"/>
                                     <t t-if="not line.product_id.description">
-                                    <strong>Sl. No. <span t-esc="counter"/> Related : </strong>
-                                    <span>None</span>
+                                        <t t-set="counter" t-value="counter+1"/>
+                                        <t t-if="not line.product_id.description">
+                                        <strong>Sl. No. <span t-esc="counter"/> Related : </strong>
+                                        <span>None</span>
+                                        </t>
                                     </t>
-                                </t>
-                                <br/>
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="footer">
-                        <div style="text-align:center;border-top: 1px solid blue;text-align:left">
-                            <div class="row" style="text-align:center">
-                            <strong style="padding-left:350%">
-                                <span style="text-align:center">Page</span>
-                                <span class="page" />
-                                of
-                                <span class="topage" />
-                            </strong>
+                                    <br/>
+                                </td>
+                            </tr>
+                            </tr>
+                        </table>
+
+                        <div class="footer">
+                            <div style="text-align:center;border-top: 1px solid blue;text-align:left">
+                            </div>
                         </div>
-                        </div>
-                    </div>
+                </div>
                 </div>
             </t>
         </t>

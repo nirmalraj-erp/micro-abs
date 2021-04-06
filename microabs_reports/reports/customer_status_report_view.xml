@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        id="customer_status_report_id"
+        model="customer.status"
+        string="Customer Status Report"
+        report_type="qweb-pdf"
+        name="microabs_reports.customer_status_report"
+        file="microabs_reports.customer_status_report"
+    />
+
+    <record id="paperformat_customer_status" model="report.paperformat">
+        <field name="name">Microabs A4</field>
+        <field name="default" eval="True" />
+        <field name="format">A3</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">23</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">35</field>
+        <field name="dpi">96</field>
+    </record>
+    <record id="microabs_reports.customer_status_report_id" model="ir.actions.report">
+        <field name="paperformat_id" ref="microabs_reports.paperformat_customer_status" />
+    </record>
+
+    <template id="customer_status_report">
+        <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+                <div class="page">
+                    <head>
+                        <style>
+                            .table-sm{
+                            font-size: 11px;
+                            border: 1.2px solid black!important;
+                            }
+                        </style>
+                    </head>
+                    <h3  style="text-align:center;width:100%"><u><strong>CUSTOMER STATUS UPDATE</strong></u></h3>
+                    <table style="width: 100%;font-size:13px;" class="table table-sm">
+                        <thead class="table-warning">
+                            <th style="border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:2%;">
+                                <strong><center>S.NO.</center></strong>
+                            </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
+                                <strong><center>Customer</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>PO. No.</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>PO Date</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:13%;">
+                                <strong><center>Product</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>Customer Req. Date</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>Supplier Del. Date</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>Shipment Mode</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:8%;">
+                                <strong><center>FF Details</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:8%;">
+                                <strong><center>Dispatch Status</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>Invoice No.</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>Invoice Date</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>BL/AWB No.</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>BL/AWB Date</center></strong>
+                             </th>
+                        </thead>
+                        <tbody>
+                            <t t-set="counter" t-value="1"/>
+                            <t t-foreach="docs" t-as="doc">
+                                <tr>
+                                    <td style="border-left:1px solid black;border-right:1px solid black;width:2%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
+                                        <span t-esc="counter"/><t t-set="counter" t-value="counter+1"/>
+                                    </td>
+                                    <td style="border-left:1px solid black;border-right:1px solid black;width:10%;text-align:left;padding-left:2px;border-bottom:1px solid black;">
+                                        <t t-esc="doc['display_name']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;padding-center:2px;text-align:center">
+                                        <t t-esc="doc['po_no']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;padding-center:2px;text-align:center">
+                                        <t t-if="doc['so_commitment_date']">
+                                            <t t-esc="doc['po_date'].strftime('%d-%m-%Y')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:13%;text-align:left;padding-left:2px;">
+                                        <t t-esc="doc['pt_name']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
+                                        <t t-if="doc['so_commitment_date']">
+                                            <t t-esc="doc['so_commitment_date'].strftime('%d-%m-%Y')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
+                                        <t t-if="doc['supplier_expected_date']">
+                                            <t t-esc="doc['supplier_expected_date'].strftime('%d-%m-%Y')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
+                                        <t t-esc="doc['sm_name']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:8%;text-align:center;padding-right:2px;">
+                                        <t t-esc="doc['ffd_name']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:8%;text-align:center;padding-right:2px;">
+                                        <span t-if="doc['qty_to_invoice'] == 0 ">Dispatched</span>
+                                        <span t-if="doc['qty_to_invoice'] > 0 ">Yet to Dispatch</span>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:7%;text-align:center;padding-right:2px;">
+                                        <t t-esc="doc['invoice_number']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
+                                        <t t-if="doc['date_invoice']">
+                                            <t t-esc="doc['date_invoice'].strftime('%d-%m-%Y')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
+                                        <t t-esc="doc['bl_no']"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
+                                        <t t-if="doc['bl_date']">
+                                            <t t-esc="doc['bl_date'].strftime('%d-%m-%Y')"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+            </t>
+    </template>
+</odoo>

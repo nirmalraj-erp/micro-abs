@@ -5,8 +5,8 @@
     'description': 'Micro Abrasive Sales Commission module with custom changes in Customer master, '
                    'Sale order and Invoice',
     'category': 'Sales Commission',
-    'author': 'The Nth Metal',
-    'website': '',
+    'author': 'Howk-i ERP Zone - Simplified',
+    'website': 'http://erp.howk-i.com/',
     'support': 'nirmalraj.erp@gmail.com',
     'license': 'AGPL-3',
     'depends': ['sale','account'],

@@ -12,4 +12,16 @@
         <field name="global" eval="True"/>
         <field name="domain_force">["|", ("company_id", "=", False), ("company_id", "child_of", user.company_id.ids)]</field>
     </record>
+    <record id="rule_bank_name_multi_company" model="ir.rule">
+        <field name="name">Bank name list multi-company</field>
+        <field name="model_id" ref="model_bank_name"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">["|", ("company_id", "=", False), ("company_id", "child_of", user.company_id.ids)]</field>
+    </record>
+    <record id="rule_sale_commission_report_multi_company" model="ir.rule">
+        <field name="name">Sale commission Report multi-company</field>
+        <field name="model_id" ref="model_sale_commission_report"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">["|", ("company_id", "=", False), ("company_id", "child_of", user.company_id.ids)]</field>
+    </record>
 </data>

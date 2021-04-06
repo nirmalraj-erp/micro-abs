@@ -7,203 +7,247 @@
         report_type="qweb-pdf"
         name="microabs_sale_commission.sale_commission_report"
         file="microabs_sale_commission.sale_commission_report"
+        print_report_name = "object.name"
     />
     <template id="sale_commission_report">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-<!--                <t t-call="web.basic_layout">-->
-                    <div class="header">
-                        <div class="first-page">
-                                <div style="float:left">
-                                    <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)"  width="150px"/>
-                                </div>
-                                <div style="float:center;font-size:12px;color:#100358;font-family:Liberation Serif;">
-                                    <strong style="color:blue;font-family:Liberation Serif;font-size:25px" class="text-left">Micro Abrasive Technologies</strong><br/>
-                                    19 Kamarajar Salai, Alwarthirunagar, Chennai 600087<br/>
-                                    <i class="fa fa-phone" style="color:#0444a6"/>
-                                    +91 98840 38805, <i class="fa fa-envelope" style="color:#0444a6"/> srini@microab.com
-                                </div>
-                                <div style="float:right;color:black;font-family:Liberation Serif;font-size:25px">
-                                    <strong>SALE COMMISSION REPORT</strong><br/>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="article">
+                <div class="header">
+                    <div class="first-page" style="border-bottom:1px solid gray">
                         <style>
-                            th,td,tr .table{border-collapse:collapse; font-family:Liberation Serif; border-1px solid black; padding-top:2px;padding-left:2px; padding-right:2px; padding-bottom:2px}
-                         </style>
-                        <table width="100%">
-                            <br/>
-                            <br/>
-                            <tr col="2">
-                                <td style="width:50%;font-size:16px;padding-left:20px;" class="pull-left">
-                                        <strong><span t-field="o.company_id.city"/></strong> <br/>
-                                        <br/>
-                                </td>
-                                <td style="width:50%;font-size:16px;text-align:right" class="pull-right">
-                                        <strong><span t-esc="o.create_date.strftime('%e %B, %Y')" /></strong> <br/>
-                                        <br/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width:50%;font-size:16px;padding-left:20px;">
-                                    <strong><span t-field="o.company_id"/></strong><br/>
-                                    <strong><span t-field="o.company_id.street"/></strong>
-                                    <strong><span t-field="o.company_id.street2"/></strong><br/>
-                                    <strong><span t-field="o.company_id.zip"/></strong>, <strong><span t-field="o.company_id.state_id"/></strong>,<strong><span t-field="o.company_id.country_id"/></strong><br/>
-                                    <strong><span t-field="o.company_id.vat"/></strong><br/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-size:16px;padding-left:20px;">
-                                    <strong>List of invoices eligible for commissions for the period of <span t-esc="o.create_date.strftime('%B, %Y')" /> are as follows:</strong>
-                                </td>
-                            </tr>
-                        </table>
-                        <table style="width: 100%">
-                            <thead>
-                                <th style="border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>INV NO.</center></strong>
-                                </th>
-                                 <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>INV DATE</center></strong>
-                                 </th>
-                                 <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>CUSTOMER NAME</center></strong>
-                                 </th>
-                                 <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>INV AMOUNT IN</center></strong>
-                                 </th>
-                                 <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>ACTUALLY RECEIVED</center></strong>
-                                 </th>
-                                 <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>% AGE</center></strong>
-                                 </th>
-                                 <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
-                                    <strong><center>COMMISSION IN</center></strong>
-                                 </th>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="o.commission_line" t-as="line">
-                                    <tr>
-                                        <td style="border-left:1px solid black;border-right:1px solid black;width:10%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
-                                         <span t-esc="line.invoice_no"/>
-                                     </td>
-                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;10px;padding-left:2px;text-align:center">
-                                        <span t-esc="line.invoice_date"/>
-                                     </td>
-                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:center;padding-right:2px;">
-                                        <span t-esc="line.customer_id"/>
-                                     </td>
-                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
+                    img {
+                      float: left;
+                    }
+                    </style>
+                    <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                    <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
+                    <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
+                        <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
+                    <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
+                    <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                        <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </div>
+                <div class="article">
+                    <style>
+                        th,td,tr .table{border-collapse:collapse; font-family:Liberation Serif; border-1px solid black; padding-top:1px;padding-left:2px; padding-right:2px; padding-bottom:2px}
+                     </style>
+                    <table  width="100%" style="font-size:18px;" >
+                        <tr>
+                           <td  style="text-align:center;width:100%"><u><strong>COMMISSION INVOICE</strong></u></td>
+                        </tr>
+                    </table>
+                    <table width="100%" style="font-size:13px;border-spacing: 0px 1px;border-collapse: separate" >
+                        <tr>
+                           <td class="table-primary" style="text-align:left;width:15%"><strong>Invoice No</strong></td>
+                           <td class="table-active" style="text-align:left;width:35%"><t t-esc="o.name"/></td>
+                           <td/>
+                            <td class="table-warning"  style="text-align:left;width:17%"><strong>Invoice To</strong></td>
+                            <td class="table-warning" style="text-align:left;width:33%"/>
+                        </tr>
+                        <tr>
+                           <td class="table-primary" style="text-align:left;width:15%"><strong>Date</strong></td>
+                           <td class="table-active" style="text-align:left;width:35%"><span t-field="o.create_date" t-options='{"format": "dd-MM-yyyy"}'/></td>
+                           <td/>
+                            <td class="table-active" style="text-align:left;width:17%"/>
+                           <td class="table-active" style="text-align:left;width:33%"><span t-field="o.company_id.name"/>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td class="table-primary" style="text-align:left;width:15%"><strong>Payment Terms</strong></td>
+                           <td class="table-active" style="text-align:left;width:35%">30 days</td>
+                           <td/>
+                           <td class="table-active" style="text-align:left;width:17%"/>
+                           <td class="table-active" style="text-align:left;width:33%">
+                               <t t-if="o.company_id.street">
+                                   <span t-field="o.company_id.street"/>
+                               </t>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td class="table-primary" style="text-align:left;width:15%"><strong>Period</strong></td>
+                           <td class="table-active" style="text-align:left;width:35%"><span t-field="o.period"/></td>
+                           <td/>
+                            <td class="table-active" style="text-align:left;width:17%"/>
+                           <td class="table-active" style="text-align:left;width:33%">
+                               <t t-if="o.company_id.street2">
+                                   <span t-field="o.company_id.street2"/><br/>
+                               </t>
+                                <t t-if="o.company_id.city">
+                                   <span t-field="o.company_id.city"/><br/>
+                               </t>
+                               <t t-if="o.company_id.state_id.name">
+                                   <span t-field="o.company_id.state_id.name"/>, <span t-field="o.company_id.zip"/><br/>
+                               </t>
+                               <t t-if="o.company_id.country_id.name">
+                                   <span t-field="o.company_id.country_id.name"/>
+                               </t>
+                           </td>
+
+                        </tr>
+                    </table>
+                    <table width="100%" style="font-size:13px;border-spacing: 0px 1px;border-collapse: separate" >
+                        <tr>
+                           <td class="table-warning" style="text-align:left;width:50%"><strong>Beneficiary Details</strong></td>
+                           <td/>
+                            <td class="table-warning"  style="text-align:left;width:50%"><strong>Intermediary Bank Details</strong></td>
+                        </tr>
+                    </table>
+                    <table width="100%" style="font-size:13px;border-spacing: 0px 1px;border-collapse: separate" >
+                        <tr>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Name</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bb_contact"/></td>
+                            <td/>
+                            <td class="table-primary"  style="text-align:left;width:17%"><strong>Name</strong></td>
+                            <td class="table-active"  style="text-align:left;width:33%"><span t-field="o.int_contact"/></td>
+                        </tr>
+                        <tr>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Address</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bank_address"/></td>
+                            <td/>
+                            <td class="table-primary"  style="text-align:left;width:17%"><strong>Address</strong></td>
+                            <td class="table-active"  style="text-align:left;width:33%"><span t-field="o.int_bank_address"/></td>
+                        </tr>
+                        <tr>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Account No.</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bank_acc_no"/></td>
+                            <td/>
+                            <td class="table-primary" style="text-align:left;width:17%"><strong><span t-field="o.bank_name_id.name"/> Account No.</strong></td>
+                           <td class="table-active" style="text-align:left;width:33%"><span t-field="o.int_bank_acc_no"/></td>
+                        </tr>
+                        <tr>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Bank Name</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bank_name_id.name"/></td>
+                            <td/>
+                            <td class="table-primary"  style="text-align:left;width:17%"><strong>IBAN No./ Routing No.</strong></td>
+                            <td class="table-active"  style="text-align:left;width:33%"><span t-field="o.int_iban_no"/></td>
+
+                        </tr>
+                        <tr>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Bank Address</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bank_address"/></td>
+                            <td/>
+                            <td class="table-primary" style="text-align:left;width:17%"><strong>Swift Code</strong></td>
+                            <td class="table-active" style="text-align:left;width:33%"><span t-field="o.int_swift_code"/></td>
+
+                        </tr>
+                        <tr>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Swift Code</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><strong><span t-field="o.swift_code"/></strong></td>
+                            <td/>
+                        </tr>
+                    </table>
+                    <table style="width: 100%;font-size:13px;">
+                        <thead class="table-warning" width="100%">
+                            <th style="border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
+                                <strong><center>S.No.</center></strong>
+                            </th>
+                            <th style="border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:7%;">
+                                <strong><center>Invoice No.</center></strong>
+                            </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
+                                <strong><center>Invoice Date</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:7%;">
+                                <strong><center>Customer Code</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:33%;">
+                                <strong><center>Customer Name</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
+                                <strong><center>Invoice Amount (<span t-field="o.company_id.currency_id.currency_unit_label"/>)</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
+                                <strong><center>Actually Received (<span t-field="o.company_id.currency_id.currency_unit_label"/>)</center></strong>
+                             </th>
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
+                                <strong><center>Commission (<span t-field="o.company_id.currency_id.currency_unit_label"/>)</center></strong>
+                             </th>
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:8%;">
+                                <strong><center>% AGE</center></strong>
+                             </th>
+                        </thead>
+                        <t t-set="total_commission" t-value="any('%.2f'%(sum(l.commission_amount for l in o.commission_line)))"/>
+                        <t t-set="counter" t-value="1"/>
+                        <tbody>
+                            <t t-foreach="o.commission_line" t-as="line">
+                                <tr width="100%">
+                                    <td style="border-left:1px solid black;border-right:1px solid black;width:5%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
+                                        <span t-esc="counter"/><t t-set="counter" t-value="counter+1"/>
+                                    </td>
+                                    <td style="border-left:1px solid black;border-right:1px solid black;width:7%;text-align:center;padding-left:2px;border-bottom:1px solid black;">
+                                        <span t-esc="line.invoice_no"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;10px;padding-left:2px;text-align:center">
+                                        <span t-field="line.invoice_date"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:7%;10px;padding-left:2px;text-align:center">
+                                        <span t-esc="line.customer_id.customer_code.name"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:33%;text-align:left;padding-right:2px;">
+                                        <span t-esc="line.customer_id.name"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
                                         <span t-esc="line.invoice_amount"/>
-                                     </td>
+                                    </td>
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
                                         <span t-esc="line.actual_received"/>
-                                     </td>
-                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:center;padding-right:2px;">
-                                        <span t-esc="line.commission_percentage"/>
                                     </td>
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
-                                       <span t-esc="line.commission_amount"/>
+                                       <span t-esc="'%.2f'% line.commission_amount"/>
                                     </td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                            <tr>
-                                <td style="width:10%;text-align:center;padding-left:2px;">
-                                </td>
-                                <td style="width:10%;10px;padding-left:2px;text-align:center">
-                                </td>
-                                <td style="width:10%;text-align:left;padding-right:2px;">
-                                    <strong>Total Invoice</strong>
-                                </td>
-                                <td style="border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
-                                     <strong><t t-esc="sum(l.invoice_amount for l in o.commission_line) " /></strong>
-                                </td>
-                                <td style="width:10%;text-align:right;padding-left:2px;">
-<!--                                    <strong> <span t-esc="(sum(actual))"/></strong>-->
-                                </td>
-                                <td style="border-right:1px solid black;width:10%;text-align:left;padding-right:2px;">
-                                    <strong>Total Commission</strong>
-                                </td>
-                                <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;"><br/>
-                                 <strong> <t t-esc="sum(l.commission_amount for l in o.commission_line) " /></strong>
-                                </td><br/><br/>
-                            </tr>
-
-                            <table width="100%">
-                                <tr>
-                                    <td style="padding-left:20px;"><strong>TOTAL COMMISSIONS PAYABLE IN : <span t-esc="sum(l.commission_amount for l in o.commission_line) "/> <span t-esc="o.amount_to_text(sum(l.commission_amount for l in o.commission_line))"/> Only </strong><br/><br/></td>
-<!--                                    <td style="padding-left:20px;"><strong>TOTAL COMMISSIONS PAYABLE IN : <span t-esc="(sum(total))"/> <span t-esc="o.amount_to_text(sum(total), 'currency')"/> </strong><br></br><br></br></td>-->
-                                </tr>
-                                <tr>
-                                    <td style="padding-left:20px;"><strong><u>PL. PAY TO:</u></strong><br/></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left:20px;"><strong><u>Name of the Intermediary / Correspondent bank of  <span t-field="o.company_id.bank_name"/>:</u></strong><br/></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:50%;text-align:left;padding-left:20px;">
-                                        <span t-field="o.company_id.intermediary"/><br/>
-                                        <span t-field="o.company_id.i_street"/> <br/>
-                                        <span t-field="o.company_id.i_street2"/><br/>
-                                        <span t-field="o.company_id.i_city"/>, <span t-field="o.company_id.i_country_id"/><br/>
-                                        IBAN NO : <span t-field="o.company_id.iban_no"/><br/>
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:8%;text-align:center;padding-right:2px;">
+                                        <span t-esc="line.commission_percentage"/>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="padding-left:20px;"><strong>Swift Code of the Correspondent Bank:</strong><br/></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left:20px;"><strong><u>Beneficiary Bank Details:</u><br/></strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:50%;text-align:left;padding-left:20px;">
-                                        <span t-field="o.company_id.bank_name"/><br/>
-                                        <span t-field="o.company_id.bank_branch"/> <br/>
-                                        <span t-field="o.company_id.bb_city"/><br/>
-                                        <span t-field="o.company_id.bb_country_id"/><br/>
-                                        SWIFT : <span t-field="o.company_id.swift"/><br/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left:20px;"><strong><u>Beneficiary Account Name and Account Details:</u><br/></strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:50%;text-align:left;padding-left:20px;">
-                                        <strong style="font-family:Liberation Serif;" class="text-center"><span t-field="o.company_id.commission_agent"/></strong><br/>
-                                    <span t-field="o.company_id.c_street"/>,<br/>
-                                    <span t-field="o.company_id.c_street2"/><br/>
-                                    <span t-field="o.company_id.c_city"/>, <span t-field="o.company_id.c_zip"/>, <span t-field="o.company_id.c_country_id.name"/><br/>
-                                        <strong>CURRENT ACCOUNT NO: <span t-field="o.company_id.current_account_no"/></strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left:20px;"><strong>FOR MICRO ABRASIVE TECHNOLOGIES,</strong></td><br/>
-                                </tr>
-                            </table>
-                             <tr>
-                                 <td  style="text-align:center;width:25%;" >
-                                     <img style="padding-left:10%;width:30%;"  t-if="o.company_id.signature" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.signature)"  width="200px"/><br/>
-                                      <strong style="padding-left:15%"><span t-field="o.company_id.contact"/></strong>
-                                 </td>
-
-                             </tr>
-                        </table>
-                    </div>
-                    <div class="footer">
-                        <div class="row" style="text-align:center">
-                            <strong style="padding-left:350%">
-                                <span style="text-align:center">Page</span>
-                                <span class="page" />
-                                of
-                                <span class="topage" />
-                            </strong>
-                        </div>
-                    </div>
-<!--                </t>-->
+                            </t>
+                        </tbody>
+                        <tr>
+                            <td style="width:5%;text-align:center;padding-left:2px;">
+                            </td>
+                            <td style="width:7%;10px;padding-left:2px;text-align:center">
+                            </td>
+                            <td style="width:10%;text-align:left;padding-right:2px;">
+                            </td>
+                            <td style="width:7%;text-align:right;padding-right:2px;">
+                            </td>
+                            <td style="width:33%;text-align:right;padding-left:2px;">
+                            </td>
+                            <td style="width:10%;text-align:left;padding-right:2px;">
+                            </td>
+                            <td style="border-right:1px solid black;width:10%;text-align:left;padding-right:2px;">
+                            </td>
+                            <td class="table-warning"  style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;"><br/>
+                             <strong> <t t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line))" /></strong>
+                            </td><br/>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <br/>
+                        </tr>
+                    </table>
+                    <table style="width: 100%;font-size:13px;">
+                        <tr  style="width: 100%;font-size:13px;">
+                            <strong style="font-size:13px;">TOTAL COMMISSONS PAYABLE IN <span t-field="o.company_id.currency_id.name"/>: </strong>&#160; <span style="font-size:13px;" t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line)) "/>&#160;(<span style="font-size:13px;" t-esc="o.amount_to_text(sum(l.commission_amount for l in o.commission_line))"/><span style="font-size:13px;">&#160;Only)</span>
+                            <br/>
+                        </tr>
+                        <tr>
+                            <br/>
+                        </tr>
+                        <tr  style="width: 100%;font-size:13px;"><strong style="font-size:13px;">Authorized Signatory:</strong></tr>
+                         <tr  style="width: 100%;font-size:13px;">
+                             <td  style="text-align:left;width:25%;" >
+                                 <img style="width:30%;"  t-if="o.company_id.signature" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.signature)"  width="160px"/><br/>
+                                  <strong style="padding-left:8%;font-size:13px;"><span t-field="o.company_id.contact"/></strong>
+                             </td>
+                         </tr>
+                    </table>
+                </div>
             </t>
         </t>
     </template>

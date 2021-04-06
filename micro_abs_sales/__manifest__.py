@@ -4,10 +4,10 @@
     'summary': 'Micro Abrasive Sales',
     'description': 'Micro Abrasive Sales module with custom changes in Product master, Sale order and Invoice',
     'category': 'Sales',
-    'author': 'The Nth Metal',
-    'website': '',
+    'author': 'Howk-i ERP Zone - Simplified',
+    'website': 'http://erp.howk-i.com/',
     'license': 'AGPL-3',
-    'depends': ['sale','account',],
+    'depends': ['sale','account'],
     'data': [
         'views/sales_inherit.xml',
         'views/configuration_views.xml',

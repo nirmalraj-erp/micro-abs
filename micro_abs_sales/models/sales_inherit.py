@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from datetime import datetime
 from odoo.tools import float_is_zero
+from datetime import date
 
 
 class ProductTemplateInherit(models.Model):
@@ -18,6 +19,7 @@ class ProductTemplateInherit(models.Model):
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     offer_details_line = fields.One2many("product.offer.line", 'offer_line_id', string="Product Order Line")
     no_commission_required = fields.Boolean("No Commission Required", default=False)
+    cutting_speed_id = fields.Many2one("cutting.speed", string="Cutting Speed")
 
 
 class ProductProductInherit(models.Model):
@@ -31,6 +33,7 @@ class ProductProductInherit(models.Model):
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     offer_details_line = fields.One2many("product.offer.line", 'offer_line_id', string="Product Order Line")
     no_commission_required = fields.Boolean("No Commission Required", default=False)
+    cutting_speed_id = fields.Many2one("cutting.speed", string="Cutting Speed")
 
 
 class ProductOfferLine(models.Model):
@@ -46,6 +49,13 @@ class ProductOfferLine(models.Model):
     sequence = fields.Integer(string='Sequence')
     drawing_no = fields.Char(string='Drawing No.')
                 
+
+class CuttingSpeed(models.Model):
+    _name = 'cutting.speed'
+    _description = 'Cutting Speed'
+
+    name = fields.Char(string='Cutting Speed')
+
 
 class ProductRecess(models.Model):
     _name = 'product.recess'
@@ -138,6 +148,7 @@ class SaleOrderInherit(models.Model):
     freight_forwarder_details = fields.Many2one('freight.forward.details', string='FF Details')
     destination_ports_id = fields.Many2one('destination.port', string='Destination Port')
     res_contact_id = fields.Many2many('res.partner', string='Contact')
+    official_contact_id = fields.Many2one('res.partner', string='Official Contact')
     inherit_order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines',
                                          states={'cancel': [('readonly', True)], 'done': [('readonly', True)]},
                                          copy=True, auto_join=True,
@@ -147,9 +158,32 @@ class SaleOrderInherit(models.Model):
     pan_no = fields.Char(string='PAN Number')
     report_partner_name = fields.Char('Report Partner Name', store=True)
     customer_type = fields.Many2one('customer.type', string='Customer Type')
+    docs_address_id = fields.Many2one('docs.address', string='Docs Address')
+    email_shipment_string = fields.Char(string='Email Shipment String')
 
+    @api.onchange('order_line.delivery_date', 'so_commitment_date')
+    @api.depends('order_line.delivery_date', 'so_commitment_date')
+    def get_week_no_date(self):
+        if self.so_commitment_date:
+            wkno = 0
+            for line in self.order_line:
+                if line.delivery_date:
+                    ndate = line.delivery_date.strftime('%Y,%m,%d')
+                    d = ndate.split(',')
+                    print(d)
+                    wkno = date(int(d[0]), int(d[1]), int(d[2])).isocalendar()[1]
+                    print(wkno)
+                    line.wkno = wkno + 1
+
+
+    @api.depends('so_commitment_date')
+    @api.onchange('so_commitment_date')
+    def get_delivery_date(self):
+        for line in self.order_line:
+            line.delivery_date = self.so_commitment_date
+
+    @api.depends('partner_id','res_contact_id')
     @api.onchange('partner_id')
-    @api.depends('partner_id')
     def get_vat_values(self):
         """Customer master contact GST IEC and Incoterm values"""
         if self.partner_id:
@@ -162,7 +196,8 @@ class SaleOrderInherit(models.Model):
             self.destination_ports_id = partner_id.destination_ports_id
             self.report_partner_name = self.partner_id.name.split()[0]
             self.customer_type = self.partner_id.customer_type.id
-        return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)]}}
+        return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
+                           'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)]}}
 
     # Create invoice - Core function inherited #
     @api.multi
@@ -207,9 +242,11 @@ class SaleOrderInherit(models.Model):
             'freight_forwarder_details': self.freight_forwarder_details.id,
             'destination_ports_id': self.destination_ports_id.id,
             'res_contact_id': [(6, 0, self.res_contact_id.ids)],
+            'official_contact_id': self.official_contact_id.id,
             'incoterm_id': self.incoterm.id,
             'commission_total': self.commission_total,
             'commission_percentage_total': self.commission_percentage_total,
+            'total_taxed': self.total_taxed,
         }
         return invoice_vals
 
@@ -256,7 +293,6 @@ class SaleOrderInherit(models.Model):
                     references[invoice] = order
                     invoices[group_key] = invoice
                     invoices_origin[group_key] = [invoice.origin]
-                    print('@@@@@@@@2',[invoice.po_no])
                     po_no[group_key] = [invoice.po_no]
                     order_conf_no[group_key] = [invoice.order_conf_no]
                     invoices_name[group_key] = [invoice.name]
@@ -266,9 +302,7 @@ class SaleOrderInherit(models.Model):
                     if order.order_conf_no not in order_conf_no[group_key]:
                         order_conf_no[group_key].append(order.order_conf_no)
                     if order.po_no not in po_no[group_key]:
-                        print('************8',po_no[group_key])
                         po_no[group_key].append(order.po_no)
-                        print('################', po_no[group_key])
                     if order.client_order_ref and order.client_order_ref not in invoices_name[group_key]:
                         invoices_name[group_key].append(order.client_order_ref)
 
@@ -299,8 +333,8 @@ class SaleOrderInherit(models.Model):
         for group_key in invoices:
             invoices[group_key].write({'name': ', '.join(invoices_name[group_key])[:2000],
                                        'origin': ', '.join(invoices_origin[group_key]),
-                                       'po_no': ','.join(map(str, po_no[group_key])),
-                                       'order_conf_no': ','.join(map(str, order_conf_no[group_key]))
+                                       'po_no': ', '.join(map(str, po_no[group_key])),
+                                       'order_conf_no': ', `'.join(map(str, order_conf_no[group_key]))
                                        })
             sale_orders = references[invoices[group_key]]
             if len(sale_orders) == 1:
@@ -312,6 +346,13 @@ class SaleOrderInherit(models.Model):
 
         self._finalize_invoices(invoices, references)
         return [inv.id for inv in invoices.values()]
+
+
+class DocsAddress(models.Model):
+    _name = 'docs.address'
+    _description = 'Docs Address'
+
+    name = fields.Char(string='Docs Address')
 
 
 class FreightForwardDetails(models.Model):
@@ -344,7 +385,7 @@ class ShipmentMode(models.Model):
 
 class SaleOrderLineInherit(models.Model):
     _inherit = 'sale.order.line'
-    
+
     description = fields.Text(string='Descriptions', required=True)
     customer_item_code = fields.Char(string='Customer Item Code')
     offer_no = fields.Char(string='Offer No.')
@@ -358,6 +399,7 @@ class SaleOrderLineInherit(models.Model):
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     sequence = fields.Integer(string='Sequence')
     delivery_date = fields.Date('Delivery Date')
+    wkno = fields.Integer('Week No')
 
     @api.onchange('product_id')
     def get_product_line(self):
@@ -371,10 +413,11 @@ class SaleOrderLineInherit(models.Model):
             self.application_ids = self.product_id.application_ids.ids
             self.no_commission_required = self.product_id.no_commission_required
             for line in self.product_id.offer_details_line:
-                self.customer_item_code = line.customer_item_code
-                self.offer_no = line.offer_no
-                self.offer_date = line.offer_date
-                self.drawing_no = line.drawing_no
+                if self.order_id.partner_id == line.partner_id:
+                    self.customer_item_code = line.customer_item_code if self.order_id.partner_id == line.partner_id else ''
+                    self.offer_no = line.offer_no if self.order_id.partner_id == line.partner_id else ''
+                    self.offer_date = line.offer_date if self.order_id.partner_id == line.partner_id else ''
+                    self.drawing_no = line.drawing_no if self.order_id.partner_id == line.partner_id else ''
             offer_date = ''
             if self.offer_date:
                 offer_date = datetime.strftime(self.offer_date, "%d/%m/%Y")
@@ -387,10 +430,14 @@ class SaleOrderLineInherit(models.Model):
                 vals += "\n" 'Specification : ' + str(self.specification.name)
             if self.drawing_no:
                 vals += "\n" 'Drawing No : ' + str(self.drawing_no)
+            if self.product_id.cutting_speed_id.name:
+                vals += "\n" 'Cutting Speed : ' + str(self.product_id.cutting_speed_id.name)
+            if self.product_id.l10n_in_hsn_code:
+                vals += "\n" 'HSN Code : ' + str(self.product_id.l10n_in_hsn_code)
             if self.offer_no or self.offer_date:
                 vals += "\n" 'Offer No : ' + str(self.offer_no) + " " + "dtd." + " " + str(offer_date)
-            if self.partner_id.comment:
-                vals += "\n" 'Customer Description: ' + str(self.partner_id.comment)
+            if self.product_id.description_sale:
+                vals += "\n" 'Product Description : ' + str(self.product_id.description_sale)
             if self.customer_item_code:
                 vals += "\n" 'Customer Item Code : ' + str(self.customer_item_code)
             if self.product_id.default_code:
@@ -456,15 +503,37 @@ class AccountInvoiceInherit(models.Model):
     invoice_number = fields.Char(string="Invoice No.")
     bl_no = fields.Char(string='BL/AWB No')
     bl_date = fields.Date(string='BL/AWB Date')
+    eta_date = fields.Date(string='ETA')
     supplier_expected_date = fields.Date(string='Supl. Del. Date')
     pan_no = fields.Char(string='PAN Number')
     customer_type = fields.Many2one('customer.type', string='Customer Type')
+    official_contact_id = fields.Many2one('res.partner', string='Official Contact')
+    email_shipment_string = fields.Char(string='Email Shipment String', store=True, compute='_get_email_shipment_string')
 
     @api.depends('partner_id')
     def get_contacts(self):
         """Customer contact ids domain"""
         if self.partner_id:
-            return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)]}}
+            return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
+                               'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)]}}
+
+    @api.onchange('shipment_mode', 'bl_no')
+    def onchange_email_shipment_string(self):
+        if self.shipment_mode.name == 'Sea' and self.bl_no:
+            self.email_shipment_string = 'Bill of Lading No.'
+        elif self.shipment_mode.name == 'Air' and self.bl_no:
+            self.email_shipment_string = 'Air way Bill No.'
+        else:
+            self.email_shipment_string = ''
+
+    @api.depends('shipment_mode', 'bl_no')
+    def _get_email_shipment_string(self):
+        if self.shipment_mode.name == 'Sea' and self.bl_no:
+            self.email_shipment_string = 'Bill of Lading No.'
+        elif self.shipment_mode.name == 'Air' and self.bl_no:
+            self.email_shipment_string = 'Air way Bill No.'
+        else:
+            self.email_shipment_string = ''
 
     def _get_refund_common_fields(self):
         return ['partner_id', 'payment_term_id', 'account_id', 'currency_id',
@@ -508,6 +577,14 @@ class ResCompanyInherit(models.Model):
     signature = fields.Binary("Signature")
     contact = fields.Char("Name of Signed person")
     com_logo = fields.Binary("Logo")
+    website_address = fields.Char('Website Address')
+
+    @api.onchange('website')
+    @api.depends('website')
+    def get_website_address(self):
+        if self.website:
+            url = self.website.replace("http://", "")
+            self.website_address = url
 
 
 class ProductCategoryInherit(models.Model):
@@ -591,3 +668,19 @@ class SaleAdvancePaymentInherit(models.TransientModel):
                                        values={'self': invoice, 'origin': order},
                                        subtype_id=self.env.ref('mail.mt_note').id)
         return invoice
+
+
+class AccountMoveMicro(models.Model):
+    _inherit = 'account.move'
+
+    def update_move(self):
+        print('HAHAHAH', self.line_ids)
+        line_list = self.line_ids
+        line_list.write({
+                        'name': 'Special Premium',
+                        'account_id': 31,
+                        'debit': 5120,
+                        'credit': 5120,
+                        'quantity': 1,
+                        'uom_id': 1,
+        })

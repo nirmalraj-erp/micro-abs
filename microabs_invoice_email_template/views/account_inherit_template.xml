@@ -1,0 +1,16 @@
+<odoo>
+     <!-- Account Invoice view Inherit-->
+    <record id="invoice_template_view_inherit" model="ir.ui.view">
+        <field name="name">invoice.template.view.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <button name="action_invoice_sent" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </button>
+            <button name="action_invoice_sent" position="after">
+                <button name="action_send_email" string="Send Invoice" type="object" class="oe_highlight" groups="base.group_user"/>
+            </button>
+        </field>
+    </record>
+</odoo>

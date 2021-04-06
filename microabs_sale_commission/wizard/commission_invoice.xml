@@ -17,11 +17,37 @@
                 </form>
             </field>
         </record>
+        <record id="view_commission_invoice_open" model="ir.ui.view">
+            <field name="name">Commission Invoice Open</field>
+            <field name="model">commission.invoice.open</field>
+            <field name="arch" type="xml">
+                <form string="Commission Invoice Open">
+                    <p class="oe_grey">
+                        Mark Reverted commission invoice to Open State.
+                    </p>
+                    <footer>
+                        <button name="update_invoice_status_open" string="Mark as Open " type="object"
+                            class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
 
         <act_window
             id="action_commission_invoice_list"
-            name="Commission Invoice"
+            name="Create Commission Invoice"
             res_model="commission.invoice"
+            src_model="sale.commission"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+        />
+        <act_window
+            id="action_commission_invoice_open_list"
+            name="Open Reverted Commission"
+            res_model="commission.invoice.open"
             src_model="sale.commission"
             view_mode="form"
             multi="True"

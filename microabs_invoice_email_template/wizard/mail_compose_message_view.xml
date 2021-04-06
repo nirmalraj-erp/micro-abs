@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="email_compose_message_wizard_inherit_form">
+        <field name="name">mail.compose.message.form (mail_attach_existing_attachment)</field>
+        <field name="model">mail.compose.message</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+        <field name="arch" type="xml">
+            <field name="subject" position="before">
+                <field name="email_cc" placeholder="Add CC"/>
+            </field>
+            <field name="partner_ids" position="replace">
+                <field name="email_to" placeholder="Add To"/>
+            </field>
+        </field>
+    </record>
+</odoo>

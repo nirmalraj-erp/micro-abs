@@ -3,6 +3,8 @@
 from odoo import api, fields, models, _
 from odoo.tools import float_compare
 from odoo.exceptions import UserError
+from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
 class CommissionMaster(models.Model):
@@ -23,18 +25,23 @@ class SaleCommission(models.Model):
     _description = 'Sale Commission'
 
     name = fields.Char(string='Agent')
-    invoice_no = fields.Char(string='Invoice No.')
+    invoice_no = fields.Char(string='Inv No.')
     invoice_date = fields.Date(string='Inv. Date')
     customer_code = fields.Char(string='Cust. Code')
-    customer_id = fields.Many2one('res.partner', string='Customer Name')
-    invoice_amount = fields.Float(string='Inv. Amount')
+    customer_id = fields.Many2one('res.partner', string='Cust. Name')
+    invoice_amount = fields.Float(string='Inv. Amt')
     actual_received = fields.Float(string='Actually Received')
-    commission_amount = fields.Float(string='Commission Amount')
+    commission_amount = fields.Float(string='Commission Amt')
     commission_percentage = fields.Integer(string='% Age')
     company_id = fields.Many2one('res.company', string='Company')
     currency_id = fields.Many2one('res.currency', string='Currency')
-    state = fields.Selection([('draft', 'Draft'), ('open', 'Open'), ('paid', 'Paid')], string='Status', readonly=True,
+    state = fields.Selection([('draft', 'Draft'), ('open', 'Commission Open'), ('paid', 'Commission Settled'),
+                              ('revert', 'Commission Reverted')], string='Status', readonly=True,
                              copy=False, index=True, track_visibility='onchange', track_sequence=3, default='draft')
+    com_inv_status = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('revert', 'Reverted')],
+                                      string='Commission Status',
+                                      readonly=True, copy=False, index=True, track_visibility='onchange',
+                                      track_sequence=3, default='draft')
 
 
 class SaleOrderCommission(models.Model):
@@ -64,9 +71,9 @@ class SaleOrderCommission(models.Model):
         for line in self:
             if not line.no_commission_required:
                 if line.commission_percentage:
-                    price_total = line.product_uom_qty * line.price_unit
-                    line.commission_amount_wod = price_total
-                    commission_percentage = line.commission_amount_wod * line.commission_percentage
+                    # price_total = line.product_uom_qty * line.price_unit
+                    line.commission_amount_wod = line.price_total
+                    commission_percentage = line.price_total * line.commission_percentage
                     line.commission_amount = (commission_percentage / 100)
 
 
@@ -112,16 +119,19 @@ class AccountInvoiceLineCommission(models.Model):
     commission_percentage = fields.Integer(string='Commission (%)')
     commission_amount = fields.Float(string='Commission Amount', compute='_get_commission_amount')
     no_commission_required = fields.Boolean(string='Is Commission')
+    commission_amount_wod = fields.Float(string='Commission Amount without Discount', compute='_get_commission_amount')
 
     def _get_commission_amount(self):
         """Get the commission amount for the data given. To be called by
         compute methods of children models.
         """
         for line in self:
-            if line.commission_percentage:
-                price_total = line.quantity * line.price_unit
-                commission_percentage = price_total * line.commission_percentage
-                line.commission_amount = (commission_percentage / 100)
+            if not line.no_commission_required:
+                if line.commission_percentage:
+                    # price_total = line.product_uom_qty * line.price_unit
+                    line.commission_amount_wod = line.price_total
+                    commission_percentage = line.price_total * line.commission_percentage
+                    line.commission_amount = (commission_percentage / 100)
 
 
 class AccountInvoiceCommissionInherit(models.Model):
@@ -134,9 +144,11 @@ class AccountInvoiceCommissionInherit(models.Model):
             record.commission_percentage_total = 0.0
             for line in record.invoice_line_ids:
                 if not line.no_commission_required:
-                    record.total_taxed += sum(y.price_total for y in line)
-                    record.commission_total += sum(x.commission_amount for x in line)
-                    record.commission_percentage_total = (record.commission_total / record.total_taxed) * 100
+                    if line.commission_percentage:
+                        record.total_taxed += sum(x.commission_amount_wod for x in line)
+                        record.commission_total += sum(x.commission_amount for x in line)
+                        if record.total_taxed != 0:
+                            record.commission_percentage_total = (record.commission_total / record.total_taxed) * 100
 
     total_taxed = fields.Float(
         string="Total Excluding Freight",
@@ -180,19 +192,35 @@ class AccountInvoiceCommissionInherit(models.Model):
         if self.commission_percentage_total != 0:
             sale_commission = self.env['sale.commission']
             for inv in self:
-                move_vals = {
-                    'name': inv.partner_id.company_id.commission_agent,
-                    'customer_id': inv.partner_id.id,
-                    'invoice_no': inv.invoice_number,
-                    'invoice_date': inv.date_invoice,
-                    'customer_code': inv.partner_id.customer_code,
-                    'invoice_amount': inv.amount_total,
-                    'actual_received': inv.amount_total,
-                    'commission_amount': inv.commission_total,
-                    'commission_percentage': inv.commission_percentage_total,
-                    'company_id': inv.company_id.id,
-                    'currency_id': inv.currency_id.id,
-                    'state': 'open',
-                }
+                if self.type == 'out_refund':
+                    move_vals = {
+                        'name': inv.partner_id.company_id.commission_agent,
+                        'customer_id': inv.partner_id.id,
+                        'invoice_no': inv.invoice_number,
+                        'invoice_date': inv.date_invoice,
+                        'customer_code': inv.partner_id.customer_code.name,
+                        'invoice_amount': -inv.amount_total,
+                        'actual_received': -inv.amount_total,
+                        'commission_amount': -inv.commission_total,
+                        'commission_percentage': inv.commission_percentage_total,
+                        'company_id': inv.company_id.id,
+                        'currency_id': inv.currency_id.id,
+                        'state': 'open',
+                    }
+                else:
+                    move_vals = {
+                        'name': inv.partner_id.company_id.commission_agent,
+                        'customer_id': inv.partner_id.id,
+                        'invoice_no': inv.invoice_number,
+                        'invoice_date': inv.date_invoice,
+                        'customer_code': inv.partner_id.customer_code.name,
+                        'invoice_amount': inv.amount_total,
+                        'actual_received': inv.amount_total,
+                        'commission_amount': inv.commission_total,
+                        'commission_percentage': inv.commission_percentage_total,
+                        'company_id': inv.company_id.id,
+                        'currency_id': inv.currency_id.id,
+                        'state': 'open',
+                    }
                 return sale_commission.create(move_vals)
 

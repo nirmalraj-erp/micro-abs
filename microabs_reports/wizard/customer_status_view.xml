@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_customer_status_filter" model="ir.ui.view">
+            <field name="name">Customer Status</field>
+            <field name="model">customer.status</field>
+            <field name="arch" type="xml">
+                <form string="Customer Status">
+                    <group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="partner_id" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="date_end"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="generate_report" string="Print" type="object"
+                            class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+            id="action_customer_status"
+            name="Customer Status Report"
+            res_model="customer.status"
+            src_model="customer.status"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+        />
+        <menuitem id="menu_customer_status" action="action_customer_status" parent="sale.menu_sale_report"
+              name="Customer Status Report" sequence="1"/>
+</odoo>

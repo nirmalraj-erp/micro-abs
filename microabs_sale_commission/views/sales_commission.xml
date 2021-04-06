@@ -12,6 +12,7 @@
 					<field name="no_commission_required" invisible="1"/>
 					<field name="commission_percentage" widget="Percent"/>
 					<field name="commission_amount"/>
+                    <field name="commission_amount_wod" invisible="1"/>
 				</xpath>
                 <field name="amount_total" position="after">
                     <field name="total_taxed" widget="monetary"/>
@@ -59,7 +60,9 @@
         <field name="name">sale.commission.tree.view</field>
         <field name="model">sale.commission</field>
         <field name="arch" type="xml">
-            <tree string="Sales Commission List" delete="false" create="false" decoration-success="state=='paid'" decoration-danger="state=='open'">
+            <tree string="Sales Commission List" delete="false" create="false" default_order="id desc"
+                  decoration-success="state=='paid'" decoration-danger="state=='open'"
+                  decoration-muted="state=='revert'">
                 <field name="name" invisible="1"/>
                 <field name="invoice_no"/>
                 <field name="invoice_date"/>
@@ -69,8 +72,9 @@
                 <field name="actual_received"/>
                 <field name="commission_amount"/>
                 <field name="commission_percentage" widget="Percent"/>
-                <field name="company_id"/>
+                <field name="company_id" invisible="1"/>
                 <field name="state"/>
+                <field name="com_inv_status" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
             </tree>
         </field>
@@ -110,7 +114,7 @@
      <!--SALES COMMISSION MAIN MENUS-->
     <menuitem id="menu_sale_commission" name="Sales Commission" parent="sale.sale_menu_root" sequence="20"/>
      <menuitem id="menu_sale_commission_view_id"
-              name="Sales Commission List"
+              name="Commission Settlements"
               action="action_sale_commission_id"
               parent="menu_sale_commission"
               sequence="2"/>

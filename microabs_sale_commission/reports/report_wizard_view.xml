@@ -5,9 +5,10 @@
         <field name="name">commission.master.tree.view</field>
         <field name="model">sale.commission.report</field>
         <field name="arch" type="xml">
-            <tree string="Commission Master">
-                <field name="name"/>
+            <tree string="Commission Master" default_order="id desc" decoration-success="state=='done'" decoration-muted="state=='revert'">
+                <field name="name" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                 <field name="create_date" string="Paid Date"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -17,20 +18,44 @@
 		<field name ="model">sale.commission.report</field>
 		<field name ="arch" type="xml">
 			<form>
+                <header>
+                    <button string="Done" name="action_done" states="draft" type='object' class="oe_highlight"/>
+                    <button string="Revert" name="action_revert" states="draft,done" type='object' />
+                    <field name="state" widget="statusbar" statusbar_visible="done,draft,revert"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                             <h1>
-                                <field name="name" readonly="1"/>
+                                <label for="name" string="Draft Commission" attrs="{'invisible': ['|',('state','not in',('draft',))]}"/>
+                                <field name="name" readonly="1" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                             </h1>
                         </div>
                     <group>
+                    <group>
                         <field name="period"/>
-                        <field name="company_id"/>
-                        <field name="currency_id" invisible="1"/>
+<!--                        <field name="check"/>-->
+                        <field name="bank_name_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
                     </group>
                     <group>
-                        <field name="commission_line">
-                            <tree string="Commission Line" editable="bottom">
+                        <field name="company_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group string="Beneficiary Bank Details">
+                        <field name="bb_contact"  attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="bank_acc_no"  attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="bank_address"  attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="swift_code" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                    </group>
+                        <group string="Intermediary Bank Details">
+                        <field name="int_contact" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="int_bank_acc_no" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="int_bank_address" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="int_swift_code" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="int_iban_no" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                    </group>
+                        <field name="commission_line" attrs="{'readonly': [('state', '=', 'done')]}">
+                            <tree string="Commission Line" delete="false" editable="false">
+                                <field name="sale_commission_id" invisible="1"/>
                                 <field name="invoice_no"/>
                                 <field name="invoice_date"/>
                                 <field name="customer_id"/>
@@ -58,8 +83,75 @@
     </record>
 
 	<menuitem id="menu_sale_commission_report"
-		name="Sale Commission Report"
+		name="Commission Invoice"
 		action="action_sale_commission_report"
 		parent="menu_sale_commission"
 		sequence="4"/>
+
+    <!--Bank Name Tree View-->
+        <record id="bank_name_tree_view_id" model="ir.ui.view">
+            <field name="name">bank.name.tree.view</field>
+            <field name="model">bank.name</field>
+            <field name="arch" type="xml">
+                <tree string="Bank Name">
+                    <field name="name"/>
+                    <field name="bank_acc_no"/>
+                    <field name="bank_address"/>
+                    <field name="swift_code"/>
+                    <field name="iban_no"/>
+                    <field name="contact"/>
+                </tree>
+            </field>
+        </record>
+
+    <record id ="bank_name_form_view_id" model="ir.ui.view">
+		<field name ="name">bank.name.form.view</field>
+		<field name ="model">bank.name</field>
+		<field name ="arch" type="xml">
+			<form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Beneficiary Bank Details">
+                            <field name="contact"/>
+                            <field name="bank_acc_no"/>
+                            <field name="bank_address"/>
+                            <field name="swift_code"/>
+                            <field name="iban_no"/>
+                        </group>
+                        <group string="Intermediary Bank Details">
+                            <field name="int_contact"/>
+                            <field name="int_bank_acc_no"/>
+                            <field name="int_bank_address"/>
+                            <field name="int_swift_code"/>
+                            <field name="int_iban_no"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+        <!--Bank Name  Action-->
+    <record id="action_menu_bank_name_id" model="ir.actions.act_window">
+        <field name="name">Bank Details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bank.name</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="bank_name_tree_view_id"/>
+    </record>
+
+        <!--Bank Name  View-->
+        <menuitem id="menu_doc_address"
+              name="Beneficiary/Intermediary Bank Details"
+              action="action_menu_bank_name_id"
+              parent="menu_sale_commission"
+              sequence="12"/>
+
 </odoo>

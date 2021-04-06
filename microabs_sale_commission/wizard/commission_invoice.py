@@ -2,10 +2,6 @@
 
 from odoo import api, models, _
 from odoo.exceptions import UserError
-from datetime import datetime, timedelta
-
-MONTH_LIST = [('1', 'Jan'), ('2', 'Feb'), ('3', 'Mar'), ('4', 'Apr'), ('5', 'May'), ('6', 'Jun'), ('7', 'Jul'),
-              ('8', 'Aug'), ('9', 'Sep'), ('10', 'Oct'), ('11', 'Nov'),('12', 'Dec')]
 
 
 class CommissionInvoice(models.TransientModel):
@@ -14,10 +10,9 @@ class CommissionInvoice(models.TransientModel):
 
     @api.multi
     def update_invoice_status(self):
-        numdays = 100
         active = self.env.context.get('active_ids')
         commission_invoice_list = self.env["sale.commission"].search([('id', 'in', active)])
-        vals = ({'name': self.env['ir.sequence'].next_by_code('sale.commission.report')})
+        vals = ({'name': _('New')})
         commission_report_obj = self.env["sale.commission.report"].create(vals)
         for cm_list in commission_invoice_list:
             date_invoice = cm_list.invoice_date
@@ -33,10 +28,39 @@ class CommissionInvoice(models.TransientModel):
                         'commission_percentage': cm_list.commission_percentage,
                         'currency_id': cm_list.currency_id.id,
                         'company_id': cm_list.company_id.id,
+                        'sale_commission_id': cm_list.id,
                     })],
                    })
             else:
-                raise UserError(_('Invalid Action!! You have selected Paid Commission Invoice'))
+                raise UserError(_('Invalid Action!! You cannot settle the commission invoice which is already paid'))
             cm_list.update({'state': 'paid'})
+            cm_list.update({'com_inv_status': 'done'})
             self.env["sale.commission.report"].search([('id', '=', commission_report_obj.id)]).update(cm_params)
+            commission_report_list = self.env["sale.commission.report"].search([('id', '=', commission_report_obj.id)])
+            date_list = commission_report_list.commission_line.mapped('invoice_date')
+            min_date = min(date_list)
+            max_date = max(date_list)
+            year, month, date = str(min_date).split('-')
+            start_date = month + '/' + year
+            year, month, date = str(max_date).split('-')
+            end_date = month + '/' + year
+            if start_date == end_date:
+                commission_report_list.period = end_date
+            else:
+                commission_report_list.period = start_date + '-' + end_date
+
+
+class CommissionInvoiceOpen(models.TransientModel):
+    _name = "commission.invoice.open"
+    _description = "Commission Invoice Open"
+
+    @api.multi
+    def update_invoice_status_open(self):
+        active = self.env.context.get('active_ids')
+        commission_invoice_list = self.env["sale.commission"].search([('id', 'in', active)])
+        for cm_list in commission_invoice_list:
+            if cm_list.state == 'revert':
+                cm_list.update({'state': 'open'})
+            else:
+                raise UserError(_('Invalid Action!! You cannot open the commission invoice which is already paid'))
 
