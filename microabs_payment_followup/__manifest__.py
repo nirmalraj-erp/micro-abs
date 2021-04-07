@@ -9,7 +9,9 @@
     'license': 'AGPL-3',
     'depends': ['account'],
     'data': [
+        'security/ir.model.access.csv',
         'views/res_partner.xml',
+        'views/payment_followup.xml'
     ],
     'demo': [],
     'installable': True,

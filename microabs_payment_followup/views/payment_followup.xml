@@ -1,0 +1,64 @@
+<odoo>
+
+    <!--  Payment Followup Tree View  -->
+    <record id="payment_followup_tree_view" model="ir.ui.view">
+        <field name="name">payment.followup.tree</field>
+        <field name="model">payment.followup</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="move_id"/>
+                <field name="partner_id"/>
+                <field name="invoice_date"/>
+                <field name="due_date"/>
+                <field name="total_amount"/>
+                <field name="due_amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--  Payment Followup Form View  -->
+    <record id="payment_followup_form_view" model="ir.ui.view">
+        <field name="name">payment.followup.form</field>
+        <field name="model">payment.followup</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="send_email" string="Send Email" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="move_id"/>
+                            <field name="invoice_date"/>
+                            <field name="total_amount"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="due_date"/>
+                            <field name="due_amount"/>
+                        </group>
+                    </group>
+                    <separator/>
+                    <group>
+                        <field name="email_body"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--  Payment Followup Action  -->
+    <record id="action_payment_followup" model="ir.actions.act_window">
+        <field name="name">Payment Followup</field>
+        <field name="res_model">payment.followup</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+            id="menu_payment_followup"
+            name="Payment Followup"
+            parent="account.menu_finance_receivables"
+            action="action_payment_followup"
+            sequence="200"/>
+
+</odoo>

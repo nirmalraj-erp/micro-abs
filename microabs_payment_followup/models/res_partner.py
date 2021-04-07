@@ -9,4 +9,3 @@ class PartnerPaymentDetails(models.Model):
     docs_to = fields.Char(string='Docs To')
     docs_cc = fields.Char(string='Docs CC')
     official_contact = fields.Char(string='Official Contact')
-
