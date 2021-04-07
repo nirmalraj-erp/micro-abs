@@ -17,11 +17,13 @@ class SaleCommissionReportWizard(models.Model):
     currency_id = fields.Many2one('res.currency', 'Currency')
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('revert', 'Reverted')], readonly=True,
                              default='draft', copy=False, string="Status")
-    bank_name_id = fields.Many2one('bank.name', 'Bank Name')
+    bank_name_id = fields.Many2one('bank.name', 'Bank')
     bank_address = fields.Char('Bank Address', store=True, compute='_get_bank_details')
     swift_code = fields.Char('Swift Code', store=True, compute='_get_bank_details')
     bank_acc_no = fields.Char('Acc No', store=True, compute='_get_bank_details')
-    bb_contact = fields.Char('Name', store=True, compute='_get_bank_details')
+    bb_contact = fields.Char('Bank Name', store=True, compute='_get_bank_details')
+    company_name = fields.Char('Name', store=True, compute='_get_bank_details')
+    company_address = fields.Char('Address', store=True, compute='_get_bank_details')
     int_bank_address = fields.Char('Bank Address',store=True, compute='_get_bank_details')
     int_swift_code = fields.Char('Swift Code', store=True, compute='_get_bank_details')
     int_bank_acc_no = fields.Char('Acc No', store=True, compute='_get_bank_details')
@@ -31,16 +33,19 @@ class SaleCommissionReportWizard(models.Model):
 
     @api.onchange('bank_name_id')
     def _get_bank_details(self):
-        if self.bank_name_id:
-            self.bank_address = self.bank_name_id.bank_address
-            self.swift_code = self.bank_name_id.swift_code
-            self.bank_acc_no = self.bank_name_id.bank_acc_no
-            self.bb_contact = self.bank_name_id.contact
-            self.int_bank_address = self.bank_name_id.int_bank_address
-            self.int_swift_code = self.bank_name_id.int_swift_code
-            self.int_bank_acc_no = self.bank_name_id.int_bank_acc_no
-            self.int_iban_no = self.bank_name_id.int_iban_no
-            self.int_contact = self.bank_name_id.int_contact
+        for rec in self:
+            if rec.bank_name_id:
+                rec.bank_address = rec.bank_name_id.bank_address
+                rec.swift_code = rec.bank_name_id.swift_code
+                rec.bank_acc_no = rec.bank_name_id.bank_acc_no
+                rec.bb_contact = rec.bank_name_id.contact
+                rec.company_name = rec.bank_name_id.company_name
+                rec.company_address = rec.bank_name_id.company_address
+                rec.int_bank_address = rec.bank_name_id.int_bank_address
+                rec.int_swift_code = rec.bank_name_id.int_swift_code
+                rec.int_bank_acc_no = rec.bank_name_id.int_bank_acc_no
+                rec.int_iban_no = rec.bank_name_id.int_iban_no
+                rec.int_contact = rec.bank_name_id.int_contact
 
     def action_revert(self):
         for line in self.commission_line:
@@ -84,8 +89,9 @@ class BankName(models.Model):
     bank_acc_no = fields.Char('Acc No')
     bank_address = fields.Char('Bank Address')
     swift_code = fields.Char('Swift Code')
-    iban_no = fields.Char('IBAN NO./ Routing No.')
-    contact = fields.Char('Name')
+    contact = fields.Char('Bank Name')
+    company_name = fields.Char('Name')
+    company_address = fields.Char('Address')
     int_bank_address = fields.Char('Bank Address', store=True)
     int_swift_code = fields.Char('Swift Code', store=True)
     int_bank_acc_no = fields.Char('Acc No', store=True)

@@ -94,12 +94,12 @@
                         <tr>
                            <td class="table-warning" style="text-align:left;width:50%"><strong>Beneficiary Details</strong></td>
                            <td/>
-                            <td class="table-warning"  style="text-align:left;width:50%"><strong>Intermediary Bank Details</strong></td>
+                            <td class="table-warning"  style="text-align:left;width:50%"><strong>Intermediary / Correspondent Bank Details</strong></td>
                         </tr>
                     </table>
                     <table width="100%" style="font-size:13px;border-spacing: 0px 1px;border-collapse: separate" >
                         <tr>
-                            <td class="table-primary" style="text-align:left;width:15%"><strong>Name</strong></td>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Bank Name</strong></td>
                             <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bb_contact"/></td>
                             <td/>
                             <td class="table-primary"  style="text-align:left;width:17%"><strong>Name</strong></td>
@@ -120,24 +120,24 @@
                            <td class="table-active" style="text-align:left;width:33%"><span t-field="o.int_bank_acc_no"/></td>
                         </tr>
                         <tr>
-                            <td class="table-primary" style="text-align:left;width:15%"><strong>Bank Name</strong></td>
-                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bank_name_id.name"/></td>
+                            <td class="table-primary" style="text-align:left;width:15%"><strong>Swift Code</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><strong><span t-field="o.swift_code"/></strong></td>
                             <td/>
                             <td class="table-primary"  style="text-align:left;width:17%"><strong>IBAN No./ Routing No.</strong></td>
                             <td class="table-active"  style="text-align:left;width:33%"><span t-field="o.int_iban_no"/></td>
 
                         </tr>
                         <tr>
-                            <td class="table-primary" style="text-align:left;width:15%"><strong>Bank Address</strong></td>
-                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.bank_address"/></td>
+                             <td class="table-primary" style="text-align:left;width:15%"><strong>Name</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.company_name"/></td>
                             <td/>
                             <td class="table-primary" style="text-align:left;width:17%"><strong>Swift Code</strong></td>
                             <td class="table-active" style="text-align:left;width:33%"><span t-field="o.int_swift_code"/></td>
 
                         </tr>
                         <tr>
-                            <td class="table-primary" style="text-align:left;width:15%"><strong>Swift Code</strong></td>
-                            <td class="table-active" style="text-align:left;width:35%"><strong><span t-field="o.swift_code"/></strong></td>
+                             <td class="table-primary" style="text-align:left;width:15%"><strong>Address</strong></td>
+                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.company_address"/></td>
                             <td/>
                         </tr>
                     </table>
@@ -233,8 +233,7 @@
                     </table>
                     <table style="width: 100%;font-size:13px;">
                         <tr  style="width: 100%;font-size:13px;">
-                            <strong style="font-size:13px;">TOTAL COMMISSONS PAYABLE IN <span t-field="o.company_id.currency_id.name"/>: </strong>&#160; <span style="font-size:13px;" t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line)) "/>&#160;(<span style="font-size:13px;" t-esc="o.amount_to_text(sum(l.commission_amount for l in o.commission_line))"/><span style="font-size:13px;">&#160;Only)</span>
-                            <br/>
+                            <strong style="font-size:13px;">TOTAL COMMISSONS PAYABLE IN <span t-field="o.company_id.currency_id.name"/>: </strong>&#160; <span style="font-size:13px;" t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line)) "/>&#160;(<span style="font-size:13px;" t-esc="o.amount_to_text(sum(l.commission_amount for l in o.commission_line))"/><span style="font-size:13px;">&#160;Only)</span><br/>
                         </tr>
                         <tr>
                             <br/>
