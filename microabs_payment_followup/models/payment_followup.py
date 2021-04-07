@@ -5,8 +5,8 @@ class PaymentFollowup(models.Model):
     _name = "payment.followup"
     _description = "Payment Followup"
 
-    move_id = fields.Many2one(string="account.move")
-    partner_id = fields.Many2one(string="res.partner")
+    invoice_id = fields.Many2one("account.invoice", string="Invoice")
+    partner_id = fields.Many2one("res.partner", string="Customer")
     invoice_date = fields.Date(string="Invoice Date")
     due_date = fields.Date(string="Due Date")
     total_amount = fields.Float(string="Total Amount")

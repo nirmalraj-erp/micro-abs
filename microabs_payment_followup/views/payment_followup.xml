@@ -6,7 +6,7 @@
         <field name="model">payment.followup</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="move_id"/>
+                <field name="invoice_id"/>
                 <field name="partner_id"/>
                 <field name="invoice_date"/>
                 <field name="due_date"/>
@@ -28,7 +28,7 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="move_id"/>
+                            <field name="invoice_id"/>
                             <field name="invoice_date"/>
                             <field name="total_amount"/>
                         </group>
