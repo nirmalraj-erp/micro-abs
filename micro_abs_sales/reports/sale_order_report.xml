@@ -37,6 +37,14 @@
                 <t t-if="not o or not 'company_id' in o">
                     <t t-set="company" t-value="res_company"/>
                 </t>
+                <t t-set="product_description" t-value="False"/>
+                <t>
+                    <tr t-foreach="docs.order_line" t-as="line">
+                        <t t-if="line.product_id.description">
+                            <t t-set="product_description" t-value="True"/>
+                        </t>
+                    </tr>
+                </t>
                 <div class="header">
                     <div class="first-page" style="border-bottom:1px solid gray">
                             <style>
@@ -360,43 +368,47 @@
                                     </tr>
                                 </tr>
                             </t>
-                            <tr>
-                                <td style="font-size:14px"><b>Customer Related Notes : </b>
-                                    <tr>
-                                        <td>
-                                           <t t-if="o.partner_id.comment">
-                                                <li style="padding-left:30px;padding-bottom:12px;font-size:14px;text-align:justify"><span style="padding-left:1%;" t-field="o.partner_id.comment"/></li><br/>
+                            <t t-if="o.partner_id.comment">
+                                <tr>
+                                    <td style="font-size:14px"><b>Customer Related Notes : </b>
+                                        <tr>
+                                            <td>
+                                               <t t-if="o.partner_id.comment">
+                                                    <li style="padding-left:30px;padding-bottom:12px;font-size:14px;text-align:justify"><span style="padding-left:1%;" t-field="o.partner_id.comment"/></li><br/>
+                                                </t>
+                                                <t t-if="not o.partner_id.comment">
+                                                    <span>None</span><br/>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="product_description == True ">
+                                <tr>
+                                    <td style="font-size:14px;;padding-bottom:10px"><b>Product Related Notes : </b></td><br/>
+                                    <tr  t-foreach="docs.order_line" t-as="line">
+                                        <td style="padding-left:30px;font-size:14px;text-align:justify">
+                                            <t t-if="line.product_id.description">
+                                                <t t-set="counter" t-value="counter+1"/>
+                                                <t t-if="line.product_id.description">
+                                                <b style="font-size:14px;">Sl. No. <span t-esc="counter"/> Related : </b>
+                                                    <li style="padding-left:30px;"><span style="padding-left:1%;" t-field="line.product_id.description"/></li>
+                                                </t>
                                             </t>
-                                            <t t-if="not o.partner_id.comment">
-                                                <span>None</span><br/>
-                                            </t>
+    <!--                                         <t t-if="not line.product_id.description">
+                                                <t t-set="counter" t-value="counter+1"/>
+                                                <t t-if="not line.product_id.description">
+                                                <strong>Sl. No. <span t-esc="counter"/> Related : </strong>
+                                                <span>None</span>
+                                                </t>
+                                            </t> -->
+                                            <br/>
                                         </td>
                                     </tr>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-size:14px;padding-bottom:10px"><b>Product Related Notes : </b></td><br/>
-                                <tr  t-foreach="docs.order_line" t-as="line">
-                                <td style="padding-left:30px;font-size:14px;text-align:justify">
-                                    <t t-if="line.product_id.description">
-                                        <t t-set="counter" t-value="counter+1"/>
-                                        <t t-if="line.product_id.description">
-                                        <b style="font-size:14px;">Sl. No. <span t-esc="counter"/> Related : </b>
-                                            <li style="padding-left:30px;"><span style="padding-left:1%;" t-field="line.product_id.description"/></li>
-                                        </t>
-                                    </t>
-                                    <t t-if="not line.product_id.description">
-                                        <t t-set="counter" t-value="counter+1"/>
-                                        <t t-if="not line.product_id.description">
-                                        <strong>Sl. No. <span t-esc="counter"/> Related : </strong>
-                                        <span>None</span>
-                                        </t>
-                                    </t>
-                                    <br/>
-                                </td>
-                            </tr>
-                            </tr>
+                                </tr>
+                            </t>
                         </table>
 
                         <div class="footer">
