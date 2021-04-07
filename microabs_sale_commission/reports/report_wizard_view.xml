@@ -45,6 +45,8 @@
                         <field name="bank_acc_no"  attrs="{'readonly': [('state', '=', 'done')]}"/>
                         <field name="bank_address"  attrs="{'readonly': [('state', '=', 'done')]}"/>
                         <field name="swift_code" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="company_name" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="company_address" attrs="{'readonly': [('state', '=', 'done')]}"/>
                     </group>
                         <group string="Intermediary Bank Details">
                         <field name="int_contact" attrs="{'readonly': [('state', '=', 'done')]}"/>
@@ -98,7 +100,6 @@
                     <field name="bank_acc_no"/>
                     <field name="bank_address"/>
                     <field name="swift_code"/>
-                    <field name="iban_no"/>
                     <field name="contact"/>
                 </tree>
             </field>
@@ -121,7 +122,8 @@
                             <field name="bank_acc_no"/>
                             <field name="bank_address"/>
                             <field name="swift_code"/>
-                            <field name="iban_no"/>
+                                <field name="company_name"/>
+                                <field name="company_address"/>
                         </group>
                         <group string="Intermediary Bank Details">
                             <field name="int_contact"/>
