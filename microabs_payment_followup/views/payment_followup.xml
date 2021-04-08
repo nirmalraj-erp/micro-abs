@@ -61,4 +61,15 @@
             action="action_payment_followup"
             sequence="200"/>
 
+    <!--Cron job for creating payment followup records-->
+    <record id="payment_followup_job" model="ir.cron">
+        <field name="name">Payment Followup Creation</field>
+        <field name="model_id" ref="model_payment_followup"/>
+        <field name="state">code</field>
+        <field name="code">model.create_payment_followup()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+    </record>
+
 </odoo>

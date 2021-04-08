@@ -509,6 +509,7 @@ class AccountInvoiceInherit(models.Model):
     customer_type = fields.Many2one('customer.type', string='Customer Type')
     official_contact_id = fields.Many2one('res.partner', string='Official Contact')
     email_shipment_string = fields.Char(string='Email Shipment String', store=True, compute='_get_email_shipment_string')
+    payment_reminder_email = fields.Boolean("Payment Reminder Email")
 
     @api.depends('partner_id')
     def get_contacts(self):
