@@ -356,7 +356,7 @@
                                 <tr>
                                     <td style="font-size:14px"><b>Internal Notes: </b></td>
                                     <tr>
-                                        <td style="padding-left:30px;padding-bottom:12px;font-size:14px;text-align:justify"><li><span style="padding-left:1%;" t-field="o.note"/></li></td>
+                                        <td style="padding-left:30px;padding-bottom:12px;font-size:14px;"><li><span style="padding-left:1%;" t-field="o.note"/></li></td>
                                     </tr>
                                 </tr>
                             </t>
@@ -365,7 +365,7 @@
                                     <tr>
                                         <td>
                                            <t t-if="o.partner_id.comment">
-                                                <li style="padding-left:30px;padding-bottom:12px;font-size:14px;text-align:justify"><span style="padding-left:1%;" t-field="o.partner_id.comment"/></li><br/>
+                                                <li style="padding-left:30px;padding-bottom:12px;font-size:14px;"><span style="padding-left:1%;" t-field="o.partner_id.comment"/></li><br/>
                                             </t>
                                             <t t-if="not o.partner_id.comment">
                                                 <span>None</span><br/>
@@ -378,7 +378,7 @@
                             <tr>
                                 <td style="font-size:14px;padding-bottom:10px"><b>Product Related Notes : </b></td><br/>
                                 <tr  t-foreach="docs.order_line" t-as="line">
-                                <td style="padding-left:30px;font-size:14px;text-align:justify">
+                                <td style="padding-left:30px;font-size:14px">
                                     <t t-if="line.product_id.description">
                                         <t t-set="counter" t-value="counter+1"/>
                                         <t t-if="line.product_id.description">
