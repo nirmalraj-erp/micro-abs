@@ -399,7 +399,7 @@ class SaleOrderLineInherit(models.Model):
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     sequence = fields.Integer(string='Sequence')
     delivery_date = fields.Date('Delivery Date')
-    wkno = fields.Integer('Week No')
+    wkno = fields.Integer(string='Week No')
 
     @api.onchange('product_id')
     def get_product_line(self):
