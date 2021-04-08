@@ -52,10 +52,7 @@ class PaymentFollowup(models.Model):
         email_to = 'kgsiva2712@gmail.com'
         subject = "Payment Followup"
         body = _("Dear %s," % self.partner_id.name)
-        body += _("<br/> <br/> Exception made if there was a mistake of ours, it seems that the following amount stays "
-                  "unpaid. Please, take appropriate measures in order to carry out this payment in the next 8 days."
-                  " Would your payment have been carried out after this mail was sent, please ignore this message. "
-                  "Do not hesitate to contact our accounting department.")
+        body += _("%s" %self.email_body)
         footer = "With Regards,<br/>Admin"
         mail_ids.append(send_mail.create({
             'email_to': email_to,
