@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <report
+        id="customer_status_report_xlsx"
+        model="customer.status"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="microabs_reports.customer_status_template"
+        file="microabs_reports.customer_status_template"
+    />
+
+
+    <report
         id="customer_status_report_id"
         model="customer.status"
         string="Customer Status Report"
