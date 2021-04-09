@@ -40,8 +40,6 @@ class PaymentFollowup(models.Model):
                                                         'total_amount': inv.amount_total,
                                                         'due_amount': inv.residual
                                                         })
-            inv.update({'payment_reminder_email': True})
-
 
     # Email function for sending mails
     @api.multi
