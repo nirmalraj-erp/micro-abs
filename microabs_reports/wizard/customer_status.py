@@ -33,4 +33,6 @@ class CustomerStatus(models.TransientModel):
         }
         return self.env.ref('microabs_reports.customer_status_report_id').report_action(self, data=data)
 
-
+    # Function call to generate report
+    def export_all(self):
+        return self.env.ref('microabs_reports.customer_status_report_xlsx').report_action(self)
