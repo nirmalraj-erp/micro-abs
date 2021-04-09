@@ -17,20 +17,15 @@ class PaymentFollowup(models.Model):
     due_amount = fields.Float(string="Due Amount")
     email_body = fields.Html(string="Email")
 
-
     @api.model
     def create_payment_followup(self):
-        print('1111111111111111111')
         self.env.cr.execute(""" delete from payment_followup """)
         today = datetime.now().date()
-        print('2222222222222', today)
         previous_date = datetime.strptime(str(today),("%Y-%m-%d")) + rdelta.relativedelta(days=-2)
         previous_date = previous_date.strftime("%Y-%m-%d")
-        print('2222222222222', previous_date)
         invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', previous_date),
                                                               ('date_due', '<=', str(today)),
                                                               ('state', '=', 'open')])
-        print('333333333333333333', invoices)
         for inv in invoices:
             self.env["payment.followup"].sudo().create({
                                                         'invoice_id': inv.id,
@@ -42,17 +37,15 @@ class PaymentFollowup(models.Model):
                                                         })
             inv.update({'payment_reminder_email': True})
 
-
     # Email function for sending mails
     @api.multi
     def send_email(self):
-        print('1111111111111111111')
         mail_ids = []
         send_mail = self.env['mail.mail']
         email_to = 'kgsiva2712@gmail.com'
         subject = "Payment Followup"
         body = _("Dear %s," % self.partner_id.name)
-        body += _("%s" %self.email_body)
+        body += _("%s" % self.email_body)
         footer = "With Regards,<br/>Admin"
         mail_ids.append(send_mail.create({
             'email_to': email_to,
