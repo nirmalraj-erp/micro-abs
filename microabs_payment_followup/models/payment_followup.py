@@ -42,7 +42,7 @@ class PaymentFollowup(models.Model):
     def send_email(self):
         mail_ids = []
         send_mail = self.env['mail.mail']
-        email_to = 'kgsiva2712@gmail.com'
+        email_to = self.partner_id.email
         subject = "Payment Followup"
         body = _("Dear %s," % self.partner_id.name)
         body += _("%s" % self.email_body)
