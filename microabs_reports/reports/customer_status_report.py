@@ -11,23 +11,39 @@ class CustomerStatusReportXLSX(models.AbstractModel):
         for obj in status_id:
             # report_name = obj.partner_id.name
             sheet = workbook.add_worksheet('customer_report.xlsx')
-            heading = workbook.add_format({
-                'font_size': 12, 'align': 'left', 'bold': 1, 'font_name': 'Liberation Serif',})
+            po_header = workbook.add_format({
+                'font_size': 12,
+                'border': 1,
+                'align': 'left',
+                'bg_color': '#B6D0E2',
+                'font_name': 'Liberation Serif', })
+            po_values = workbook.add_format({
+                'font_size': 12,
+                'border': 1,
+                'align': 'left',
+                'font_name': 'Liberation Serif', })
             merge_header = workbook.add_format({
                 'bold': 1,
                 'border': 1,
                 'align': 'center',
                 'valign': 'vcenter',
-                'fg_color': 'yellow'})
-            sheet.set_column('B3:M3', 20)
-            sheet.set_column('A9:A9', 5)
+                'fg_color': '#fed8b1'})
+            merge_customer = workbook.add_format({
+                'bold': 1,
+                'border': 1,
+                'align': 'center',
+                'valign': 'vcenter',
+                'fg_color': '#b2beb5'})
+            sheet.set_column('C3:M3', 20)
+            sheet.set_column('A9:A9', 2)
+            sheet.set_column('B9:B9', 5)
             header_line = workbook.add_format({
                 'bold': 1,
                 'border': 1,
                 'align': 'center',
                 'font_name': 'Liberation Serif',
                 'valign': 'vcenter',
-                'bg_color': '#fed8b1'})
+                'bg_color': '#B6D0E2'})
             line_values = workbook.add_format({
                 'align': 'left',
                 'font_name': 'Liberation Serif',
@@ -40,52 +56,55 @@ class CustomerStatusReportXLSX(models.AbstractModel):
             })
             date_format = workbook.add_format({'num_format': 'dd/mm/yyyy',
                                                'align': 'left',
+                                               'border': 1,
                                                'font_name': 'Liberation Serif'})
-            sheet.merge_range('B2:E2', 'Customer Status Report', merge_header)
+            date_format_lines = workbook.add_format({'num_format': 'dd/mm/yyyy',
+                                                    'align': 'left',
+                                                     'font_name': 'Liberation Serif'})
+            sheet.merge_range('C2:H2', 'Customer Status Report', merge_header)
             row = 3
             for partners in obj.partner_id.ids:
                 for data in self.get_po_common_data(partners, obj.date_start, obj.date_end):
                     row += 1
-                    sheet.write('B' + str(row), 'Customer Name', heading)
-                    sheet.write('C' + str(row), data.get('partner'), line_values)
-                    row += 1
-                    sheet.write('B' + str(row), 'PO No.', heading)
-                    sheet.write('C' + str(row), data.get('po_no'), line_values)
-                    sheet.write('D' + str(row), 'PO Date.', heading)
-                    sheet.write('E' + str(row), data.get('po_date'), date_format)
-                    row += 1
-                    sheet.write('B' + str(row), 'Shipping Mode', heading)
-                    sheet.write('C' + str(row), data.get('sm_name'), line_values)
-                    sheet.write('D' + str(row), 'FF Details', heading)
-                    sheet.write('E' + str(row), data.get('ffd_name'), date_format)
-                    row += 1
-                    sheet.write('B' + str(row), 'Supplier Del. Date', heading)
-                    sheet.write('C' + str(row), data.get('supplier_expected_date'), date_format)
-                    sheet.write('D' + str(row), 'Customer Req. Date', heading)
-                    sheet.write('E' + str(row), data.get('so_commitment_date'), date_format)
+                    sheet.merge_range('C' + str(row) + ':' + 'E' + str(row), 'Customer Name', merge_customer)
+                    sheet.merge_range('F' + str(row) + ':' + 'H' + str(row), data.get('partner'), merge_customer)
                     row += 2
-                    sheet.write('A' + str(row), 'S.NO.', header_line)
-                    sheet.write('B' + str(row), 'Product', header_line)
-                    sheet.write('C' + str(row), 'Dispatch Status', header_line)
-                    sheet.write('D' + str(row), 'Invoice No.', header_line)
-                    sheet.write('E' + str(row), 'Invoice Date', header_line)
-                    sheet.write('F' + str(row), 'BL/AWB No.', header_line)
-                    sheet.write('G' + str(row), 'BL/AWB Date', header_line)
+                    sheet.write('D' + str(row), 'PO No.', po_header)
+                    sheet.write('E' + str(row), data.get('po_no'), po_values)
+                    sheet.write('F' + str(row), 'PO Date.', po_header)
+                    sheet.write('G' + str(row), data.get('po_date'), date_format)
+                    row += 1
+                    sheet.write('D' + str(row), 'Shipping Mode', po_header)
+                    sheet.write('E' + str(row), data.get('sm_name'), po_values)
+                    sheet.write('F' + str(row), 'FF Details', po_header)
+                    sheet.write('G' + str(row), data.get('ffd_name'), date_format)
+                    row += 1
+                    sheet.write('D' + str(row), 'Supplier Del. Date', po_header)
+                    sheet.write('E' + str(row), data.get('supplier_expected_date'), date_format)
+                    sheet.write('F' + str(row), 'Customer Req. Date', po_header)
+                    sheet.write('G' + str(row), data.get('so_commitment_date'), date_format)
+                    row += 2
+                    sheet.write('B' + str(row), 'S.NO.', header_line)
+                    sheet.write('C' + str(row), 'Product', header_line)
+                    sheet.write('D' + str(row), 'Dispatch Status', header_line)
+                    sheet.write('E' + str(row), 'Invoice No.', header_line)
+                    sheet.write('F' + str(row), 'Invoice Date', header_line)
+                    sheet.write('G' + str(row), 'BL/AWB No.', header_line)
+                    sheet.write('H' + str(row), 'BL/AWB Date', header_line)
                     row += 2
                     counter = 1
                     for lines in self.get_order_line_data(partners, obj.date_start, obj.date_end):
-                        print('lines', lines)
-                        sheet.write('A' + str(row), counter, sl_format)
+                        sheet.write('B' + str(row), counter, sl_format)
                         counter += 1
-                        sheet.write('B' + str(row), lines.get('pt_name'), line_values)
+                        sheet.write('C' + str(row), lines.get('pt_name'), line_values)
                         if not lines.get('invoice_number'):
-                            sheet.write('C' + str(row), 'Yet to Dispatch', line_values)
+                            sheet.write('D' + str(row), 'Yet to Dispatch', line_values)
                         else:
-                            sheet.write('C' + str(row), 'Dispatched', line_values)
-                            sheet.write('D' + str(row), lines.get('invoice_number'), line_values)
-                            sheet.write('E' + str(row), lines.get('date_invoice'), date_format)
-                            sheet.write('F' + str(row), lines.get('bl_no'), line_values)
-                            sheet.write('G' + str(row), lines.get('bl_date'), date_format)
+                            sheet.write('D' + str(row), 'Dispatched', line_values)
+                            sheet.write('E' + str(row), lines.get('invoice_number'), line_values)
+                            sheet.write('F' + str(row), lines.get('date_invoice'), date_format_lines)
+                            sheet.write('G' + str(row), lines.get('bl_no'), line_values)
+                            sheet.write('H' + str(row), lines.get('bl_date'), date_format_lines)
                         row += 1
 
     def get_order_line_data(self, partners, date_start, date_end):
