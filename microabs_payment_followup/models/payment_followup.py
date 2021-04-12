@@ -52,7 +52,7 @@ class PaymentFollowup(models.Model):
 
                 message += "<b> Overdue Invoices: </b>"
                 message += "<p> No overdue as on date. </p>"
-                message += "<br/><br/>"
+                message += "<br/>"
 
                 message += "<b> Pending Invoices: </b>"
                 message += "<p> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </p>" % (res.invoice_id.number,
@@ -96,9 +96,9 @@ class PaymentFollowup(models.Model):
                               res.currency_id.name,
                               res.due_amount,
                               res.due_date.strftime("%d-%m-%Y"))
-                message += "<br/><br/>"
+                message += "<br/>"
 
-                message += "<b> Pending Invoices: </b> <br/><br/>"
+                message += "<b> Pending Invoices: </b>"
                 message += " <p> No pending invoices as on date. </p>"
                 message += "<br/><br/>"
                 message += "Regards, <br/> ERP Team. <br/>"
@@ -114,17 +114,15 @@ class PaymentFollowup(models.Model):
     def send_email(self):
         mail_ids = []
         send_mail = self.env['mail.mail']
-        email_to = self.partner_id.email
-        subject = "Payment Followup"
-        body = _("Dear %s," % self.partner_id.name)
-        body += _("%s" % self.email_body)
-        footer = "With Regards,<br/>Admin"
+        body = _("%s" % self.email_body)
         mail_ids.append(send_mail.create({
-            'email_to': email_to,
-            'subject': subject,
+            'email_to': self.email_to,
+            'email_cc': self.email_cc,
+            'subject': self.email_subject,
             'body_html': '''<span  style="font-size:14px"><br/>
                         <br/>%s<br/>
-                        <br/>%s</span>''' % (body, footer),
+                        </span>''' % body,
         }))
         for i in range(len(mail_ids)):
             mail_ids[i].send(self)
+        self.state = 'sent'

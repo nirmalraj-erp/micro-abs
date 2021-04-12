@@ -24,7 +24,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="send_email" string="Send Email" type="object" class="oe_highlight"/>
+                    <button name="send_email" string="Send Email" type="object" states="draft" class="oe_highlight"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,sent"/>
                 </header>
                 <sheet>
