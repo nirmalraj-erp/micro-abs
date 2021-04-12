@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 from odoo.tools import float_is_zero
 from datetime import date
@@ -134,8 +134,8 @@ class ResPartnerInherit(models.Model):
 
 class SaleOrderInherit(models.Model):
     _inherit = 'sale.order'
-    _sql_constraints = [
-        ('po_no_uniq', 'unique(po_no)', 'PO Number must be a unique.')]
+    # _sql_constraints = [
+    #     ('po_no_uniq', 'unique(po_no)', 'PO Number must be a unique.')]
 
     order_conf_no = fields.Char(string='OC No.')
     order_conf_date = fields.Date(string='OC Date')
@@ -493,8 +493,6 @@ class SaleOrderLineInherit(models.Model):
                                
 class AccountInvoiceInherit(models.Model):
     _inherit = 'account.invoice'
-    _sql_constraints = [
-        ('invoice_number_uniq', 'unique(invoice_number)', 'Invoice Number must be a unique.')]
 
     order_conf_no = fields.Char(string='OC No.')
     order_conf_date = fields.Date(string='OC Date')
