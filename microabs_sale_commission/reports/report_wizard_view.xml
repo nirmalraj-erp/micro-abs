@@ -17,7 +17,7 @@
 		<field name ="name">commission.sale.report.form</field>
 		<field name ="model">sale.commission.report</field>
 		<field name ="arch" type="xml">
-			<form>
+			<form delete="false">
                 <header>
                     <button string="Done" name="action_done" states="draft" type='object' class="oe_highlight"/>
                     <button string="Revert" name="action_revert" states="draft,done" type='object' />
