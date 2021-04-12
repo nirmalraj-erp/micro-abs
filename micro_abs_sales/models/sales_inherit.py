@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 from odoo.tools import float_is_zero
 from datetime import date
@@ -134,6 +134,8 @@ class ResPartnerInherit(models.Model):
 
 class SaleOrderInherit(models.Model):
     _inherit = 'sale.order'
+    # _sql_constraints = [
+    #     ('po_no_uniq', 'unique(po_no)', 'PO Number must be a unique.')]
 
     order_conf_no = fields.Char(string='OC No.')
     order_conf_date = fields.Date(string='OC Date')
@@ -403,46 +405,49 @@ class SaleOrderLineInherit(models.Model):
 
     @api.onchange('product_id')
     def get_product_line(self):
-        """Description line based on Product master - Product Info"""
-        if self.product_id:
-            self.product_size = self.product_id.product_size.id
-            self.product_kind = self.product_id.product_kind.id
-            self.operation_id = self.product_id.operation_id.id
-            self.product_recess_id = self.product_id.product_recess_id.id
-            self.specification = self.product_id.specification.id
-            self.application_ids = self.product_id.application_ids.ids
-            self.no_commission_required = self.product_id.no_commission_required
-            for line in self.product_id.offer_details_line:
-                if self.order_id.partner_id == line.partner_id:
-                    self.customer_item_code = line.customer_item_code if self.order_id.partner_id == line.partner_id else ''
-                    self.offer_no = line.offer_no if self.order_id.partner_id == line.partner_id else ''
-                    self.offer_date = line.offer_date if self.order_id.partner_id == line.partner_id else ''
-                    self.drawing_no = line.drawing_no if self.order_id.partner_id == line.partner_id else ''
-            offer_date = ''
-            if self.offer_date:
-                offer_date = datetime.strftime(self.offer_date, "%d/%m/%Y")
-            vals =""""""
-            if self.product_size.name:
-                vals += 'Size : ' + str(self.product_size.name)
-            if self.product_recess_id.name:
-                vals += "\n" 'Recess : ' + str(self.product_recess_id.name)
-            if self.specification.name:
-                vals += "\n" 'Specification : ' + str(self.specification.name)
-            if self.drawing_no:
-                vals += "\n" 'Drawing No : ' + str(self.drawing_no)
-            if self.product_id.cutting_speed_id.name:
-                vals += "\n" 'Cutting Speed : ' + str(self.product_id.cutting_speed_id.name)
-            if self.product_id.l10n_in_hsn_code:
-                vals += "\n" 'HSN Code : ' + str(self.product_id.l10n_in_hsn_code)
-            if self.offer_no or self.offer_date:
-                vals += "\n" 'Offer No : ' + str(self.offer_no) + " " + "dtd." + " " + str(offer_date)
-            if self.product_id.description_sale:
-                vals += "\n" 'Product Description : ' + str(self.product_id.description_sale)
-            if self.customer_item_code:
-                vals += "\n" 'Customer Item Code : ' + str(self.customer_item_code)
-            if self.product_id.default_code:
-                vals += "\n" 'Supplier Item Code : ' + str(self.product_id.default_code)
-            self.description = vals
+        """Description line based on Product master - Product Info and Company Code"""
+        if self.order_id.company_id.company_code == 'HAD':
+            self.description = self.product_id.name
+        else:
+            if self.product_id:
+                self.product_size = self.product_id.product_size.id
+                self.product_kind = self.product_id.product_kind.id
+                self.operation_id = self.product_id.operation_id.id
+                self.product_recess_id = self.product_id.product_recess_id.id
+                self.specification = self.product_id.specification.id
+                self.application_ids = self.product_id.application_ids.ids
+                self.no_commission_required = self.product_id.no_commission_required
+                for line in self.product_id.offer_details_line:
+                    if self.order_id.partner_id == line.partner_id:
+                        self.customer_item_code = line.customer_item_code if self.order_id.partner_id == line.partner_id else ''
+                        self.offer_no = line.offer_no if self.order_id.partner_id == line.partner_id else ''
+                        self.offer_date = line.offer_date if self.order_id.partner_id == line.partner_id else ''
+                        self.drawing_no = line.drawing_no if self.order_id.partner_id == line.partner_id else ''
+                offer_date = ''
+                if self.offer_date:
+                    offer_date = datetime.strftime(self.offer_date, "%d/%m/%Y")
+                vals =""""""
+                if self.product_size.name:
+                    vals += 'Size : ' + str(self.product_size.name)
+                if self.product_recess_id.name:
+                    vals += "\n" 'Recess : ' + str(self.product_recess_id.name)
+                if self.specification.name:
+                    vals += "\n" 'Specification : ' + str(self.specification.name)
+                if self.drawing_no:
+                    vals += "\n" 'Drawing No : ' + str(self.drawing_no)
+                if self.product_id.cutting_speed_id.name:
+                    vals += "\n" 'Cutting Speed : ' + str(self.product_id.cutting_speed_id.name)
+                if self.product_id.l10n_in_hsn_code:
+                    vals += "\n" 'HSN Code : ' + str(self.product_id.l10n_in_hsn_code)
+                if self.offer_no or self.offer_date:
+                    vals += "\n" 'Offer No : ' + str(self.offer_no) + " " + "dtd." + " " + str(offer_date)
+                if self.product_id.description_sale:
+                    vals += "\n" 'Product Description : ' + str(self.product_id.description_sale)
+                if self.customer_item_code:
+                    vals += "\n" 'Customer Item Code : ' + str(self.customer_item_code)
+                if self.product_id.default_code:
+                    vals += "\n" 'Supplier Item Code : ' + str(self.product_id.default_code)
+                self.description = vals
 
     @api.multi
     def _prepare_invoice_line(self, qty):
@@ -546,6 +551,8 @@ class AccountInvoiceInherit(models.Model):
 
 class ResCompanyInherit(models.Model):
     _inherit = 'res.company'
+    _sql_constraints = [
+        ('company_code_uniq', 'unique(company_code)', 'Company Code must be a unique.')]
 
     agent = fields.Char("Agent")
     commission = fields.Float("Commission(%)")
@@ -579,6 +586,11 @@ class ResCompanyInherit(models.Model):
     contact = fields.Char("Name of Signed person")
     com_logo = fields.Binary("Logo")
     website_address = fields.Char('Website Address')
+    so_email_to = fields.Char('SO Email To')
+    so_email_cc = fields.Char('SO Email CC')
+    com_email_to = fields.Char('Comm Email To')
+    com_email_cc = fields.Char('Comm Email CC')
+    company_code = fields.Char('Company Code')
 
     @api.onchange('website')
     @api.depends('website')
