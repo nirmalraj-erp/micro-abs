@@ -49,6 +49,7 @@
             name="Open Reverted Commission"
             res_model="commission.invoice.open"
             src_model="sale.commission"
+            invisible = "1"
             view_mode="form"
             multi="True"
             target="new"
