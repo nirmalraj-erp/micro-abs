@@ -44,15 +44,14 @@
             target="new"
             key2="client_action_multi"
         />
-        <act_window
+        <!--<act_window
             id="action_commission_invoice_open_list"
             name="Open Reverted Commission"
             res_model="commission.invoice.open"
             src_model="sale.commission"
-            invisible = "1"
             view_mode="form"
             multi="True"
             target="new"
             key2="client_action_multi"
-        />
+        />-->
 </odoo>
