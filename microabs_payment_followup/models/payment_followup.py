@@ -15,27 +15,99 @@ class PaymentFollowup(models.Model):
     due_date = fields.Date(string="Due Date")
     total_amount = fields.Float(string="Total Amount")
     due_amount = fields.Float(string="Due Amount")
+    currency_id = fields.Many2one("res.currency", string="Currency")
     email_body = fields.Html(string="Email")
+    email_to = fields.Char(string="Email To")
+    email_cc = fields.Char(string="Email CC")
+    email_subject = fields.Char(string="Subject")
+    state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
+                             string="Status")
 
     @api.model
     def create_payment_followup(self):
         self.env.cr.execute(""" delete from payment_followup """)
         today = datetime.now().date()
-        previous_date = datetime.strptime(str(today),("%Y-%m-%d")) + rdelta.relativedelta(days=-2)
-        previous_date = previous_date.strftime("%Y-%m-%d")
-        invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', previous_date),
-                                                              ('date_due', '<=', str(today)),
-                                                              ('state', '=', 'open')])
-        for inv in invoices:
-            self.env["payment.followup"].sudo().create({
-                                                        'invoice_id': inv.id,
-                                                        'partner_id': inv.partner_id.id,
-                                                        'invoice_date': inv.date_invoice,
-                                                        'due_date': inv.date_due,
-                                                        'total_amount': inv.amount_total,
-                                                        'due_amount': inv.residual
-                                                        })
-            inv.update({'payment_reminder_email': True})
+        overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
+                                                                      ('state', 'in', ('open', 'in_payment'))])
+        pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
+                                                                      ('state', 'in', ('open', 'in_payment'))])
+        if pending_invoices:
+            for inv in pending_invoices:
+                res = self.env["payment.followup"].sudo().create({
+                                                            'invoice_id': inv.id,
+                                                            'partner_id': inv.partner_id.id,
+                                                            'invoice_date': inv.date_invoice,
+                                                            'due_date': inv.date_due,
+                                                            'total_amount': inv.amount_total,
+                                                            'due_amount': inv.residual,
+                                                            'currency_id': inv.currency_id.id,
+                                                            'email_to': inv.partner_id.email,
+                                                            'email_cc': inv.partner_id.payment_cc,
+                                                            'email_subject': inv.company_id.name + " - " + inv.partner_id.
+                                                            name + " - " + " Overdue and Pending Invoice"
+                                                            })
+                message = "Dear %s, <br/>" % res.partner_id.name
+                message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
+                message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
+
+                message += "<b> Overdue Invoices: </b>"
+                message += "<p> No overdue as on date. </p>"
+                message += "<br/><br/>"
+
+                message += "<b> Pending Invoices: </b>"
+                message += "<p> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </p>" % (res.invoice_id.number,
+                                                                                          res.invoice_date.strftime("%d-%m-%Y"),
+                                                                                          res.currency_id.name,
+                                                                                          res.due_amount,
+                                                                                          res.due_date.strftime("%d-%m-%Y"))
+                message += "<br/><br/>"
+                message += "Regards, <br/> ERP Team. <br/>"
+                message += "%s, " % res.partner_id.street
+                message += "%s, <br/>" % res.partner_id.street2
+                message += "%s, " % res.partner_id.city
+                message += "%s, <br/>" % res.partner_id.state_id.name
+                message += "%s - %s. " % (res.partner_id.country_id.name, res.partner_id.zip)
+                res.email_body = message
+
+        if overdue_invoices:
+            for inv in overdue_invoices:
+                res = self.env["payment.followup"].sudo().create({
+                    'invoice_id': inv.id,
+                    'partner_id': inv.partner_id.id,
+                    'invoice_date': inv.date_invoice,
+                    'due_date': inv.date_due,
+                    'total_amount': inv.amount_total,
+                    'due_amount': inv.residual,
+                    'currency_id': inv.currency_id.id,
+                    'email_to': inv.partner_id.email,
+                    'email_cc': inv.partner_id.payment_cc,
+                    'email_subject': inv.company_id.name + " - " + inv.partner_id.name + " - " + " "
+                    "Overdue and Pending Invoice"
+                })
+                message = "Dear %s, <br/>" % res.partner_id.name
+                message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
+                message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
+
+                message += "<b> Overdue Invoices: </b>"
+                message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
+                           "</p>" \
+                           % (res.invoice_id.number,
+                              res.invoice_date.strftime("%d-%m-%Y"),
+                              res.currency_id.name,
+                              res.due_amount,
+                              res.due_date.strftime("%d-%m-%Y"))
+                message += "<br/><br/>"
+
+                message += "<b> Pending Invoices: </b> <br/><br/>"
+                message += " <p> No pending invoices as on date. </p>"
+                message += "<br/><br/>"
+                message += "Regards, <br/> ERP Team. <br/>"
+                message += "%s, " % res.partner_id.street
+                message += "%s, <br/>" % res.partner_id.street2
+                message += "%s, " % res.partner_id.city
+                message += "%s, <br/>" % res.partner_id.state_id.name
+                message += "%s - %s. " % (res.partner_id.country_id.name, res.partner_id.zip)
+                res.email_body = message
 
     # Email function for sending mails
     @api.multi
