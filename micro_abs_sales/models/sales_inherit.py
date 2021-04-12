@@ -134,6 +134,8 @@ class ResPartnerInherit(models.Model):
 
 class SaleOrderInherit(models.Model):
     _inherit = 'sale.order'
+    _sql_constraints = [
+        ('po_no_uniq', 'unique(po_no)', 'PO Number must be a unique.')]
 
     order_conf_no = fields.Char(string='OC No.')
     order_conf_date = fields.Date(string='OC Date')
