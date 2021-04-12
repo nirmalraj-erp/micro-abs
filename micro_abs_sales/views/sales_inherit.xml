@@ -437,6 +437,15 @@
                     <field name="agent" invisible="1"/>
                     <field name="commission" invisible="1"/>
                 </field>
+                <field name="partner_id" position="before">
+                    <field name="company_code"/>
+                </field>
+                <div class="o_address_format" position="after">
+                    <field name="so_email_to"/>
+                    <field name="so_email_cc"/>
+                    <field name="com_email_to"/>
+                    <field name="com_email_cc"/>
+                </div>
                 <xpath expr="/form/sheet/notebook/page[1]" position="after">
                     <page string="Commission Agent Details">
                         <group string="Commission Agent Details">
