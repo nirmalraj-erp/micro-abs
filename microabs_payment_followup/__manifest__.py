@@ -10,6 +10,7 @@
     'depends': ['account'],
     'data': [
         'security/ir.model.access.csv',
+        'security/payment_followup_security.xml',
         'views/res_partner.xml',
         'views/payment_followup.xml'
     ],
