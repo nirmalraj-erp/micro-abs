@@ -5,7 +5,7 @@
         <field name="name">payment.followup.tree</field>
         <field name="model">payment.followup</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-danger="due_status == 'overdue'" decoration-warning="due_status == 'pending'">
                 <field name="invoice_id"/>
                 <field name="partner_id"/>
                 <field name="invoice_date"/>
@@ -13,6 +13,7 @@
                 <field name="total_amount" widget="monetary"/>
                 <field name="due_amount" widget="monetary"/>
                 <field name="state"/>
+                <field name="due_status"/>
             </tree>
         </field>
     </record>
@@ -33,12 +34,14 @@
                             <field name="invoice_id" readonly="1" force_save="1"/>
                             <field name="invoice_date" readonly="1" force_save="1"/>
                             <field name="total_amount" readonly="1" force_save="1" widget="monetary"/>
+                            <field name="company_id" readonly="1"/>
                         </group>
                         <group>
                             <field name="partner_id" readonly="1" force_save="1"/>
                             <field name="due_date" readonly="1" force_save="1"/>
                             <field name="due_amount" readonly="1" force_save="1" widget="monetary"/>
                             <field name="currency_id" invisible="1"/>
+                            <field name="due_status" invisible="1"/>
                         </group>
                     </group>
                     <separator/>
