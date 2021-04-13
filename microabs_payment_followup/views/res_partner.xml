@@ -7,11 +7,21 @@
                 <xpath expr="//page[@name='sales_purchases']" position="after">
                     <page string="Payment Follow-Ups" autofocus="autofocus">
                         <group string="Payment Follow-Ups Details">
-                            <field name="payment_to"/>
-                            <field name="payment_cc"/>
-                            <field name="docs_to"/>
-                            <field name="docs_cc"/>
-                            <field name="official_contact"/>
+                            <group>
+                                <field name="payment_to"/>
+                                <field name="payment_cc"/>
+                                <field name="docs_to_ids" widget="many2many_tags"
+                                       domain="[('id', 'in', child_ids)]"
+                                       options="{'no_open':True,'no_create': True}"/>
+                                <field name="docs_cc_ids" widget="many2many_tags"
+                                       domain="[('id', 'in', child_ids)]"
+                                       options="{'no_open':True,'no_create': True}"/>
+                                <field name="official_contact"/>
+                            </group>
+                            <group>
+                                <field name="docs_to"/>
+                                <field name="docs_cc"/>
+                            </group>
                         </group>
                     </page>
                 </xpath>
