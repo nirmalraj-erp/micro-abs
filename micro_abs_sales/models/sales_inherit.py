@@ -177,6 +177,12 @@ class SaleOrderInherit(models.Model):
                     print(wkno)
                     line.wkno = wkno + 1
 
+    @api.onchange("po_no")
+    def onchange_po_no(self):
+        if self.po_no:
+            po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
+            if po_no:
+                raise ValidationError("PO Number must be unique..!")
 
     @api.depends('so_commitment_date')
     @api.onchange('so_commitment_date')
@@ -515,6 +521,13 @@ class AccountInvoiceInherit(models.Model):
     official_contact_id = fields.Many2one('res.partner', string='Official Contact')
     email_shipment_string = fields.Char(string='Email Shipment String', store=True, compute='_get_email_shipment_string')
     # payment_reminder_email = fields.Boolean("Payment Reminder Email")
+
+    @api.onchange("invoice_number")
+    def onchange_invoice_number(self):
+        if self.invoice_number:
+            invoice_number = self.sudo().search([('invoice_number', '=', self.invoice_number), ('id', '!=', self._origin.id)])
+            if invoice_number:
+                raise ValidationError("Invoice Number must be unique..!")
 
     @api.depends('partner_id')
     def get_contacts(self):
