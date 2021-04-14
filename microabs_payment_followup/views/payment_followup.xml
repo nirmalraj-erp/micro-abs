@@ -5,7 +5,7 @@
         <field name="name">payment.followup.tree</field>
         <field name="model">payment.followup</field>
         <field name="arch" type="xml">
-            <tree decoration-danger="due_status == 'overdue'" decoration-warning="due_status == 'pending'">
+            <tree decoration-danger="due_status == 'overdue'" decoration-info="due_status == 'pending'">
                 <field name="invoice_id"/>
                 <field name="partner_id"/>
                 <field name="invoice_date"/>
