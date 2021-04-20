@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from datetime import datetime, date, time
+from odoo.exceptions import UserError, ValidationError
 from datetime import timedelta
 from dateutil import relativedelta as rdelta
 
@@ -32,7 +33,15 @@ class PaymentFollowup(models.Model):
     def default_get(self, fields):
         res = super(PaymentFollowup, self).default_get(fields)
         res_ids = self._context.get('active_ids')
-        invoice_id = self.env["account.invoice"].sudo().browse(res_ids)
+        partner_list = []
+        partner = self.env["account.invoice"].sudo().browse(res_ids)
+        for i in partner:
+            if i.partner_id.id not in partner_list and len(partner_list) >= 1:
+                raise ValidationError("Different Partner's have been selected. Kindly select records of same partner..!")
+            else:
+                partner_list.append(i.partner_id.id)
+        invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
+        print('222222222222222', invoice_id)
         res.update({
             'email_to': invoice_id.partner_id.docs_to,
             'email_cc': invoice_id.partner_id.docs_cc,
