@@ -41,7 +41,6 @@ class PaymentFollowup(models.Model):
             else:
                 partner_list.append(i.partner_id.id)
         invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
-        print('222222222222222', invoice_id)
         res.update({
             'email_to': invoice_id.partner_id.docs_to,
             'email_cc': invoice_id.partner_id.docs_cc,
