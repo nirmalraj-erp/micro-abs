@@ -8,6 +8,7 @@ class PaymentFollowup(models.Model):
     _name = "payment.followup"
     _description = "Payment Followup"
     _rec_name = "invoice_id"
+    _order = "due_date"
 
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
     partner_id = fields.Many2one("res.partner", string="Customer")
@@ -22,14 +23,13 @@ class PaymentFollowup(models.Model):
     email_subject = fields.Char(string="Subject")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
-    due_status = fields.Selection([('pending', 'Pending Invoices'), ('overdue', 'Overdue Invoice')], default="pending",
-                             string="Due Status")
+    due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
+                                  default="pending", string="Due Status")
     company_id = fields.Many2one('res.company', string='Company',
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'))
 
     @api.model
     def create_payment_followup(self):
-        self.env.cr.execute(""" delete from payment_followup """)
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
                                                                       ('state', 'in', ('open', 'in_payment'))])
@@ -46,8 +46,8 @@ class PaymentFollowup(models.Model):
                                                             'total_amount': inv.amount_total,
                                                             'due_amount': inv.residual,
                                                             'currency_id': inv.currency_id.id,
-                                                            'email_to': inv.partner_id.email,
-                                                            'email_cc': inv.partner_id.payment_cc,
+                                                            'email_to': inv.partner_id.docs_to,
+                                                            'email_cc': inv.partner_id.docs_cc,
                                                             'email_subject': inv.company_id.name + " - " + inv.partner_id.
                                                             name + " - " + " Overdue and Pending Invoice"
                                                             })

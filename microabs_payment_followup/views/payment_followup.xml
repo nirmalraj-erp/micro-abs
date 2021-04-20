@@ -5,7 +5,8 @@
         <field name="name">payment.followup.tree</field>
         <field name="model">payment.followup</field>
         <field name="arch" type="xml">
-            <tree decoration-danger="due_status == 'overdue'" decoration-warning="due_status == 'pending'">
+            <tree decoration-danger="due_status == 'overdue'" decoration-warning="due_status == 'pending'"
+                  decoration-success="due_status == 'paid'">
                 <field name="invoice_id"/>
                 <field name="partner_id"/>
                 <field name="invoice_date"/>
@@ -47,10 +48,10 @@
                     <separator/>
                     <group string="Email Recipients">
                         <group>
-                            <field name="email_to" readonly="1" force_save="1"/>
+                            <field name="email_to" />
                         </group>
                         <group>
-                            <field name="email_cc" readonly="1" force_save="1"/>
+                            <field name="email_cc" />
                         </group>
                     </group>
                     <group>
@@ -73,22 +74,22 @@
     </record>
 
     <!--  Payment Followup Menu -->
-    <menuitem
-            id="menu_payment_followup"
-            name="Payment Followup"
-            parent="account.menu_finance_receivables"
-            action="action_payment_followup"
-            sequence="200"/>
+<!--    <menuitem-->
+<!--            id="menu_payment_followup"-->
+<!--            name="Payment Followup"-->
+<!--            parent="account.menu_finance_receivables"-->
+<!--            action="action_payment_followup"-->
+<!--            sequence="200"/>-->
 
     <!--Cron job for creating payment followup records-->
-    <record id="payment_followup_job" model="ir.cron">
-        <field name="name">Payment Followup Creation</field>
-        <field name="model_id" ref="model_payment_followup"/>
-        <field name="state">code</field>
-        <field name="code">model.create_payment_followup()</field>
-        <field name='interval_number'>1</field>
-        <field name='interval_type'>days</field>
-        <field name="numbercall">-1</field>
-    </record>
+<!--    <record id="payment_followup_job" model="ir.cron">-->
+<!--        <field name="name">Payment Followup Creation</field>-->
+<!--        <field name="model_id" ref="model_payment_followup"/>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">model.create_payment_followup()</field>-->
+<!--        <field name='interval_number'>1</field>-->
+<!--        <field name='interval_type'>days</field>-->
+<!--        <field name="numbercall">-1</field>-->
+<!--    </record>-->
 
 </odoo>
