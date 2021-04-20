@@ -1,2 +1,2 @@
 from . import res_partner
-# from . import payment_followup
+from . import payment_followup

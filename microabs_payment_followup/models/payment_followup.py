@@ -29,6 +29,32 @@ class PaymentFollowup(models.Model):
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'))
 
     @api.model
+    def default_get(self, fields):
+        res = super(PaymentFollowup, self).default_get(fields)
+        res_ids = self._context.get('active_ids')
+        invoice_id = self.env["account.invoice"].sudo().browse(res_ids)
+        print('invoiceeeeeeeeeeee', invoice_id)
+        res.update({
+            'invoice_id': res_ids,
+            'partner_id': invoice_id.partner_id.id,
+            'email_to': invoice_id.partner_id.docs_to,
+            'email_cc': invoice_id.partner_id.docs_cc,
+            'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
+            " Overdue and Pending Invoice"
+        })
+        self.test()
+        return res
+
+    def test(self):
+        today = datetime.now().date()
+        overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
+                                                                      ('state', 'in', ('open', 'in_payment'))])
+        pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
+                                                                      ('state', 'in', ('open', 'in_payment'))])
+        print('11111111111111111111', overdue_invoices)
+        print('11111111111111111111', pending_invoices)
+
+    @api.model
     def create_payment_followup(self):
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
