@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from datetime import datetime, date, time
+from odoo.exceptions import UserError, ValidationError
 from datetime import timedelta
 from dateutil import relativedelta as rdelta
 
@@ -8,6 +9,7 @@ class PaymentFollowup(models.Model):
     _name = "payment.followup"
     _description = "Payment Followup"
     _rec_name = "invoice_id"
+    _order = "due_date"
 
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
     partner_id = fields.Many2one("res.partner", string="Customer")
@@ -22,14 +24,81 @@ class PaymentFollowup(models.Model):
     email_subject = fields.Char(string="Subject")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
-    due_status = fields.Selection([('pending', 'Pending Invoices'), ('overdue', 'Overdue Invoice')], default="pending",
-                             string="Due Status")
+    due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
+                                  default="pending", string="Due Status")
     company_id = fields.Many2one('res.company', string='Company',
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'))
 
     @api.model
+    def default_get(self, fields):
+        res = super(PaymentFollowup, self).default_get(fields)
+        res_ids = self._context.get('active_ids')
+        partner_list = []
+        partner = self.env["account.invoice"].sudo().browse(res_ids)
+        for i in partner:
+            if i.partner_id.id not in partner_list and len(partner_list) >= 1:
+                raise ValidationError("Different Partner's have been selected. Kindly select records of same partner..!")
+            else:
+                partner_list.append(i.partner_id.id)
+        invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
+        res.update({
+            'email_to': invoice_id.partner_id.docs_to,
+            'email_cc': invoice_id.partner_id.docs_cc,
+            'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
+            " Overdue and Pending Invoice"
+        })
+
+        today = datetime.now().date()
+        overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
+                                                                      ('state', 'in', ('open', 'in_payment'))])
+        pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
+                                                                      ('state', 'in', ('open', 'in_payment'))])
+        message = "Dear %s, <br/>" % invoice_id.partner_id.name
+        message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
+        message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
+
+        if overdue_invoices:
+            message += "<b> Overdue Invoices: </b>"
+            for due in overdue_invoices:
+                message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
+                           "</p>" \
+                           % (due.number,
+                              due.date_invoice.strftime("%d-%m-%Y"),
+                              due.currency_id.name,
+                              due.residual,
+                              due.date_due.strftime("%d-%m-%Y"))
+        else:
+            message += "<b> Overdue Invoices: </b>"
+            message += "<p> No overdue as on date. </p>"
+
+        if pending_invoices:
+            message += "<br/>"
+            message += "<b> Pending Invoices: </b>"
+            for pen in pending_invoices:
+                message += "<p> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </p>" % (pen.number,
+                                                                                          pen.date_invoice.strftime("%d-%m-%Y"),
+                                                                                          pen.currency_id.name,
+                                                                                          pen.residual,
+                                                                                          pen.date_due.strftime("%d-%m-%Y"))
+        else:
+            message += "<br/>"
+            message += "<b> Pending Invoices: </b>"
+            message += " <p> No pending invoices as on date. </p>"
+
+        message += "<br/><br/>"
+        message += "Regards, <br/> ERP Team. <br/>"
+        message += "%s, " % invoice_id.partner_id.street
+        message += "%s, <br/>" % invoice_id.partner_id.street2
+        message += "%s, " % invoice_id.partner_id.city
+        message += "%s, <br/>" % invoice_id.partner_id.state_id.name
+        message += "%s - %s. " % (invoice_id.partner_id.country_id.name, invoice_id.partner_id.zip)
+        res.update({
+                'email_body': message
+                })
+        return res
+
+    @api.model
     def create_payment_followup(self):
-        self.env.cr.execute(""" delete from payment_followup """)
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
                                                                       ('state', 'in', ('open', 'in_payment'))])
@@ -46,8 +115,8 @@ class PaymentFollowup(models.Model):
                                                             'total_amount': inv.amount_total,
                                                             'due_amount': inv.residual,
                                                             'currency_id': inv.currency_id.id,
-                                                            'email_to': inv.partner_id.email,
-                                                            'email_cc': inv.partner_id.payment_cc,
+                                                            'email_to': inv.partner_id.docs_to,
+                                                            'email_cc': inv.partner_id.docs_cc,
                                                             'email_subject': inv.company_id.name + " - " + inv.partner_id.
                                                             name + " - " + " Overdue and Pending Invoice"
                                                             })
@@ -131,4 +200,4 @@ class PaymentFollowup(models.Model):
         }))
         for i in range(len(mail_ids)):
             mail_ids[i].send(self)
-        self.state = 'sent'
+        # self.state = 'sent'
