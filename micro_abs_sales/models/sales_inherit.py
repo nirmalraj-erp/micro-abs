@@ -182,7 +182,7 @@ class SaleOrderInherit(models.Model):
         if self.po_no:
             po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
             if po_no:
-                raise ValidationError("PO Number must be unique..!")
+                raise UserError(_('PO Number must be Unique!!'))
 
     @api.depends('so_commitment_date')
     @api.onchange('so_commitment_date')
@@ -527,7 +527,7 @@ class AccountInvoiceInherit(models.Model):
         if self.invoice_number:
             invoice_number = self.sudo().search([('invoice_number', '=', self.invoice_number), ('id', '!=', self._origin.id)])
             if invoice_number:
-                raise ValidationError("Invoice Number must be unique..!")
+                raise UserError(_('Invoice Number must be Unique!!'))
 
     @api.depends('partner_id')
     def get_contacts(self):
