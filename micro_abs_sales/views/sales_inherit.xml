@@ -604,7 +604,7 @@
 
     <act_window
         id="action_payment_followup_mail"
-        name="Send Email"
+        name="Send Payment Followup"
         res_model="payment.followup"
         src_model="account.invoice"
         view_mode="form"
