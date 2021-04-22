@@ -521,6 +521,19 @@ class AccountInvoiceInherit(models.Model):
     official_contact_id = fields.Many2one('res.partner', string='Official Contact')
     email_shipment_string = fields.Char(string='Email Shipment String', store=True, compute='_get_email_shipment_string')
     # payment_reminder_email = fields.Boolean("Payment Reminder Email")
+    due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
+                                  string="Due Status", compute='compute_due_status')
+
+    @api.depends("state")
+    def compute_due_status(self):
+        for record in self:
+            today = datetime.now().date()
+            if record.state == 'paid':
+                record.due_status = 'paid'
+            if str(record.date_due) < str(today) and record.state in ('open', 'in_payment'):
+                record.due_status = 'overdue'
+            if str(record.date_due) >= str(today) and record.state in ('open', 'in_payment'):
+                record.due_status = 'pending'
 
     @api.onchange("invoice_number")
     def onchange_invoice_number(self):
