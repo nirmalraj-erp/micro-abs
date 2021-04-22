@@ -11,10 +11,12 @@ class InvoiceTemplateInherit(models.Model):
         try:
             template_id = ir_model_data.get_object_reference('microabs_invoice_email_template', 'email_template')[1]
         except ValueError:
+            print('***-->',ValueError)
             template_id = False
         try:
             compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
         except ValueError:
+            print('**************-->', ValueError)
             compose_form_id = False
         ctx = {
             'default_model': 'account.invoice',
