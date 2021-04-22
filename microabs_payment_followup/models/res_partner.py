@@ -4,13 +4,15 @@ from odoo import api, fields, models, _
 class PartnerPaymentDetails(models.Model):
     _inherit = 'res.partner'
 
-    payment_to = fields.Char(string='Payment To')
-    payment_cc = fields.Char(string='Payment CC')
+    payment_to = fields.Char(string='Email Payment To')
+    payment_cc = fields.Char(string='Email Payment CC')
     docs_to = fields.Char(string='Email Docs To')
     docs_cc = fields.Char(string='Email Docs CC')
     official_contact = fields.Char(string='Official Contact')
     docs_to_ids = fields.Many2many("res.partner", "res_partner_to_rel", "partner_id", "to_id", string="Docs To")
     docs_cc_ids = fields.Many2many("res.partner", "res_partner_cc_rel", "partner_id", "cc_id", string="Docs CC")
+    payment_to_ids = fields.Many2many("res.partner", "pay_partner_to_rel", "partner_id", "to_id", string="Payment To")
+    payment_cc_ids = fields.Many2many("res.partner", "pay_partner_cc_rel", "partner_id", "cc_id", string="Payment CC")
 
     @api.onchange("docs_to_ids")
     def onchange_docs_to_ids(self):
@@ -21,6 +23,8 @@ class PartnerPaymentDetails(models.Model):
                     self.docs_to = self.docs_to + i.email + ","
                 else:
                     self.docs_to = i.email + ","
+        else:
+            self.docs_to = False
 
     @api.onchange("docs_cc_ids")
     def onchange_docs_cc_ids(self):
@@ -31,3 +35,30 @@ class PartnerPaymentDetails(models.Model):
                     self.docs_cc = self.docs_cc + i.email + ","
                 else:
                     self.docs_cc = i.email + ","
+        else:
+            self.docs_cc = False
+
+
+    @api.onchange("payment_to_ids")
+    def onchange_payment_to_ids(self):
+        if self.payment_to_ids:
+            self.payment_to = False
+            for i in self.payment_to_ids:
+                if self.payment_to:
+                    self.payment_to = self.payment_to + i.email + ","
+                else:
+                    self.payment_to = i.email + ","
+        else:
+            self.payment_to = False
+
+    @api.onchange("payment_cc_ids")
+    def onchange_payment_cc_ids(self):
+        if self.payment_cc_ids:
+            self.payment_cc = False
+            for i in self.payment_cc_ids:
+                if self.payment_cc:
+                    self.payment_cc = self.payment_cc + i.email + ","
+                else:
+                    self.payment_cc = i.email + ","
+        else:
+            self.payment_cc = False

@@ -42,8 +42,8 @@ class PaymentFollowup(models.Model):
                 partner_list.append(i.partner_id.id)
         invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
         res.update({
-            'email_to': invoice_id.partner_id.docs_to,
-            'email_cc': invoice_id.partner_id.docs_cc,
+            'email_to': invoice_id.partner_id.payment_to,
+            'email_cc': invoice_id.partner_id.payment_cc,
             'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
             " Overdue and Pending Invoice"
         })
@@ -115,8 +115,8 @@ class PaymentFollowup(models.Model):
                                                             'total_amount': inv.amount_total,
                                                             'due_amount': inv.residual,
                                                             'currency_id': inv.currency_id.id,
-                                                            'email_to': inv.partner_id.docs_to,
-                                                            'email_cc': inv.partner_id.docs_cc,
+                                                            'email_to': inv.partner_id.payment_to,
+                                                            'email_cc': inv.partner_id.payment_cc,
                                                             'email_subject': inv.company_id.name + " - " + inv.partner_id.
                                                             name + " - " + " Overdue and Pending Invoice"
                                                             })

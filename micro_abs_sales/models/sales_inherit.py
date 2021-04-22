@@ -523,17 +523,35 @@ class AccountInvoiceInherit(models.Model):
     # payment_reminder_email = fields.Boolean("Payment Reminder Email")
     due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
                                   string="Due Status", compute='compute_due_status')
+    sequence = fields.Integer(string="Sequence", compute='compute_due_status', store=True)
 
-    @api.depends("state")
+    @api.depends("state", "amount_total")
     def compute_due_status(self):
         for record in self:
             today = datetime.now().date()
             if record.state == 'paid':
                 record.due_status = 'paid'
+                record.sequence = 3
             if str(record.date_due) < str(today) and record.state in ('open', 'in_payment'):
                 record.due_status = 'overdue'
+                record.sequence = 1
             if str(record.date_due) >= str(today) and record.state in ('open', 'in_payment'):
                 record.due_status = 'pending'
+                record.sequence = 2
+
+    @api.model
+    def due_sequence_update(self):
+        for record in self.search([]):
+            today = datetime.now().date()
+            if record.state == 'paid':
+                record.due_status = 'paid'
+                record.sequence = 3
+            if str(record.date_due) < str(today) and record.state in ('open', 'in_payment'):
+                record.due_status = 'overdue'
+                record.sequence = 1
+            if str(record.date_due) >= str(today) and record.state in ('open', 'in_payment'):
+                record.due_status = 'pending'
+                record.sequence = 2
 
     @api.onchange("invoice_number")
     def onchange_invoice_number(self):
