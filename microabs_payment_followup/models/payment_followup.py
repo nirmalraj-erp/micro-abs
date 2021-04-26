@@ -49,9 +49,9 @@ class PaymentFollowup(models.Model):
         })
 
         today = datetime.now().date()
-        overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
+        overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),('partner_id', '=', partner_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
-        pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
+        pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),('partner_id', '=', partner_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
         message = "Dear %s, <br/>" % invoice_id.partner_id.name
         message += " <br/> Please find the below list of overdue/pending invoices. <br/>"

@@ -731,7 +731,6 @@ class AccountMoveMicro(models.Model):
     _inherit = 'account.move'
 
     def update_move(self):
-        print('HAHAHAH', self.line_ids)
         line_list = self.line_ids
         line_list.write({
                         'name': 'Special Premium',
