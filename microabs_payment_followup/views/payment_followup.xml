@@ -62,7 +62,7 @@
 
     <!--  Payment Followup Action  -->
     <record id="action_payment_followup" model="ir.actions.act_window">
-        <field name="name">Payment Followup</field>
+        <field name="name">Payment Follow-up</field>
         <field name="res_model">payment.followup</field>
         <field name="view_mode">tree,form</field>
     </record>

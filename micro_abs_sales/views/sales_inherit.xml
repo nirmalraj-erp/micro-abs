@@ -584,7 +584,7 @@
 
     <!--  Payment Followup Action  -->
     <record model="ir.actions.act_window" id="action_payment_followups">
-        <field name="name">Payment Followup</field>
+        <field name="name">Payment Follow-up</field>
         <field name="res_model">account.invoice</field>
         <field name="view_mode">tree</field>
         <field name="search_view_id" ref="account.view_account_invoice_filter"/>
@@ -597,14 +597,14 @@
 
     <!--  Payment Followup Menu -->
     <menuitem id="menu_payment_followup"
-          name="Payment Followup"
+          name="Payment Follow-up"
           action="action_payment_followups"
           parent="account.menu_finance_receivables"
           sequence="200"/>
 
     <act_window
         id="action_payment_followup_mail"
-        name="Send Payment Followup"
+        name="Send Follow-up"
         res_model="payment.followup"
         src_model="account.invoice"
         view_mode="form"
