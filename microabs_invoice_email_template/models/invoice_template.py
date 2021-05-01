@@ -21,9 +21,9 @@ class InvoiceTemplateInherit(models.Model):
         ctx = {
             'default_model': 'account.invoice',
             'default_res_id': self.id,
-            'default_email_to': self.partner_id.docs_to,
+            # 'default_email_to': self.partner_id.docs_to,
             'default_email_cc': self.partner_id.docs_cc,
-            'default_use_template': bool(template_id),
+            # 'default_use_template': bool(template_id),
             'default_template_id': template_id,
             'default_composition_mode': 'comment',
             'default_attachment_ids': [list_item for list_item in self.env[

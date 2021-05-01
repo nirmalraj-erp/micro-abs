@@ -725,18 +725,3 @@ class SaleAdvancePaymentInherit(models.TransientModel):
                                        values={'self': invoice, 'origin': order},
                                        subtype_id=self.env.ref('mail.mt_note').id)
         return invoice
-
-
-class AccountMoveMicro(models.Model):
-    _inherit = 'account.move'
-
-    def update_move(self):
-        line_list = self.line_ids
-        line_list.write({
-                        'name': 'Special Premium',
-                        'account_id': 31,
-                        'debit': 5120,
-                        'credit': 5120,
-                        'quantity': 1,
-                        'uom_id': 1,
-        })

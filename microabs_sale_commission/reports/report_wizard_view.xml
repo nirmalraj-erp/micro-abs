@@ -70,6 +70,10 @@
                                 <field name="company_id"/>
                             </tree>
                             </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="total_commission" widget="monetary"/>
+                            <field name="total_invoice" widget="monetary"/>
+                        </group>
                     </group>
                 </sheet>
 			</form>

@@ -30,6 +30,24 @@ class SaleCommissionReportWizard(models.Model):
     int_iban_no = fields.Char('IBAN NO./ Routing No.', store=True, compute='_get_bank_details')
     int_contact = fields.Char('Name', store=True, compute='_get_bank_details')
     # check = fields.Boolean('chechk', default=True)
+    total_commission = fields.Float(
+        string="Total Commission",
+        compute="_compute_commission_total",
+        store=True,
+    )
+    total_invoice = fields.Float(
+        string="Total Invoice",
+        compute="_compute_commission_total",
+        store=True,
+    )
+    @api.depends('commission_line.commission_amount', 'commission_line.invoice_amount')
+    def _compute_commission_total(self):
+        for record in self:
+            record.invoice_amount = 0.0
+            record.commission_amount = 0.0
+            for line in record.commission_line:
+                record.total_commission += sum(x.commission_amount for x in line)
+                record.total_invoice += sum(x.invoice_amount for x in line)
 
     @api.onchange('bank_name_id')
     def _get_bank_details(self):
