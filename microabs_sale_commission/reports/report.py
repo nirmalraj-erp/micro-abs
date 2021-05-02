@@ -40,6 +40,7 @@ class SaleCommissionReportWizard(models.Model):
         compute="_compute_commission_total",
         store=True,
     )
+    
     @api.depends('commission_line.commission_amount', 'commission_line.invoice_amount')
     def _compute_commission_total(self):
         for record in self:
@@ -138,6 +139,7 @@ class CommissionLine(models.Model):
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'),
                                  readonly=True)
     currency_id = fields.Many2one('res.currency', 'Currency', required=True)
+    sequence = fields.Integer(string='Sequence', default=10)
 
 
 class SaleCommissionReportInherit(models.AbstractModel):

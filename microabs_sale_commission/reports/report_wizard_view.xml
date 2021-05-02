@@ -58,6 +58,7 @@
                     </group>
                         <field name="commission_line" attrs="{'readonly': [('state', '=', 'done')]}">
                             <tree string="Commission Line" delete="false" editable="false">
+                                <field name="sequence" widget="handle"/>
                                 <field name="sale_commission_id" invisible="1"/>
                                 <field name="invoice_no"/>
                                 <field name="invoice_date"/>
