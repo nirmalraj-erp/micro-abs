@@ -162,6 +162,7 @@ class SaleOrderInherit(models.Model):
     customer_type = fields.Many2one('customer.type', string='Customer Type')
     docs_address_id = fields.Many2one('docs.address', string='Docs Address')
     email_shipment_string = fields.Char(string='Email Shipment String')
+    customer_order_value = fields.Monetary(string="Customer Order Value")
 
     @api.onchange('order_line.delivery_date', 'so_commitment_date')
     @api.depends('order_line.delivery_date', 'so_commitment_date')
@@ -189,6 +190,12 @@ class SaleOrderInherit(models.Model):
     def get_delivery_date(self):
         for line in self.order_line:
             line.delivery_date = self.so_commitment_date
+
+    def action_confirm(self):
+        if self.customer_order_value > self.amount_total:
+            raise ValidationError("Customer Order Value should not be greater than Amount Total..!")
+        else:
+            return super(SaleOrderInherit, self).action_confirm()
 
     @api.depends('partner_id','res_contact_id')
     @api.onchange('partner_id')

@@ -27,6 +27,7 @@
                 <field name="order_conf_no"/>
                 <field name="order_conf_date"/>
                 <field name="supplier_expected_date"/>
+                <field name="customer_order_value"/>
                 <field name="report_partner_name" invisible="1"/>
                 <field name="email_shipment_string" invisible="1"/>
             </field>
