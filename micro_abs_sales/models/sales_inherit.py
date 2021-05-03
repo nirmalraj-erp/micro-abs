@@ -183,7 +183,15 @@ class SaleOrderInherit(models.Model):
         if self.po_no:
             po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
             if po_no:
-                raise UserError(_('PO Number must be Unique!!'))
+                raise ValidationError('PO Number must be Unique!!')
+
+    # @api.constrains('po_no')
+    # @api.onchange("po_no")
+    # def _check_po_no(self):
+    #     if self.po_no:
+    #         po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
+    #         if po_no:  # or your conditions
+    #             raise ValidationError(_('Error COntext'))
 
     @api.depends('so_commitment_date')
     @api.onchange('so_commitment_date')
