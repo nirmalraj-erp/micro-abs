@@ -21,6 +21,7 @@
                                        domain="[('id', 'in', child_ids)]"
                                        options="{'no_open':True,'no_create': True}"/>
                                 <field name="official_contact"/>
+                                <field name="official_contact_two"/>
                             </group>
                             <group>
                                 <field name="docs_to" readonly="1" force_save="1" />

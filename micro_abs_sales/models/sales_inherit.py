@@ -150,7 +150,8 @@ class SaleOrderInherit(models.Model):
     freight_forwarder_details = fields.Many2one('freight.forward.details', string='FF Details')
     destination_ports_id = fields.Many2one('destination.port', string='Destination Port')
     res_contact_id = fields.Many2many('res.partner', string='Contact')
-    official_contact_id = fields.Many2one('res.partner', string='Official Contact')
+    official_contact_id = fields.Many2one('res.partner', string='Official Contact 1')
+    official_contact_two_id = fields.Many2one('res.partner', string='Official Contact 2')
     inherit_order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines',
                                          states={'cancel': [('readonly', True)], 'done': [('readonly', True)]},
                                          copy=True, auto_join=True,
@@ -219,8 +220,13 @@ class SaleOrderInherit(models.Model):
             self.destination_ports_id = partner_id.destination_ports_id
             self.report_partner_name = self.partner_id.name.split()[0]
             self.customer_type = self.partner_id.customer_type.id
-        return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
-                           'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)]}}
+            return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
+                               'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
+                               'official_contact_two_id': [('id', 'in', self.partner_id.child_ids.ids)]
+                               }}
+        else:
+            self.official_contact_id = None
+            self.official_contact_two_id = None
 
     # Create invoice - Core function inherited #
     @api.multi
