@@ -201,8 +201,8 @@ class SaleOrderInherit(models.Model):
             line.delivery_date = self.so_commitment_date
 
     def action_confirm(self):
-        if self.customer_order_value > self.amount_total:
-            raise ValidationError("Customer Order Value should not be greater than Amount Total..!")
+        if self.customer_order_value != self.amount_total:
+            raise ValidationError("Customer Order Value should be equal to Amount Total..!")
         else:
             return super(SaleOrderInherit, self).action_confirm()
 
