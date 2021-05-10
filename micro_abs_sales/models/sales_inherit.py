@@ -545,6 +545,7 @@ class AccountInvoiceInherit(models.Model):
     due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
                                   string="Due Status", compute='compute_due_status')
     sequence = fields.Integer(string="Sequence", compute='compute_due_status', store=True)
+    email_status = fields.Selection([('draft', 'Draft'), ('email_sent', 'Email Sent')], default='draft', string="Status")
 
     @api.depends("state", "amount_total")
     def compute_due_status(self):
