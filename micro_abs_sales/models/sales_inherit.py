@@ -203,6 +203,8 @@ class SaleOrderInherit(models.Model):
     def action_confirm(self):
         if self.customer_order_value != self.amount_total:
             raise ValidationError("Sale Order amount should be the same as Customer Order Value, Please Check!")
+        elif not self.po_no:
+            raise ValidationError("Kindly enter PO No.")
         else:
             return super(SaleOrderInherit, self).action_confirm()
 
