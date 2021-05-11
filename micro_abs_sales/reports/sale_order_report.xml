@@ -52,7 +52,7 @@
                           float: left;
                         }
                         </style>
-                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="80px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:14%"><i class="fa fa-mobile" style="color:#0444a6"/>
                             <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
@@ -269,7 +269,7 @@
                         </tr>
                     </table>
                     <table style="width:100%;font-size:14px;border-top:1px solid blue;" col="4">
-                        <tr col="6" width="100%" style="padding-bottom:30%">
+                        <tr col="6" width="100%">
                             <td width="15%">
                                 <strong style="color:#0444a6">Official Contact 1</strong>
                            </td>
@@ -289,7 +289,31 @@
                             <td>
                             </td>
                         </tr>
+                        <tr col="6" width="100%">
+                            <td width="15%">
+                                <strong style="color:#0444a6">Official Contact 2</strong>
+                           </td>
+                           <td width="2%">
+                               <strong>:</strong>
+                           </td>
+                            <td width="33%">
+                                <t t-if="o.official_contact_id.mobile"><span t-field="o.official_contact_two_id.title"/>.</t> <span t-field="o.official_contact_two_id.name"/><br/>
+                                <t t-if="o.official_contact_two_id.mobile"><i class="fa fa-mobile" style="color:#0444a6"/>  <span t-field="o.official_contact_two_id.mobile"/></t><br/>
+                            </td>
+                             <td width="33%">
+                                 <t t-if="o.official_contact_two_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.email"/></t><br/>
+                                 <t t-if="o.official_contact_two_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.phone"/></t>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
                     </table>
+                </div>
+                <div class="page">
+                    <br> </br>
+                    <br> </br>
                 </div>
                 <div class="article">
                     <div class="page">

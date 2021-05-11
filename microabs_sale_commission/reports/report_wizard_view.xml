@@ -35,26 +35,26 @@
                     <group>
                         <field name="period"/>
 <!--                        <field name="check"/>-->
-                        <field name="bank_name_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="bank_name_id"/>
                     </group>
                     <group>
                         <field name="company_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
                         <field name="currency_id" invisible="1"/>
                     </group>
                     <group string="Beneficiary Bank Details">
-                        <field name="company_name" attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="company_address" attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="bb_contact"  attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="bank_address"  attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="bank_acc_no"  attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="swift_code" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="company_name"/>
+                        <field name="company_address"/>
+                        <field name="bb_contact"/>
+                        <field name="bank_address"/>
+                        <field name="bank_acc_no"/>
+                        <field name="swift_code"/>
                     </group>
                         <group string="Intermediary Bank Details">
-                        <field name="int_contact" attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="int_bank_acc_no" attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="int_bank_address" attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="int_swift_code" attrs="{'readonly': [('state', '=', 'done')]}"/>
-                        <field name="int_iban_no" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="int_contact"/>
+                        <field name="int_bank_acc_no"/>
+                        <field name="int_bank_address"/>
+                        <field name="int_swift_code"/>
+                        <field name="int_iban_no"/>
                     </group>
                         <field name="commission_line" attrs="{'readonly': [('state', '=', 'done')]}">
                             <tree string="Commission Line" delete="false" editable="false">
