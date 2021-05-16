@@ -435,6 +435,9 @@
                             </t>
                         </table>
                         <div class="footer">
+                            <div class="not-last-page">
+                                <p style="text-align:center;font-size:16px;font-family:Liberation Serif;"><b>Continued on the next page</b></p>
+                            </div>
                             <div style="text-align:center;border-top: 1px solid blue;text-align:left">
                             </div>
                         </div>
