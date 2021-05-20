@@ -207,7 +207,7 @@
                         </tr>
                     </table>
                     <table style="width:100%;font-size:14px;" col="6">
-                        <tr  col="6" width="100%">
+                        <tr col="6" width="100%;">
                             <td width="15%">
                                 <strong>Payment Term</strong>
                             </td>
@@ -268,8 +268,15 @@
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div class="article">
+                    <div class="page">
+                        <style>
+                            th,td,tr .table{border-collapse:collapse; font-size:14px, font-family:Serif;border-1px solid black;}
+                        </style>
+
                     <table style="width:100%;font-size:14px;border-top:1px solid blue;" col="4">
-                        <tr col="6" width="100%">
+                        <tr col="6" width="100%;" style="border-bottom:1px solid blue;">
                             <td width="15%">
                                 <strong style="color:#0444a6">Official Contact 1</strong>
                            </td>
@@ -289,7 +296,7 @@
                             <td>
                             </td>
                         </tr>
-                        <tr col="6" width="100%">
+                        <tr col="6" width="100%;" style="border-bottom:1px solid blue;">
                             <td width="15%">
                                 <strong style="color:#0444a6">Official Contact 2</strong>
                            </td>
@@ -310,16 +317,6 @@
                             </td>
                         </tr>
                     </table>
-                </div>
-                <div class="page">
-                    <br> </br>
-                    <br> </br>
-                </div>
-                <div class="article">
-                    <div class="page">
-                        <style>
-                            th,td,tr .table{border-collapse:collapse; font-size:14px, font-family:Serif;border-1px solid black;}
-                        </style>
 
                       <t t-set="display_discount" t-value="any([l.discount for l in docs.order_line])"/>
                         <table class="table table-sm" style="font-size:14px;">
