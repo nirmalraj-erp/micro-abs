@@ -220,7 +220,7 @@ class SaleOrderInherit(models.Model):
             self.incoterm = partner_id.incoterm_id.id
             self.client_order_ref = partner_id.ref
             self.destination_ports_id = partner_id.destination_ports_id
-            # self.report_partner_name = self.partner_id.name.split()[0]
+            self.report_partner_name = self.partner_id.name.split()[0]
             self.customer_type = self.partner_id.customer_type.id
             return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
                                'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
