@@ -10,13 +10,14 @@
 					<field name="commission_id" invisible="1"/>
 					<field name="commission_name" invisible="1"/>
 					<field name="no_commission_required" invisible="1"/>
-					<field name="commission_percentage" widget="Percent"/>
+					<field name="commission_percentage"/>
+					<field name="commission_percentage_temp" invisible="1"/>
 					<field name="commission_amount"/>
                     <field name="commission_amount_wod" invisible="1"/>
 				</xpath>
                 <field name="amount_total" position="after">
                     <field name="total_taxed" widget="monetary"/>
-                    <field name="commission_percentage_total" widget="Percent"/>
+                    <field name="commission_percentage_total"/>
                     <field name="commission_total"
                            widget="monetary"/>
                 </field>
@@ -31,7 +32,7 @@
             <field name="arch" type="xml">
                 <field name="amount_total" position="after">
                     <field name="total_taxed" widget="monetary"/>
-                    <field name="commission_percentage_total" widget="Percent"/>
+                    <field name="commission_percentage_total"/>
                     <field name="commission_total"
                            widget="monetary"/>
                 </field>
@@ -48,7 +49,8 @@
 					<field name="commission_id" invisible="1"/>
 					<field name="commission_name" invisible="1"/>
 					<field name="no_commission_required" invisible="1"/>
-					<field name="commission_percentage" widget="Percent" attrs="{'readonly': [('no_commission_required', '=', True)]}"/>
+					<field name="commission_percentage" attrs="{'readonly': [('no_commission_required', '=', True)]}"/>
+					<field name="commission_percentage_temp" invisible="1"/>
 					<field name="commission_amount"/>
 					<field name="commission_amount_wod" invisible="1"/>
 				</xpath>
@@ -71,7 +73,8 @@
                 <field name="invoice_amount"/>
                 <field name="actual_received"/>
                 <field name="commission_amount"/>
-                <field name="commission_percentage" widget="Percent"/>
+                <field name="commission_percentage"/>
+                <field name="commission_percentage_tmp" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="state"/>
                 <field name="com_inv_status" invisible="1"/>
@@ -96,7 +99,7 @@
         <field name="arch" type="xml">
             <tree string="Commission Master" editable="bottom">
                 <field name="customer_id"/>
-                <field name="commission_percentage" widget="Percent"/>
+                <field name="commission_percentage"/>
                 <field name="product_id"/>
                 <field name="company_id"/>
             </tree>
@@ -123,4 +126,5 @@
               action="action_commission_master_id"
               parent="menu_sale_commission"
               sequence="1"/>
+
 </odoo>

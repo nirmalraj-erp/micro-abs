@@ -16,7 +16,8 @@ class CommissionMaster(models.Model):
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'),
                                  readonly=True)
     customer_id = fields.Many2one('res.partner', string='Customer')
-    commission_percentage = fields.Integer( string='Commission (%)')
+    commission_percentage = fields.Float(string='Commission (%)')
+    commission_percentage_tmp = fields.Float(string='')
     product_id = fields.Many2one('product.product', string='Product')
 
 
@@ -32,7 +33,8 @@ class SaleCommission(models.Model):
     invoice_amount = fields.Float(string='Inv. Amt')
     actual_received = fields.Float(string='Actually Received')
     commission_amount = fields.Float(string='Commission Amt')
-    commission_percentage = fields.Integer(string='% Age')
+    commission_percentage = fields.Float(string='% Age')
+    commission_percentage_tmp = fields.Float(string='')
     company_id = fields.Many2one('res.company', string='Company')
     currency_id = fields.Many2one('res.currency', string='Currency')
     state = fields.Selection([('draft', 'Draft'), ('open', 'Commission Open'), ('paid', 'Commission Settled'),
@@ -50,7 +52,8 @@ class SaleOrderCommission(models.Model):
     commission_id = fields.Many2one('commission.master', string='Commission ID')
     commission_name = fields.Char(string='Commission')
     no_commission_required = fields.Boolean(string='Is Commission')
-    commission_percentage = fields.Integer(string='Commission (%)')
+    commission_percentage = fields.Float(string='Commission (%)')
+    commission_percentage_temp = fields.Float(string='')
     commission_amount = fields.Float(string='Commission Amount', compute='_get_commission_amount')
     commission_amount_wod = fields.Float(string='Commission Amount without Discount', compute='_get_commission_amount')
 
@@ -116,7 +119,8 @@ class AccountInvoiceLineCommission(models.Model):
 
     commission_id = fields.Many2one('commission.master', string='Commission ID')
     commission_name = fields.Char(string='Commission')
-    commission_percentage = fields.Integer(string='Commission (%)')
+    commission_percentage = fields.Float(string='Commission (%)')
+    commission_percentage_temp = fields.Float(string='')
     commission_amount = fields.Float(string='Commission Amount', compute='_get_commission_amount')
     no_commission_required = fields.Boolean(string='Is Commission')
     commission_amount_wod = fields.Float(string='Commission Amount without Discount', compute='_get_commission_amount')

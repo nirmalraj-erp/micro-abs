@@ -129,7 +129,8 @@ class ResPartnerInherit(models.Model):
     customer_code = fields.Many2one('customer.code', string='Customer Code')
     customer_type = fields.Many2one('customer.type', string='Customer Type')
     pan_no = fields.Char(string='PAN Number')
-    commission_percentage = fields.Integer(string='Commission (%)')
+    commission_percentage = fields.Float(string='Commission (%)')
+    commission_percentage_temp = fields.Float(string='')
 
 
 class SaleOrderInherit(models.Model):

@@ -401,6 +401,7 @@
                     <field name="incoterm_id"/>
                     <field name="destination_ports_id"/>
                     <field name="commission_percentage"/>
+                    <field name="commission_percentage_temp" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='category_id']" position="after">
                     <field name="application_ids" widget= "many2many_tags"/>

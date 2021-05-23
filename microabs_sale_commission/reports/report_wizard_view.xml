@@ -66,7 +66,7 @@
                                 <field name="invoice_amount"/>
                                 <field name="actual_received"/>
                                 <field name="commission_amount"/>
-                                <field name="commission_percentage" widget="Percent"/>
+                                <field name="commission_percentage"/>
                                 <field name="currency_id"/>
                                 <field name="company_id"/>
                             </tree>

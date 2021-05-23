@@ -134,7 +134,7 @@ class CommissionLine(models.Model):
     invoice_amount = fields.Float(string='Inv. Amount')
     actual_received = fields.Float(string='Actually Received')
     commission_amount = fields.Float(string='Commission Amount')
-    commission_percentage = fields.Integer(string='% Age')
+    commission_percentage = fields.Float(string='% Age')
     company_id = fields.Many2one('res.company', 'Company',
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'),
                                  readonly=True)
