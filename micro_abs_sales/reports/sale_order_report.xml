@@ -52,14 +52,13 @@
                           float: left;
                         }
                         </style>
-                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="80px"/>
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:14%"><i class="fa fa-mobile" style="color:#0444a6"/>
                             <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
                         <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
                             <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
-                            <br></br>
                             <br></br>
                             <br></br>
                             <br></br>
@@ -87,20 +86,20 @@
                         <tr width="100%">
                             <td  width="33%">
                                 <strong>Customer:</strong><br/>
-                                <span t-field="o.partner_id.name"/>,
+                                <span t-field="o.partner_id.name"/>
                             </td>
                             <t t-if="o.partner_invoice_id">
                                 <td  width="33%">
                                     <strong>Invoice To:</strong><br/>
-                                <t t-if="o.partner_invoice_id.name">
-                                    <span t-field="o.partner_invoice_id.name"/>
+                                <t t-if="o.partner_invoice_id.display_name">
+                                    <span t-field="o.partner_invoice_id.display_name"/>
                                 </t>
                                 </td>
                             </t>
                             <td  width="33%">
                                 <strong>Ship To:</strong><br/>
-                                <t t-if="o.partner_shipping_id.name">
-                                    <span t-field="o.partner_shipping_id.name"/>
+                                <t t-if="o.partner_shipping_id.display_name">
+                                    <span t-field="o.partner_shipping_id.display_name"/>
                                 </t>
                                 <br/>
                             </td>
@@ -125,8 +124,8 @@
                                 <strong style="color:#0444a6">PO. Date      : </strong><span t-field="o.po_date"/>
                             </td>
                             <td  width="33%">
-                               <t t-if="o.partner_shipping_id.street2">
-                                    <span t-field="o.partner_shipping_id.street2"/>
+                               <t t-if="o.partner_invoice_id.street2">
+                                    <span t-field="o.partner_invoice_id.street2"/>
                                 </t>
                             </td>
                             <td  width="33%">
@@ -268,13 +267,6 @@
                             </td>
                         </tr>
                     </table>
-                </div>
-                <div class="article">
-                    <div class="page">
-                        <style>
-                            th,td,tr .table{border-collapse:collapse; font-size:14px, font-family:Serif;border-1px solid black;}
-                        </style>
-
                     <table style="width:100%;font-size:14px;border-top:1px solid blue;" col="4">
                         <tr col="6" width="100%;" style="border-bottom:1px solid blue;">
                             <td width="15%">
@@ -291,12 +283,9 @@
                                  <t t-if="o.official_contact_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_id.email"/></t><br/>
                                  <t t-if="o.official_contact_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_id.phone"/></t>
                             </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
+
                         </tr>
-                        <tr col="6" width="100%;" style="border-bottom:1px solid blue;">
+                        <tr col="6" width="100%;">
                             <td width="15%">
                                 <strong style="color:#0444a6">Official Contact 2</strong>
                            </td>
@@ -311,12 +300,14 @@
                                  <t t-if="o.official_contact_two_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.email"/></t><br/>
                                  <t t-if="o.official_contact_two_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.phone"/></t>
                             </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
                         </tr>
                     </table>
+                </div>
+                <div class="article">
+                    <div class="page">
+                        <style>
+                            th,td,tr .table{border-collapse:collapse; font-size:14px, font-family:Serif;border-1px solid black;}
+                        </style>
 
                       <t t-set="display_discount" t-value="any([l.discount for l in docs.order_line])"/>
                         <table class="table table-sm" style="font-size:14px;">

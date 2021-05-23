@@ -54,7 +54,7 @@
                            <td class="table-active" style="text-align:left;width:35%"><span t-field="o.create_date" t-options='{"format": "dd-MM-yyyy"}'/></td>
                            <td/>
                             <td class="table-active" style="text-align:left;width:17%"/>
-                           <td class="table-active" style="text-align:left;width:33%"><span t-field="o.company_id.name"/>
+                           <td class="table-active" style="text-align:left;width:33%"><span t-field="o.company_id.display_name"/>
                            </td>
                         </tr>
                         <tr>

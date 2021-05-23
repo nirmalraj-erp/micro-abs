@@ -165,40 +165,12 @@ class SaleOrderInherit(models.Model):
     email_shipment_string = fields.Char(string='Email Shipment String')
     customer_order_value = fields.Monetary(string="Customer Order Value")
 
-    @api.onchange('order_line.delivery_date', 'so_commitment_date')
-    @api.depends('order_line.delivery_date', 'so_commitment_date')
-    def get_week_no_date(self):
-        if self.so_commitment_date:
-            wkno = 0
-            for line in self.order_line:
-                if line.delivery_date:
-                    ndate = line.delivery_date.strftime('%Y,%m,%d')
-                    d = ndate.split(',')
-                    print(d)
-                    wkno = date(int(d[0]), int(d[1]), int(d[2])).isocalendar()[1]
-                    print(wkno)
-                    line.wkno = wkno + 1
-
     @api.onchange("po_no")
     def onchange_po_no(self):
         if self.po_no:
             po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
             if po_no:
                 raise ValidationError('PO Number must be Unique!!')
-
-    # @api.constrains('po_no')
-    # @api.onchange("po_no")
-    # def _check_po_no(self):
-    #     if self.po_no:
-    #         po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
-    #         if po_no:  # or your conditions
-    #             raise ValidationError(_('Error COntext'))
-
-    @api.depends('so_commitment_date')
-    @api.onchange('so_commitment_date')
-    def get_delivery_date(self):
-        for line in self.order_line:
-            line.delivery_date = self.so_commitment_date
 
     def action_confirm(self):
         if self.customer_order_value != self.amount_total:
@@ -429,8 +401,25 @@ class SaleOrderLineInherit(models.Model):
     product_size = fields.Many2one('product.size', string='Size')
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     sequence = fields.Integer(string='Sequence')
-    delivery_date = fields.Date('Delivery Date')
-    wkno = fields.Integer(string='Week No')
+    delivery_date = fields.Date('Delivery Date', compute='_get_delivery_date_depends', readonly=False)
+    wkno = fields.Integer(string='Week No', compute='_get_week_no_date')
+
+    @api.depends('order_id.so_commitment_date')
+    def _get_delivery_date_depends(self):
+        for line in self:
+            line.delivery_date = line.order_id.so_commitment_date
+
+    @api.depends('delivery_date')
+    def _get_week_no_date(self):
+        wkno = 0
+        for line in self:
+            if line.delivery_date:
+                ndate = line.delivery_date.strftime('%Y,%m,%d')
+                d = ndate.split(',')
+                print(d)
+                wkno = date(int(d[0]), int(d[1]), int(d[2])).isocalendar()[1]
+                print(wkno)
+                line.wkno = wkno + 1
 
     @api.onchange('product_id')
     def get_product_line(self):
