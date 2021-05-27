@@ -6,8 +6,8 @@ class PartnerPaymentDetails(models.Model):
 
     payment_to = fields.Char(string='Email Payment To')
     payment_cc = fields.Char(string='Email Payment CC')
-    docs_to = fields.Char(string='Email Docs To')
-    docs_cc = fields.Char(string='Email Docs CC')
+    docs_to = fields.Text(string='Email Docs To')
+    docs_cc = fields.Text(string='Email Docs CC')
     official_contact = fields.Char(string='Official Contact 1')
     official_contact_two = fields.Char(string='Official Contact 2')
     docs_to_ids = fields.Many2many("res.partner", "res_partner_to_rel", "partner_id", "to_id", string="Docs To")
