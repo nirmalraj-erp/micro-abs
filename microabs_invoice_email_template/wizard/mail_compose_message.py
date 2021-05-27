@@ -71,7 +71,7 @@ class InvoiceFollowup(models.Model):
             'email_to': self.email_to,
             'email_cc': self.email_cc,
             'subject': self.email_subject,
-            'attachments_ids': [(6, 0, [self.email_attachment_ids.ids])],
+            'attachment_ids': [(6, 0, self.email_attachment_ids.ids)],
             'body_html': '''<span  style="font-size:14px"><br/>
                          <br/>%s<br/>
                          </span>''' % body,
