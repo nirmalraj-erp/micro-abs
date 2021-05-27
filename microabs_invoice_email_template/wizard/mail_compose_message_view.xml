@@ -1,23 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record model="ir.ui.view" id="email_compose_message_wizard_inherit_form">
-        <field name="name">mail.compose.message.form (mail_attach_existing_attachment)</field>
-        <field name="model">mail.compose.message</field>
-        <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+    <!--  Payment Followup Form View  -->
+    <record id="invoice_followup_form_view" model="ir.ui.view">
+        <field name="name">invoice.followup.form</field>
+        <field name="model">invoice.followup</field>
         <field name="arch" type="xml">
-            <span name="document_followers_text" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </span>
-             <label for="partner_ids" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </label>
-            <field name="partner_ids" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </field>
-            <field name="subject" position="before">
-                <field name="email_to" placeholder="Add To"/>
-                <field name="email_cc" placeholder="Add CC"/>
-            </field>
+            <form>
+                <sheet>
+                    <group>
+                        <field name="email_to"/>
+                    </group>
+                    <group>
+                        <field name="email_cc"/>
+                    </group>
+                    <group>
+                        <field name="email_subject"/>
+                    </group>
+                    <separator/>
+                    <group>
+                        <field name="email_body" nolabel="1" style="border:none;" options="{'style-inline': true}"/>
+                    </group>
+                    <group>
+                        <field name="email_attachment_ids" widget="many2many_binary"/>
+                        <field name="invoice_id" readonly="1" force_save="1" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="send_email" string="Send Email" type="object" class="oe_highlight"/>
+                    <button name="cancel" string="Cancel" type="object" special="cancel"/>
+                </footer>
+            </form>
         </field>
     </record>
+
+    <!--  Payment Followup Action  -->
+    <record id="action_invoice_followup" model="ir.actions.act_window">
+        <field name="name">Invoice Follow-up</field>
+        <field name="res_model">invoice.followup</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <act_window
+        id="action_invoice_followup_mail"
+        name="Send Email"
+        res_model="invoice.followup"
+        src_model="account.invoice"
+        view_mode="form"
+        multi="True"
+        target="new"
+        key2="client_action_multi"
+    />
 </odoo>

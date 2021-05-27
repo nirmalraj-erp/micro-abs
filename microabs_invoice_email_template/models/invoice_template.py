@@ -9,11 +9,6 @@ class InvoiceTemplateInherit(models.Model):
         self.ensure_one()
         ir_model_data = self.env['ir.model.data']
         try:
-            template_id = ir_model_data.get_object_reference('microabs_invoice_email_template', 'email_template')[1]
-        except ValueError:
-            print('***-->',ValueError)
-            template_id = False
-        try:
             compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
         except ValueError:
             print('**************-->', ValueError)
@@ -24,7 +19,6 @@ class InvoiceTemplateInherit(models.Model):
             # 'default_email_to': self.partner_id.docs_to,
             'default_email_cc': self.partner_id.docs_cc,
             # 'default_use_template': bool(template_id),
-            'default_template_id': template_id,
             'default_composition_mode': 'comment',
             'default_attachment_ids': [list_item for list_item in self.env[
                 'ir.attachment'].search([('res_id', '=', self.id), ('res_model', '=', 'account.invoice')]).ids],

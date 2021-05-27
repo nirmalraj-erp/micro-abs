@@ -9,7 +9,7 @@
                 <attribute name="invisible">1</attribute>
             </button>
             <button name="action_invoice_sent" position="after">
-                <button name="action_send_email" string="Send Invoice" type="object" class="oe_highlight" groups="base.group_user"/>
+                <button name="%(action_invoice_followup_mail)d" string="Send Invoice" type="action" class="oe_highlight" groups="base.group_user"/>
             </button>
         </field>
     </record>

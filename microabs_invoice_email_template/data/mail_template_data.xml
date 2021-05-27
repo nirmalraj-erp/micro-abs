@@ -9,7 +9,7 @@
              <field name="lang">${object.partner_id.lang}</field>
              <field name="body_html"  type="html">
                <div style="margin: 0px; padding: 0px;">
-                <p>Dear ${object.official_contact_id.title.name} ${object.official_contact_id.name},</p>
+                <p>Dear ${object.partner_id.title.name} ${object.partner_id.name},</p>
 
                 <br/>
 

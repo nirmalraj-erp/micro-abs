@@ -9,9 +9,11 @@
     'license': 'AGPL-3',
     'depends': ['account'],
     'data': [
-        'data/mail_template_data.xml',
-        'views/account_inherit_template.xml',
+        'security/ir.model.access.csv',
         'wizard/mail_compose_message_view.xml',
+        # 'data/mail_template_data.xml',
+        'views/account_inherit_template.xml',
+
     ],
     'demo': [],
     'installable': True,
