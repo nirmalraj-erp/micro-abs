@@ -212,6 +212,7 @@
 							<field name="offer_no"/>
 							<field name="offer_date"/>
 							<field name="drawing_no"/>
+							<field name="drawing_attachments_ids" widget="many2many_binary"/>
 						</tree>
 					</field>
 				</group>
