@@ -538,7 +538,7 @@ class AccountInvoiceInherit(models.Model):
                                   string="Due Status", compute='compute_due_status')
     sequence = fields.Integer(string="Sequence", compute='compute_due_status', store=True)
     email_status = fields.Selection([('draft', 'Draft'), ('email_sent', 'Email Sent')], default='draft', string="Status")
-    followup_date = fields.Datetime(string="Followup Dates")
+    followup_date = fields.Char(string="Follow-up Dates")
 
     @api.depends("state", "amount_total")
     def compute_due_status(self):
