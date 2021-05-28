@@ -25,7 +25,7 @@ class PaymentFollowup(models.Model):
     email_subject = fields.Char(string="Subject")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
-    due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
+    due_status = fields.Selection([('overdue', 'Overdue'), ('pending', 'Pending Invoice'), ('paid', 'Paid')],
                                   default="pending", string="Due Status")
     company_id = fields.Many2one('res.company', string='Company',
                                  default=lambda self: self.env['res.company']._company_default_get('sale.order'))
