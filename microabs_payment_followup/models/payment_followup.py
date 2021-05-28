@@ -12,6 +12,7 @@ class PaymentFollowup(models.Model):
     _order = "due_date"
 
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
+    invoice_ids = fields.Many2many("account.invoice", string="Invoice")
     partner_id = fields.Many2one("res.partner", string="Customer")
     invoice_date = fields.Date(string="Invoice Date")
     due_date = fields.Date(string="Due Date")
@@ -34,8 +35,10 @@ class PaymentFollowup(models.Model):
         res = super(PaymentFollowup, self).default_get(fields)
         res_ids = self._context.get('active_ids')
         partner_list = []
+        invoice_list = []
         partner = self.env["account.invoice"].sudo().browse(res_ids)
         for i in partner:
+            invoice_list.append(i.id)
             if i.partner_id.id not in partner_list and len(partner_list) >= 1:
                 raise ValidationError("Different Partner's have been selected. Kindly select records of same partner..!")
             else:
@@ -45,7 +48,8 @@ class PaymentFollowup(models.Model):
             'email_to': invoice_id.partner_id.payment_to,
             'email_cc': invoice_id.partner_id.payment_cc,
             'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
-            " Overdue and Pending Invoice"
+            " Overdue and Pending Invoice",
+            "invoice_ids": [(6, 0, invoice_list)]
         })
         partner = ""
         for inv in invoice_id.partner_id.payment_to_ids:
@@ -53,10 +57,10 @@ class PaymentFollowup(models.Model):
 
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
-                                                                      ('partner_id', '=', partner_list),
+                                                                      ('id', 'in', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
         pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
-                                                                      ('partner_id', '=', partner_list),
+                                                                      ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
         partner = partner[:-1] if partner else "Customer"
         message = "Dear %s, <br/>" % partner
@@ -64,7 +68,7 @@ class PaymentFollowup(models.Model):
         message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
 
         if overdue_invoices:
-            message += "<b> Overdue Invoices: </b>"
+            message += "<b> Overdue: </b>"
             for due in overdue_invoices:
                 message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
                            "</p>" \
@@ -74,7 +78,7 @@ class PaymentFollowup(models.Model):
                               due.residual,
                               due.date_due.strftime("%d-%m-%Y"))
         else:
-            message += "<b> Overdue Invoices: </b>"
+            message += "<b> Overdue: </b>"
             message += "<p> No overdue as on date. </p>"
 
         if pending_invoices:
@@ -131,7 +135,7 @@ class PaymentFollowup(models.Model):
                 message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
                 message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
 
-                message += "<b> Overdue Invoices: </b>"
+                message += "<b> Overdue: </b>"
                 message += "<p> No overdue as on date. </p>"
                 message += "<br/>"
 
@@ -170,7 +174,7 @@ class PaymentFollowup(models.Model):
                 message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
                 message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
 
-                message += "<b> Overdue Invoices: </b>"
+                message += "<b> Overdue: </b>"
                 message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
                            "</p>" \
                            % (res.invoice_id.invoice_number,
@@ -207,4 +211,5 @@ class PaymentFollowup(models.Model):
         }))
         for i in range(len(mail_ids)):
             mail_ids[i].send(self)
-        self.invoice_id.email_status = 'email_sent'
+        for inv in self.invoice_ids:
+            inv.followup_date = datetime.today()

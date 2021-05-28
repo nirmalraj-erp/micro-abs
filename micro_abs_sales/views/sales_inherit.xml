@@ -571,7 +571,8 @@
                     <field name="amount_total_signed" string="Total" sum="Total"/>
                     <field name="residual_signed" string="Amount Due" sum="Amount Due"/>
                     <field name="due_status"/>
-                    <field name="email_status"/>
+                    <field name="followup_date"/>
+                    <field name="email_status" invisible="1"/>
                     <field name="state" invisible="1"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="company_currency_id" invisible="1"/>
