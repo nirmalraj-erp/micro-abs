@@ -201,8 +201,8 @@ class SaleOrderInherit(models.Model):
             self.report_partner_name = self.partner_id.name.split()[0]
             self.customer_type = self.partner_id.customer_type.id
             return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
-                               'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
-                               'official_contact_two_id': [('id', 'in', self.partner_id.child_ids.ids)]
+                               'official_contact_id': [('id', 'in', self.partner_id.official_contact_ids.ids)],
+                               'official_contact_two_id': [('id', 'in', self.partner_id.official_contact_two_ids.ids)]
                                }}
         else:
             self.official_contact_id = None
