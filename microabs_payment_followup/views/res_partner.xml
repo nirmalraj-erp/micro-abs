@@ -20,13 +20,15 @@
                                 <field name="payment_cc_ids" widget="many2many_tags"
                                        domain="[('id', 'in', child_ids)]"
                                        options="{'no_open':True,'no_create': True}"/>
-                                <field name="official_contact"/>
-                                <field name="official_contact_two"/>
+                                <field name="official_contact_ids" widget="many2many_tags"/>
+                                <field name="official_contact_two_ids" widget="many2many_tags"/>
                             </group>
-                                <field name="docs_to" force_save="1"/>
+                            <group>
+                                <field name="docs_to" readonly="1" force_save="1"/>
                                 <field name="docs_cc" readonly="1" force_save="1" />
                                 <field name="payment_to" readonly="1" force_save="1"/>
                                 <field name="payment_cc" readonly="1" force_save="1"/>
+                            </group>
                         </group>
                     </page>
                 </xpath>
