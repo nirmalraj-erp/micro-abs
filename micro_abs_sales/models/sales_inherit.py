@@ -166,6 +166,11 @@ class SaleOrderInherit(models.Model):
     email_shipment_string = fields.Char(string='Email Shipment String')
     customer_order_value = fields.Monetary(string="Customer Order Value")
 
+    @api.onchange('so_commitment_date')
+    def _onchange_delivery_date(self):
+        for line in self.order_line:
+            line.delivery_date = self.so_commitment_date
+
     @api.onchange("po_no")
     def onchange_po_no(self):
         if self.po_no:
@@ -402,13 +407,8 @@ class SaleOrderLineInherit(models.Model):
     product_size = fields.Many2one('product.size', string='Size')
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     sequence = fields.Integer(string='Sequence')
-    delivery_date = fields.Date('Delivery Date', compute='_get_delivery_date_depends', readonly=False)
+    delivery_date = fields.Date('Delivery Date')
     wkno = fields.Integer(string='Week No', compute='_get_week_no_date')
-
-    @api.depends('order_id.so_commitment_date')
-    def _get_delivery_date_depends(self):
-        for line in self:
-            line.delivery_date = line.order_id.so_commitment_date
 
     @api.depends('delivery_date')
     def _get_week_no_date(self):
