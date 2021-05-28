@@ -20,8 +20,12 @@
                                 <field name="payment_cc_ids" widget="many2many_tags"
                                        domain="[('id', 'in', child_ids)]"
                                        options="{'no_open':True,'no_create': True}"/>
-                                <field name="official_contact_ids" widget="many2many_tags"/>
-                                <field name="official_contact_two_ids" widget="many2many_tags"/>
+                                <field name="official_contact_ids" widget="many2many_tags"
+                                       domain="[('id', 'in', child_ids)]"
+                                       options="{'no_open':True,'no_create': True}"/>
+                                <field name="official_contact_two_ids" widget="many2many_tags"
+                                       domain="[('id', 'in', child_ids)]"
+                                       options="{'no_open':True,'no_create': True}"/>
                             </group>
                             <group>
                                 <field name="docs_to" readonly="1" force_save="1"/>
