@@ -212,4 +212,5 @@ class PaymentFollowup(models.Model):
         for i in range(len(mail_ids)):
             mail_ids[i].send(self)
         for inv in self.invoice_ids:
-            inv.followup_date = datetime.today()
+            follow_date = datetime.today()
+            inv.followup_date = follow_date.strftime("%d-%m-%y %H:%M:%S")
