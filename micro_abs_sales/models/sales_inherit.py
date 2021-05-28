@@ -534,7 +534,7 @@ class AccountInvoiceInherit(models.Model):
     official_contact_id = fields.Many2one('res.partner', string='Official Contact')
     email_shipment_string = fields.Char(string='Email Shipment String', store=True, compute='_get_email_shipment_string')
     # payment_reminder_email = fields.Boolean("Payment Reminder Email")
-    due_status = fields.Selection([('overdue', 'Overdue Invoice'), ('pending', 'Pending Invoices'), ('paid', 'Paid')],
+    due_status = fields.Selection([('overdue', 'Overdue'), ('pending', 'Pending Invoice'), ('paid', 'Paid')],
                                   string="Due Status", compute='compute_due_status')
     sequence = fields.Integer(string="Sequence", compute='compute_due_status', store=True)
     email_status = fields.Selection([('draft', 'Draft'), ('email_sent', 'Email Sent')], default='draft', string="Status")
