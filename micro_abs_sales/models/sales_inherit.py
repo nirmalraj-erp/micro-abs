@@ -48,7 +48,7 @@ class ProductOfferLine(models.Model):
     offer_date = fields.Date(string='Offer Dated')
     sequence = fields.Integer(string='Sequence')
     drawing_no = fields.Char(string='Drawing No.')
-    drawing_attachments_ids = fields.Many2many('ir.attachment', string='Attachments')
+    drawing_attachments_id = fields.Binary(string='Attachments')
                 
 
 class CuttingSpeed(models.Model):
