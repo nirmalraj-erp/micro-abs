@@ -204,6 +204,8 @@ class SaleOrderInherit(models.Model):
             self.official_contact_id = self.partner_id.official_contact_id.id
             self.official_contact_two_id = self.partner_id.official_contact_two_id.id
             return {'domain': {'res_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
+                               'official_contact_id': [('id', 'in', self.partner_id.child_ids.ids)],
+                               'official_contact_two_id': [('id', 'in', self.partner_id.child_ids.ids)],
                                }}
         else:
             self.official_contact_id = None
