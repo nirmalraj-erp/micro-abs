@@ -52,7 +52,7 @@
                           float: left;
                         }
                         </style>
-                        <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" width="100px" height="100px"/>
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px" height="100px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:14%"><i class="fa fa-mobile" style="color:#0444a6"/>
                             <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
