@@ -52,7 +52,7 @@
                           float: left;
                         }
                         </style>
-                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                        <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" width="100px" height="100px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:14%"><i class="fa fa-mobile" style="color:#0444a6"/>
                             <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
@@ -86,7 +86,7 @@
                         <tr width="100%">
                             <td  width="33%">
                                 <strong>Customer:</strong><br/>
-                                <span t-field="o.partner_id.name"/>
+                                <span t-field="o.partner_id.display_name"/>
                             </td>
                             <t t-if="o.partner_invoice_id">
                                 <td  width="33%">
@@ -267,10 +267,10 @@
                             </td>
                         </tr>
                     </table>
-                    <table style="width:100%;font-size:14px;border-top:1px solid blue;" col="4">
-                        <tr col="6" width="100%;" style="border-bottom:1px solid blue;">
+                    <table style="width:100%;border-top:1px solid blue;font-size:14px;" col="4">
+                        <tr col="6" width="100%;" style="border-bottom:1px solid blue;font-size:14px;">
                             <td width="15%">
-                                <strong style="color:#0444a6">Official Contact 1</strong>
+                                <strong style="color:#0444a6;font-size:14px;">Official Contact 1</strong>
                            </td>
                            <td width="2%">
                                <strong>:</strong>
@@ -285,21 +285,21 @@
                             </td>
 
                         </tr>
-                        <tr col="6" width="100%;">
+                        <tr col="6" width="100%;" style="font-size:14px;">
                             <td width="15%">
-                                <strong style="color:#0444a6">Official Contact 2</strong>
-                           </td>
-                           <td width="2%">
+                                <strong style="color:#0444a6;font-size:14px;">Official Contact 2</strong>
+                            </td>
+                            <td width="2%">
                                <strong>:</strong>
-                           </td>
+                            </td>
                             <td width="33%">
                                 <t t-if="o.official_contact_id.mobile"><span t-field="o.official_contact_two_id.title"/>.</t> <span t-field="o.official_contact_two_id.name"/><br/>
                                 <t t-if="o.official_contact_two_id.mobile"><i class="fa fa-mobile" style="color:#0444a6"/>  <span t-field="o.official_contact_two_id.mobile"/></t><br/>
-                            </td>
+                             </td>
                              <td width="33%">
                                  <t t-if="o.official_contact_two_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.email"/></t><br/>
                                  <t t-if="o.official_contact_two_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.phone"/></t>
-                            </td>
+                             </td>
                         </tr>
                     </table>
                 </div>

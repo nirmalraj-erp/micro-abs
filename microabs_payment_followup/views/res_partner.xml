@@ -36,6 +36,9 @@
                         </group>
                     </page>
                 </xpath>
+                <xpath expr="//field[@name='title']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                </xpath>
             </field>
         </record>
 

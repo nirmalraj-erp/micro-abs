@@ -53,7 +53,7 @@ class PaymentFollowup(models.Model):
         })
         partner = ""
         for inv in invoice_id.partner_id.payment_to_ids:
-            partner += "Mr." + inv.name + "/"
+            partner += invoice_id.partner_id.title.name + " " + inv.name + "/"
 
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
@@ -63,7 +63,7 @@ class PaymentFollowup(models.Model):
                                                                       ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
         partner = partner[:-1] if partner else "Customer"
-        message = "Dear %s, <br/>" % partner
+        message = " %s, <br/>" % partner
         message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
         message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
 
@@ -213,4 +213,4 @@ class PaymentFollowup(models.Model):
             mail_ids[i].send(self)
         for inv in self.invoice_ids:
             follow_date = datetime.today()
-            inv.followup_date = follow_date.strftime("%d-%m-%y %H:%M:%S")
+            inv.followup_date += follow_date.strftime("%d-%m-%y") + ","
