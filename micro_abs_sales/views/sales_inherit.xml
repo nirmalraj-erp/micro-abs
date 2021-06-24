@@ -23,7 +23,7 @@
 				<field name="docs_address_id"/>
 				<field name="po_no"/>
                 <field name="po_date"/>
-                <field name="po_received_date" attrs="{'readonly': [('state', '=', 'sale')]}"/>
+                <field name="po_received_date"/>
                 <field name="order_conf_no"/>
                 <field name="order_conf_date"/>
                 <field name="supplier_expected_date"/>
