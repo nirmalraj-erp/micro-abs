@@ -191,7 +191,7 @@
                                         <span t-esc="line.customer_id.customer_code.name"/>
                                     </td>
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:33%;text-align:left;padding-right:2px;">
-                                        <span t-esc="line.customer_id.name"/>
+                                        <span t-esc="line.customer_id.display_name"/>
                                     </td>
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
                                         <span t-esc="line.invoice_amount"/>
