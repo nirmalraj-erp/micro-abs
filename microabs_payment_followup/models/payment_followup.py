@@ -20,9 +20,9 @@ class PaymentFollowup(models.Model):
     due_amount = fields.Float(string="Due Amount")
     currency_id = fields.Many2one("res.currency", string="Currency")
     email_body = fields.Html(string="Email")
-    email_to = fields.Char(string="Email To")
-    email_cc = fields.Char(string="Email CC")
-    email_subject = fields.Char(string="Subject")
+    email_to = fields.Char(string="To")
+    email_cc = fields.Char(string="CC")
+    email_subject = fields.Char(string="Sub")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
     due_status = fields.Selection([('overdue', 'Overdue'), ('pending', 'Pending Invoice'), ('paid', 'Paid')],
@@ -62,10 +62,12 @@ class PaymentFollowup(models.Model):
         pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
                                                                       ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
+        message = "<p> <span style='color:green;font-size:14px;'>MATTER URGENT!</span> </p>"
         partner = partner[:-1] if partner else "Customer"
-        message = " %s, <br/>" % partner
-        message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
-        message += "Please clear them at the earliest and kindly share swift copy once paid. <br/><br/>"
+        message += " %s, <br/>" % partner
+        message += "<br/> <p> <span style='color:green;font-size:14px;'>We sincerely thank you for your POs and also for the continuous patronage to us.</span> </p>"
+        message += " <br/> Pl. find the below list of overdue/pending invoices. <br/>"
+        message += "Pl. clear them at the earliest <span style='color:green;font-size:14px;'> ON TOP PRIORITY </span> and kindly share swift copy once paid. <br/><br/>"
 
         if overdue_invoices:
             message += "<b> Overdue: </b>"
@@ -93,10 +95,13 @@ class PaymentFollowup(models.Model):
         else:
             message += "<br/>"
             message += "<b> Pending Invoices: </b>"
-            message += " <p> No pending invoices as on date. </p>"
+            message += " <p> No pending invoices as on date. </p> <br/>"
+
+        message += "<p> <span style='color:green;font-size:14px;'>We appreciate your timely response as to WHEN THE OVERDUES WILL BE CLEARED.</span> </p>"
 
         message += "<br/><br/>"
         message += "Regards, <br/> ERP Team. <br/>"
+        message += "<p> <span style='color:green;font-size:14px;'>%s</span> <br/>" % invoice_id.company_id.name
         message += "%s, " % invoice_id.company_id.street if invoice_id.company_id.street else ""
         message += "%s, <br/>" % invoice_id.company_id.street2 if invoice_id.company_id.street2 else ""
         message += "%s, " % invoice_id.company_id.city if invoice_id.company_id.city else ""
