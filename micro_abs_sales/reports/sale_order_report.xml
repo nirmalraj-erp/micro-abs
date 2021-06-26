@@ -47,21 +47,18 @@
                 </t>
                 <div class="header">
                     <div class="first-page" style="border-bottom:1px solid gray">
-                            <style>
+                        <style>
                         img {
                           float: left;
                         }
                         </style>
-                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px" height="100px"/>
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" style="width:54px;height:54px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
-                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:14%"><i class="fa fa-mobile" style="color:#0444a6"/>
+                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:21%"><i class="fa fa-mobile" style="color:#0444a6"/>
                             <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
                         <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
-                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:17%"><i class="fa fa-mobile" style="color:#0444a6;"/>
                             <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
-                            <br></br>
-                            <br></br>
-                            <br></br>
                      </div>
                     <p style="text-align:center;color:#0444a6;font-size:18px;text-decoration:underline;text-decoration-color:black;"><b>ORDER REQUEST FORM</b></p>
                     <table style="font-size:14px" width="100%">
@@ -267,7 +264,41 @@
                             </td>
                         </tr>
                     </table>
-                    <table style="width:100%;border-top:1px solid blue;font-size:14px;" col="4">
+                    <table style="width:100%;font-size:14px;border-top:1px solid blue;font-size:14px;" col="6">
+                        <tr col="6" width="100%;" style="border-bottom:1px solid blue;font-size:14px;">
+                            <td width="15%">
+                                <strong style="color:#0444a6;font-size:14px;">Official Contact 1</strong>
+                           </td>
+                           <td width="2%">
+                               <strong>:</strong>
+                           </td>
+                            <td width="33%">
+                                <t t-if="o.official_contact_id.mobile"><span t-field="o.official_contact_id.title"/></t> <span t-field="o.official_contact_id.name"/><br/>
+                                <t t-if="o.official_contact_id.mobile"><i class="fa fa-mobile" style="color:#0444a6"/>  <span t-field="o.official_contact_id.mobile"/></t><br/>
+                            </td>
+                             <td width="50%">
+                                 <t t-if="o.official_contact_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_id.email"/></t><br/>
+                                 <t t-if="o.official_contact_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_id.phone"/></t>
+                            </td>
+                        </tr>
+                        <tr col="6" width="100%;" style="font-size:14px;">
+                            <td width="15%">
+                                <strong style="color:#0444a6;font-size:14px;">Official Contact 2</strong>
+                            </td>
+                            <td width="2%">
+                               <strong>:</strong>
+                            </td>
+                            <td width="33%">
+                                <t t-if="o.official_contact_id.mobile"><span t-field="o.official_contact_two_id.title"/></t> <span t-field="o.official_contact_two_id.name"/><br/>
+                                <t t-if="o.official_contact_two_id.mobile"><i class="fa fa-mobile" style="color:#0444a6"/>  <span t-field="o.official_contact_two_id.mobile"/></t><br/>
+                             </td>
+                             <td width="50%">
+                                 <t t-if="o.official_contact_two_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.email"/></t><br/>
+                                 <t t-if="o.official_contact_two_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.phone"/></t>
+                             </td>
+                        </tr>
+                    </table>
+                    <!--<table style="width:100%;border-top:1px solid blue;font-size:14px;">
                         <tr col="6" width="100%;" style="border-bottom:1px solid blue;font-size:14px;">
                             <td width="15%">
                                 <strong style="color:#0444a6;font-size:14px;">Official Contact 1</strong>
@@ -283,7 +314,6 @@
                                  <t t-if="o.official_contact_id.email"><i class="fa fa-envelope" style="color:#0444a6"/> <span t-field="o.official_contact_id.email"/></t><br/>
                                  <t t-if="o.official_contact_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_id.phone"/></t>
                             </td>
-
                         </tr>
                         <tr col="6" width="100%;" style="font-size:14px;">
                             <td width="15%">
@@ -301,7 +331,7 @@
                                  <t t-if="o.official_contact_two_id.phone"><i class="fa fa-phone" style="color:#0444a6"/> <span t-field="o.official_contact_two_id.phone"/></t>
                              </td>
                         </tr>
-                    </table>
+                    </table>-->
                 </div>
                 <div class="article">
                     <div class="page">
