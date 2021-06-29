@@ -3,6 +3,7 @@ from datetime import datetime, date, time
 from odoo.exceptions import UserError, ValidationError
 from datetime import timedelta
 from dateutil import relativedelta as rdelta
+from tabulate import tabulate
 
 
 class PaymentFollowup(models.Model):
@@ -70,15 +71,38 @@ class PaymentFollowup(models.Model):
         message += "Pl. clear them at the earliest <span style='color:green;font-size:14px;'> ON TOP PRIORITY </span> and kindly share swift copy once paid. <br/><br/>"
 
         if overdue_invoices:
-            message += "<b> Overdue: </b>"
+            message += "<b> Overdue: </b> <br/><br/>"
             for due in overdue_invoices:
-                message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
-                           "</p>" \
-                           % (due.invoice_number,
-                              due.date_invoice.strftime("%d-%m-%Y"),
-                              due.currency_id.name,
-                              due.residual,
-                              due.date_due.strftime("%d-%m-%Y"))
+                # info = {
+                #     'inv_no': due.invoice_number,
+                #     'date_invoice': due.date_invoice.strftime("%d-%m-%Y"),
+                #     'currency_id': due.currency_id.name,
+                #     'residual': due.residual,
+                #     'date_due': due.date_due.strftime("%d-%m-%Y"),
+                #         }
+                # info = {'First Name': ['John', 'Mary', 'Jennifer'], 'Last Name': ['Smith', 'Jane', 'Doe'],
+                #         'Age': [39, 25, 28]}
+                # message += tabulate(info, headers='keys', tablefmt='fancy_grid', showindex=True)
+                message += "<table style='color:red; border:2px solid black; padding:5px'> " \
+                           "<tr>" \
+                           "<th> Inv.No </th>" \
+                           "<th> Inv. Date </th>" \
+                           "<th> Inv. Amt </th>"\
+                           "<th> Due Date </th>"\
+                           "<th> Days of Expiry </th>"\
+                           "</tr>" \
+                           "<td>" \
+                           "INV" \
+                           "</td>"\
+                           "<td>" \
+                           "INV" \
+                           "</td>"\
+                           "</table>" \
+                           # % (due.invoice_number,
+                           #    due.date_invoice.strftime("%d-%m-%Y"),
+                           #    due.currency_id.name,
+                           #    due.residual,
+                           #    due.date_due.strftime("%d-%m-%Y"))
         else:
             message += "<b> Overdue: </b>"
             message += "<p> No overdue as on date. </p>"
