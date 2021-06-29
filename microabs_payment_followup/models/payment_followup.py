@@ -46,8 +46,8 @@ class PaymentFollowup(models.Model):
                 partner_list.append(i.partner_id.id)
         invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
         res.update({
-            'email_to': "saba@microab.com, srini@microab.com, " + invoice_id.partner_id.payment_to if invoice_id.partner_id.payment_to else "" ,
-            'email_cc': "erp@microab.com, " + invoice_id.partner_id.payment_cc if invoice_id.partner_id.payment_cc else "",
+            'email_to': invoice_id.partner_id.payment_to if invoice_id.partner_id.payment_to else "",
+            'email_cc': "saba@microab.com, srini@microab.com, " + invoice_id.partner_id.payment_cc if invoice_id.partner_id.payment_cc else "",
             'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
             " Overdue and Pending Invoice",
             "invoice_ids": [(6, 0, invoice_list)]

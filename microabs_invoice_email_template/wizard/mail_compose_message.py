@@ -17,7 +17,7 @@ class InvoiceFollowup(models.Model):
         attachments = self.env['ir.attachment'].search(
                 [('res_id', '=', invoice_ids.id), ('res_model', '=', 'account.invoice')]).ids
         res.update({
-            'email_cc': email_cc,
+            'email_cc': "erp@microab.com, " + email_cc,
             'email_to': email_to,
             'email_subject': email_subject,
             'email_attachment_ids': attachments
