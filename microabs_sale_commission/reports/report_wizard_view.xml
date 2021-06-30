@@ -8,7 +8,7 @@
             <tree string="Commission Master" delete='false' default_order="id desc" decoration-success="state=='done'"
                   decoration-muted="state=='revert'">
                 <field name="name" attrs="{'invisible': [('state', '=', 'draft')]}"/>
-                <field name="create_date" string="Paid Date"/>
+                <field name="create_date" string="Date" invisible="1"/>
                 <field name="period"/>
                 <field name="bank_name_id"/>
                 <field name="total_commission" widget="monetary"/>
