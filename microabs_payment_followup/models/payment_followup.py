@@ -73,6 +73,7 @@ class PaymentFollowup(models.Model):
         if overdue_invoices:
             message += "<b> Overdue: </b> <br/><br/>"
             for due in overdue_invoices:
+                overdue_days = -(due.date_invoice-due.date_due).days
                 # info = {
                 #     'inv_no': due.invoice_number,
                 #     'date_invoice': due.date_invoice.strftime("%d-%m-%Y"),
@@ -83,45 +84,83 @@ class PaymentFollowup(models.Model):
                 # info = {'First Name': ['John', 'Mary', 'Jennifer'], 'Last Name': ['Smith', 'Jane', 'Doe'],
                 #         'Age': [39, 25, 28]}
                 # message += tabulate(info, headers='keys', tablefmt='fancy_grid', showindex=True)
-                message += "<table style='color:red; border:2px solid black; padding:5px'> " \
-                           "<tr>" \
-                           "<th> Inv.No </th>" \
-                           "<th> Inv. Date </th>" \
-                           "<th> Inv. Amt </th>"\
-                           "<th> Due Date </th>"\
-                           "<th> Days of Expiry </th>"\
+                message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
+                           "</p>" \
+                           % (due.invoice_number,
+                              due.date_invoice.strftime("%d-%m-%Y"),
+                              due.currency_id.name,
+                              due.residual,
+                              due.date_due.strftime("%d-%m-%Y"))
+                message += "<p> <span style='color:green;font-size:14px;'>Overdue since the past %s days.</span> </p>" % overdue_days
+                message += "<table style='border:2px solid black; padding:5px;text-align:center' " \
+                           "width=750px> " \
+                           "<tr style='text-align:center'>" \
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Inv.No </th>" \
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Inv. Date </th>" \
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Inv. Amt </th>"\
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Due Date </th>"\
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Days Delay" \
+                           " </th>" \
                            "</tr>" \
-                           "<td>" \
-                           "INV" \
-                           "</td>"\
-                           "<td>" \
-                           "INV" \
-                           "</td>"\
+                           "<tr>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "</tr>" \
                            "</table>" \
-                           # % (due.invoice_number,
-                           #    due.date_invoice.strftime("%d-%m-%Y"),
-                           #    due.currency_id.name,
-                           #    due.residual,
-                           #    due.date_due.strftime("%d-%m-%Y"))
+                           % (due.invoice_number,
+                              due.date_invoice.strftime("%d-%m-%Y"),
+                              due.residual,
+                              due.date_due.strftime("%d-%m-%Y"),
+                              overdue_days)
         else:
             message += "<b> Overdue: </b>"
             message += "<p> No overdue as on date. </p>"
 
         if pending_invoices:
             message += "<br/>"
-            message += "<b> Pending Invoices: </b>"
+            message += "<b> Pending Invoices: </b> <br/><br/>"
             for pen in pending_invoices:
-                message += "<p> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </p>" % (pen.invoice_number,
-                                                                                          pen.date_invoice.strftime("%d-%m-%Y"),
-                                                                                          pen.currency_id.name,
-                                                                                          pen.residual,
-                                                                                          pen.date_due.strftime("%d-%m-%Y"))
+                pending_days = -(pen.date_invoice - pen.date_due).days
+                message += "<p <span style='color:red;'> <b> Inv. %s dtd. %s for %s %s - Due Date %s </b> </span> " \
+                           "</p>" \
+                           % (pen.invoice_number,
+                              pen.date_invoice.strftime("%d-%m-%Y"),
+                              pen.currency_id.name,
+                              pen.residual,
+                              pen.date_due.strftime("%d-%m-%Y"))
+                message += "<p> <span style='color:green;font-size:14px;'>%s Days to Expiry.</span> </p>" % pending_days
+                message += "<table style=' border:2px solid black; padding:5px;text-align:center'" \
+                           " width=750px> " \
+                           "<tr style='text-align:center'>" \
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Inv.No </th>" \
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Inv. Date </th>" \
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Inv. Amt </th>"\
+                           "<th style='border-right:2px solid black;border-bottom:2px solid black'> Due Date </th>"\
+                           "<th style='border-bottom:2px solid black'> Days of Expiry " \
+                           "</th>"\
+                           "</tr>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "<td style='border-right:2px solid black'> %s </td>" \
+                           "</table>"\
+                           % (pen.invoice_number,
+                              pen.date_invoice.strftime("%d-%m-%Y"),
+                              pen.residual,
+                              pen.date_due.strftime("%d-%m-%Y"),
+                              pending_days)
         else:
-            message += "<br/>"
+            message += "<br/><br/>"
             message += "<b> Pending Invoices: </b>"
             message += " <p> No pending invoices as on date. </p> <br/>"
 
-        message += "<p> <span style='color:green;font-size:14px;'>We appreciate your timely response as to WHEN THE OVERDUES WILL BE CLEARED.</span> </p>"
+        message += "<br/><br/>" \
+                   "<p> <span style='color:green;font-size:14px;'>" \
+                   "We appreciate your timely response as to WHEN THE OVERDUES WILL BE CLEARED.</span> </p>"
 
         message += "<br/><br/>"
         message += "Regards, <br/> ERP Team. <br/>"
@@ -242,4 +281,4 @@ class PaymentFollowup(models.Model):
             mail_ids[i].send(self)
         for inv in self.invoice_ids:
             follow_date = datetime.today()
-            inv.followup_date += follow_date.strftime("%d/%m/%Y") + ","
+            # inv.followup_date += follow_date.strftime("%d/%m/%Y") + ","
