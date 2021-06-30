@@ -20,8 +20,8 @@ class PaymentFollowup(models.Model):
     due_amount = fields.Float(string="Due Amount")
     currency_id = fields.Many2one("res.currency", string="Currency")
     email_body = fields.Html(string="Email")
-    email_to = fields.Char(string="To")
-    email_cc = fields.Char(string="CC")
+    email_to = fields.Text(string="To")
+    email_cc = fields.Text(string="CC")
     email_subject = fields.Char(string="Sub")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
