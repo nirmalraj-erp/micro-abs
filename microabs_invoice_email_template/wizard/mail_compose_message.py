@@ -17,7 +17,7 @@ class InvoiceFollowup(models.Model):
         attachments = self.env['ir.attachment'].search(
                 [('res_id', '=', invoice_ids.id), ('res_model', '=', 'account.invoice')]).ids
         res.update({
-            'email_cc': "erp@microab.com, " + email_cc,
+            'email_cc': "erp@microab.com, " + email_cc if email_cc else "erp@microab.com, ",
             'email_to': email_to,
             'email_subject': email_subject,
             'email_attachment_ids': attachments
@@ -55,8 +55,8 @@ class InvoiceFollowup(models.Model):
         return res
 
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
-    email_cc = fields.Char('Cc', help="Carbon copy recipients (placeholders may be used here)")
-    email_to = fields.Char('To', help="Recipients Address (placeholders may be used here)")
+    email_cc = fields.Text('Cc', help="Carbon copy recipients (placeholders may be used here)")
+    email_to = fields.Text('To', help="Recipients Address (placeholders may be used here)")
     email_subject = fields.Char(string="Subject")
     email_body = fields.Html(string="Email")
     email_attachment_ids = fields.Many2many('ir.attachment', string='')
