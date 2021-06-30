@@ -563,7 +563,7 @@
 			<field name="model">account.invoice</field>
 			<field name="arch" type="xml">
                 <tree create="false" decoration-danger="due_status == 'overdue'" decoration-info="due_status == 'pending'"
-                  decoration-success="due_status == 'paid'" string="Invoice" default_order="sequence asc">
+                  decoration-success="due_status == 'paid'" string="Invoice" default_order="partner_id">
                     <field name="invoice_number"/>
                     <field name="partner_id" string="Customer"/>
                     <field name="date_invoice"/>

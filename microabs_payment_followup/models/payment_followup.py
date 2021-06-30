@@ -21,8 +21,8 @@ class PaymentFollowup(models.Model):
     due_amount = fields.Float(string="Due Amount")
     currency_id = fields.Many2one("res.currency", string="Currency")
     email_body = fields.Html(string="Email")
-    email_to = fields.Char(string="To")
-    email_cc = fields.Char(string="CC")
+    email_to = fields.Text(string="To")
+    email_cc = fields.Text(string="CC")
     email_subject = fields.Char(string="Sub")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
@@ -47,7 +47,7 @@ class PaymentFollowup(models.Model):
         invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
         res.update({
             'email_to': invoice_id.partner_id.payment_to if invoice_id.partner_id.payment_to else "",
-            'email_cc': "saba@microab.com, srini@microab.com, " + invoice_id.partner_id.payment_cc if invoice_id.partner_id.payment_cc else "",
+            'email_cc': "saba@microab.com, srini@microab.com, " + invoice_id.partner_id.payment_cc if invoice_id.partner_id.payment_cc else "saba@microab.com, srini@microab.com, ",
             'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
             " Overdue and Pending Invoice",
             "invoice_ids": [(6, 0, invoice_list)]

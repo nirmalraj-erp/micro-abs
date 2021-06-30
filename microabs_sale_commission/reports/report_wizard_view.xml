@@ -9,7 +9,11 @@
                   decoration-muted="state=='revert'">
                 <field name="name" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                 <field name="create_date" string="Paid Date"/>
-                <field name="state"/>
+                <field name="period"/>
+                <field name="bank_name_id"/>
+                <field name="total_commission" widget="monetary"/>
+                <field name="total_invoice" widget="monetary"/>
+                <field name="state" widget="badge"/>
             </tree>
         </field>
     </record>
@@ -56,7 +60,7 @@
                         <field name="int_swift_code"/>
                         <field name="int_iban_no"/>
                     </group>
-                        <field name="commission_line" attrs="{'readonly': [('state', '=', 'done')]}">
+                        <field name="commission_line">
                             <tree string="Commission Line" delete="false" editable="false">
                                 <field name="sequence" widget="handle"/>
                                 <field name="sale_commission_id" invisible="1"/>
