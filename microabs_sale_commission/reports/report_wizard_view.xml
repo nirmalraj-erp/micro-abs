@@ -47,6 +47,7 @@
                 <field name="create_date" string="Date" invisible="1"/>
                 <field name="period"/>
                 <field name="bank_name_id"/>
+                <field name="company_id"/>
                 <field name="total_commission" widget="monetary"/>
                 <field name="total_invoice" widget="monetary"/>
                 <field name="state" widget="badge"/>
@@ -72,6 +73,15 @@
                                 <field name="name" readonly="1" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                             </h1>
                         </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_account_payment" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('commission_count', '=', 0)]}">
+                            <div class="o_stat_info">
+                                <field name="commission_count" widget="statinfo"/>
+                            </div>
+                        </button>
+                    </div>
                     <group>
                     <group>
                         <field name="period"/>
@@ -97,7 +107,7 @@
                         <field name="int_swift_code"/>
                         <field name="int_iban_no"/>
                     </group>
-                        <field name="commission_line">
+                        <field name="commission_line" attrs="{'readonly': [('state', '=', 'paid')]}">
                             <tree string="Commission Line" delete="false" editable="false">
                                 <field name="sequence" widget="handle"/>
                                 <field name="sale_commission_id" invisible="1"/>

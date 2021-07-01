@@ -43,6 +43,26 @@ class SaleCommissionReportWizard(models.Model):
         compute="_compute_commission_total",
         store=True,
     )
+    commission_count = fields.Integer(compute='compute_commission_count')
+
+    @api.depends('state')
+    def compute_commission_count(self):
+        for record in self:
+            payment = self.env["account.payment"].sudo().search_count([('communication', '=', record.name)])
+            record.commission_count = payment
+
+    @api.multi
+    def action_account_payment(self):
+        payment_id = self.env["account.payment"].sudo().search([('communication', '=', self.name)])
+        action = self.env.ref('account.action_account_payments').read()[0]
+        form_view = [(self.env.ref('account.view_account_payment_form').id, 'form')]
+        if 'views' in action:
+            action['views'] = form_view + [(state, view) for state, view in action['views'] if view != 'form']
+        else:
+            action['views'] = form_view
+        action['res_id'] = payment_id.id
+        action['domain'] = [('id', '=', payment_id.id)]
+        return action
     
     @api.depends('commission_line.commission_amount', 'commission_line.invoice_amount')
     def _compute_commission_total(self):
@@ -205,5 +225,6 @@ class SaleCommissionPayment(models.Model):
             'payment_date': self.payment_date,
             'communication': self.communication,
         }
-        self.env["account.payment"].sudo().create(vals)
+        payment_id = self.env["account.payment"].sudo().create(vals)
+        payment_id.post()
         self.commission_id.update({'state': 'paid'})
