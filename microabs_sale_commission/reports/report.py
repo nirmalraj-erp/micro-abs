@@ -10,12 +10,15 @@ class SaleCommissionReportWizard(models.Model):
     _name = "sale.commission.report"
     _description = "Sale Commission Report Wizard"
 
+    def get_currency(self):
+        return self.env.ref('base.main_company').currency_id
+
     name = fields.Char(string='Name', index=True, default=lambda self: _('New'))
     period = fields.Char(string='Period')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('sale.order'))
     commission_line = fields.One2many('commission.line', 'line_id', string="Commission Line")
-    currency_id = fields.Many2one('res.currency', 'Currency')
-    state = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('revert', 'Reverted')], readonly=True,
+    currency_id = fields.Many2one('res.currency', 'Currency', default=get_currency)
+    state = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('revert', 'Reverted'), ('paid', 'Paid')], readonly=True,
                              default='draft', copy=False, string="Status")
     bank_name_id = fields.Many2one('bank.name', 'Bank')
     bank_address = fields.Char('Bank Address')
@@ -159,3 +162,48 @@ class SaleCommissionReportInherit(models.AbstractModel):
                 'docs': report_obj,
                 'data': data,
             }
+
+
+class SaleCommissionPayment(models.Model):
+    _name = "sale.commission.payment"
+    _description = "Sale Commission Payment"
+
+    amount = fields.Float(string="Payment Amount")
+    journal_id = fields.Many2one("account.journal", string="Payment Journal")
+    payment_date = fields.Date(string="Payment Date")
+    communication = fields.Text(string="Memo")
+    currency_id = fields.Many2one('res.currency', 'Currency')
+    company_id = fields.Many2one("res.company")
+    commission_id = fields.Many2one("sale.commission.report")
+
+    @api.model
+    def default_get(self, fields):
+        res = super(SaleCommissionPayment, self).default_get(fields)
+        res_ids = self._context.get('active_ids')
+        commission_id = self.env["sale.commission.report"].sudo().browse(res_ids)
+        res.update({'amount': commission_id.total_commission,
+                    'payment_date': datetime.now().date(),
+                    'communication': commission_id.name,
+                    'currency_id': commission_id.currency_id.id,
+                    'company_id': commission_id.company_id.id,
+                    'commission_id': commission_id.id
+                    })
+        return res
+
+    def validate_payment(self):
+        if self.amount <= 0:
+            raise ValidationError("Amount should not be lesser than or equal to zero")
+        payment_method = self.env["account.payment.method"].sudo().search([('code', '=', 'manual'),
+                                                                           ('payment_type', '=', 'inbound')])
+        vals = {
+            'partner_type': 'customer',
+            'payment_type': 'inbound',
+            'payment_method_id': payment_method.id,
+            'partner_id': self.company_id.partner_id.id,
+            'amount': self.amount,
+            'journal_id': self.journal_id.id,
+            'payment_date': self.payment_date,
+            'communication': self.communication,
+        }
+        self.env["account.payment"].sudo().create(vals)
+        self.commission_id.update({'state': 'paid'})
