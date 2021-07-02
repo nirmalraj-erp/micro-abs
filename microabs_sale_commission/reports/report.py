@@ -43,7 +43,7 @@ class SaleCommissionReportWizard(models.Model):
         compute="_compute_commission_total",
         store=True,
     )
-    total_due = fields.Float(string="Total Due")
+    total_due = fields.Float(string="Amount Due")
     commission_count = fields.Integer(compute='compute_commission_count', string="Payments")
 
     @api.depends('state')
