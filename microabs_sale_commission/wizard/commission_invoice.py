@@ -13,10 +13,13 @@ class CommissionInvoice(models.TransientModel):
         active = self.env.context.get('active_ids')
         commission_invoice_list = self.env["sale.commission"].search([('id', 'in', active)])
         vals = ({'name': _('New')})
+        amount = 0
         commission_report_obj = self.env["sale.commission.report"].create(vals)
         for cm_list in commission_invoice_list:
+            print('111111111111111111', cm_list)
             date_invoice = cm_list.invoice_date
             if cm_list.state == 'open':
+                amount += cm_list.commission_amount
                 cm_params = ({
                     'commission_line': [(0, 0, {
                         'invoice_no': cm_list.invoice_no,
@@ -31,6 +34,7 @@ class CommissionInvoice(models.TransientModel):
                         'sale_commission_id': cm_list.id,
                     })],
                    })
+                commission_report_obj.update({'total_due': amount})
             else:
                 raise UserError(_('Invalid Action!! You cannot settle the commission invoice which is already paid'))
             cm_list.update({'state': 'paid'})
