@@ -10,14 +10,14 @@ class SaleCommissionReportWizard(models.Model):
     _name = "sale.commission.report"
     _description = "Sale Commission Report Wizard"
 
-    def get_currency(self):
-        return self.env.ref('base.main_company').currency_id
+    # def get_currency(self):
+    #     return self.env.ref('base.main_company').currency_id
 
     name = fields.Char(string='Name', index=True, default=lambda self: _('New'))
     period = fields.Char(string='Period')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env['res.company']._company_default_get('sale.order'))
     commission_line = fields.One2many('commission.line', 'line_id', string="Commission Line")
-    currency_id = fields.Many2one('res.currency', 'Currency', default=get_currency)
+    currency_id = fields.Many2one('res.currency', 'Currency')
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('revert', 'Reverted'), ('paid', 'Paid')], readonly=True,
                              default='draft', copy=False, string="Status")
     bank_name_id = fields.Many2one('bank.name', 'Bank')
@@ -43,25 +43,20 @@ class SaleCommissionReportWizard(models.Model):
         compute="_compute_commission_total",
         store=True,
     )
+    total_due = fields.Float(string="Total Due")
     commission_count = fields.Integer(compute='compute_commission_count')
 
     @api.depends('state')
     def compute_commission_count(self):
         for record in self:
-            payment = self.env["account.payment"].sudo().search_count([('communication', '=', record.name)])
+            payment = self.env["commission.payment.history"].sudo().search_count([('commission_id', '=', record.id)])
             record.commission_count = payment
 
     @api.multi
     def action_account_payment(self):
-        payment_id = self.env["account.payment"].sudo().search([('communication', '=', self.name)])
-        action = self.env.ref('account.action_account_payments').read()[0]
-        form_view = [(self.env.ref('account.view_account_payment_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [(state, view) for state, view in action['views'] if view != 'form']
-        else:
-            action['views'] = form_view
-        action['res_id'] = payment_id.id
-        action['domain'] = [('id', '=', payment_id.id)]
+        payment_id = self.env["commission.payment.history"].sudo().search([('commission_id', '=', self.id)])
+        action = self.env.ref('microabs_sale_commission.action_commission_payment_history').read()[0]
+        action['domain'] = [('id', 'in', payment_id.ids)]
         return action
     
     @api.depends('commission_line.commission_amount', 'commission_line.invoice_amount')
@@ -72,6 +67,7 @@ class SaleCommissionReportWizard(models.Model):
             for line in record.commission_line:
                 record.total_commission += sum(x.commission_amount for x in line)
                 record.total_invoice += sum(x.invoice_amount for x in line)
+                record.total_due = record.total_commission
 
     @api.onchange('bank_name_id')
     def _get_bank_details(self):
@@ -188,10 +184,10 @@ class SaleCommissionPayment(models.Model):
     _name = "sale.commission.payment"
     _description = "Sale Commission Payment"
 
+    name = fields.Text(string="Name")
     amount = fields.Float(string="Payment Amount")
     journal_id = fields.Many2one("account.journal", string="Payment Journal")
     payment_date = fields.Date(string="Payment Date")
-    communication = fields.Text(string="Memo")
     currency_id = fields.Many2one('res.currency', 'Currency')
     company_id = fields.Many2one("res.company")
     commission_id = fields.Many2one("sale.commission.report")
@@ -201,9 +197,9 @@ class SaleCommissionPayment(models.Model):
         res = super(SaleCommissionPayment, self).default_get(fields)
         res_ids = self._context.get('active_ids')
         commission_id = self.env["sale.commission.report"].sudo().browse(res_ids)
-        res.update({'amount': commission_id.total_commission,
+        res.update({'amount': commission_id.total_due,
                     'payment_date': datetime.now().date(),
-                    'communication': commission_id.name,
+                    'name': commission_id.name,
                     'currency_id': commission_id.currency_id.id,
                     'company_id': commission_id.company_id.id,
                     'commission_id': commission_id.id
@@ -223,8 +219,24 @@ class SaleCommissionPayment(models.Model):
             'amount': self.amount,
             'journal_id': self.journal_id.id,
             'payment_date': self.payment_date,
-            'communication': self.communication,
+            'name': self.name,
+            'company_id': self.company_id.id,
+            'total_commission': self.commission_id.total_commission,
+            'commission_id': self.commission_id.id
         }
-        payment_id = self.env["account.payment"].sudo().create(vals)
-        payment_id.post()
-        self.commission_id.update({'state': 'paid'})
+        self.env["commission.payment.history"].sudo().create(vals)
+        self.commission_id.update({'state': 'paid', 'total_due': self.commission_id.total_due - self.amount})
+
+
+class CommissionPaymentHistory(models.Model):
+    _name = "commission.payment.history"
+    _description = "Commission Payment History"
+
+    name = fields.Text(string="Name")
+    amount = fields.Float(string="Paid Amount")
+    journal_id = fields.Many2one("account.journal", string="Payment Journal")
+    payment_date = fields.Date(string="Payment Date")
+    currency_id = fields.Many2one('res.currency', 'Currency')
+    company_id = fields.Many2one("res.company")
+    commission_id = fields.Many2one("sale.commission.report")
+    total_commission = fields.Float(string="Total Commission")

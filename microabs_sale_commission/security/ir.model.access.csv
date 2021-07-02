@@ -5,4 +5,5 @@ access_commission_invoice,commission.invoice,model_commission_invoice,sales_team
 access_sale_commission_report,sale.commission.report,model_sale_commission_report,sales_team.group_sale_salesman,1,1,1,1
 access_commission_line,commission.line,model_commission_line,sales_team.group_sale_salesman,1,1,1,1
 access_bank_name,bank.name,model_bank_name,sales_team.group_sale_salesman,1,1,1,1
-access_sale_commission_payment,Sale.commission.payment,model_sale_commission_payment,sales_team.group_sale_salesman,1,1,1,1
+access_sale_commission_payment,sale.commission.payment,model_sale_commission_payment,sales_team.group_sale_salesman,1,1,1,1
+access_commission_payment_history,commission.payment.history,model_commission_payment_history,sales_team.group_sale_salesman,1,1,1,1
