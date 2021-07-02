@@ -46,8 +46,8 @@
                 <field name="journal_id"/>
                 <field name="payment_date"/>
                 <field name="company_id"/>
-                <field name="total_commission" widget="monetary"/>
                 <field name="amount" widget="monetary"/>
+                <field name="total_commission" widget="monetary"/>
                 <field name="commission_id" invisible="1"/>
             </tree>
         </field>
@@ -64,15 +64,16 @@
         <field name="name">commission.master.tree.view</field>
         <field name="model">sale.commission.report</field>
         <field name="arch" type="xml">
-            <tree string="Commission Master" delete='false' default_order="id desc" decoration-success="state=='done'"
-                  decoration-muted="state=='revert'">
+            <tree string="Commission Master" delete='false' default_order="id desc" decoration-success="state=='paid'"
+                  decoration-info="state=='done'" decoration-muted="state=='revert'">
                 <field name="name" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                 <field name="create_date" string="Date" invisible="1"/>
                 <field name="period"/>
                 <field name="bank_name_id"/>
                 <field name="company_id"/>
-                <field name="total_commission" widget="monetary"/>
                 <field name="total_invoice" widget="monetary"/>
+                <field name="total_commission" widget="monetary"/>
+                <field name="total_due" widget="monetary"/>
                 <field name="state" widget="badge"/>
             </tree>
         </field>
@@ -95,11 +96,9 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_account_payment" type="object"
-                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                class="oe_stat_button" icon="fa-money"
                                 attrs="{'invisible': [('commission_count', '=', 0)]}">
-                            <div class="o_stat_info">
-                                <field name="commission_count" widget="statinfo"/>
-                            </div>
+                                <field name="commission_count" widget="statinfo" string="Payments"/>
                         </button>
                     </div>
                     <div class="oe_title">
@@ -149,8 +148,8 @@
                             </tree>
                             </field>
                         <group class="oe_subtotal_footer oe_right">
-                            <field name="total_commission" widget="monetary"/>
                             <field name="total_invoice" widget="monetary"/>
+                            <field name="total_commission" widget="monetary"/>
                             <field name="total_due" readonly="1" force_save="1" widget="monetary"/>
                         </group>
                     </group>

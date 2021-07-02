@@ -184,7 +184,7 @@ class SaleCommissionPayment(models.Model):
     _name = "sale.commission.payment"
     _description = "Sale Commission Payment"
 
-    name = fields.Text(string="Name")
+    name = fields.Text(string="Reference")
     amount = fields.Float(string="Payment Amount")
     journal_id = fields.Many2one("account.journal", string="Payment Journal")
     payment_date = fields.Date(string="Payment Date")
