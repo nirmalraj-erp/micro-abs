@@ -67,7 +67,7 @@
             <tree string="Commission Master" delete='false' default_order="id desc" decoration-success="state=='paid'"
                   decoration-info="state=='done'" decoration-muted="state=='revert'">
                 <field name="name" attrs="{'invisible': [('state', '=', 'draft')]}"/>
-                <field name="create_date" string="Date" invisible="1"/>
+                <field name="create_date" string="Date" widget="date"/>
                 <field name="period"/>
                 <field name="bank_name_id"/>
                 <field name="company_id"/>
@@ -115,6 +115,7 @@
                     </group>
                     <group>
                         <field name="company_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="create_date" string="Date" readonly="1" force_save="1" widget="date"/>
                         <field name="currency_id" invisible="1"/>
                     </group>
                     <group string="Beneficiary Bank Details">
