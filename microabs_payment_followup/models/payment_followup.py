@@ -93,7 +93,7 @@ class PaymentFollowup(models.Model):
                               overdue_days)
         else:
             message += "<b style='font-size:14px;font-family:'Serif''> Overdue: </b>"
-            message += "<p style='font-size:14px;font-family:'Serif''> No overdue as on date. </p>"
+            message += "<br/><p style='font-size:14px;font-family:'Serif''> No overdue as on date. </p>"
 
         if pending_invoices:
             message += "<br/>"
@@ -112,7 +112,7 @@ class PaymentFollowup(models.Model):
         else:
             message += "<br/>"
             message += "<b style='font-size:14px;font-family:'Serif''> Pending Invoices: </b>"
-            message += " <p style='font-size:14px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
+            message += "<br/> <p style='font-size:14px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
 
         message += "<p> <span style='color:green;font-size:14px;'>" \
                    "We appreciate your timely response as to WHEN THE OVERDUES WILL BE CLEARED.</span> </p>"
