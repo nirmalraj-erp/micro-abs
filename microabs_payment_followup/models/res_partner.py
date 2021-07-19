@@ -30,7 +30,7 @@ class PartnerPaymentDetails(models.Model):
     @api.onchange("docs_cc_ids")
     def onchange_docs_cc_ids(self):
         if self.docs_cc_ids:
-            # self.docs_cc = 'erp@microab.com, '
+            self.docs_cc = False
             for i in self.docs_cc_ids:
                 if self.docs_cc:
                     self.docs_cc = self.docs_cc + i.email + ", "
