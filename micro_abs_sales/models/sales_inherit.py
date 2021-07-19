@@ -136,8 +136,9 @@ class ResPartnerInherit(models.Model):
 
 class SaleOrderInherit(models.Model):
     _inherit = 'sale.order'
-    # _sql_constraints = [
-    #     ('po_no_uniq', 'unique(po_no)', 'PO Number must be a unique.')]
+
+    _sql_constraints = [
+        ('po_no_uniq', 'unique(po_no, company_id)', 'PO Number must be a unique.')]
 
     order_conf_no = fields.Char(string='OC No.')
     order_conf_date = fields.Date(string='OC Date')
@@ -175,7 +176,8 @@ class SaleOrderInherit(models.Model):
     @api.onchange("po_no")
     def onchange_po_no(self):
         if self.po_no:
-            po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id)])
+            po_no = self.sudo().search([('po_no', '=', self.po_no), ('id', '!=', self._origin.id),
+                                        ('company_id', '=', self.company_id.id)])
             if po_no:
                 raise ValidationError('PO Number must be Unique!!')
 
@@ -574,7 +576,8 @@ class AccountInvoiceInherit(models.Model):
     @api.onchange("invoice_number")
     def onchange_invoice_number(self):
         if self.invoice_number:
-            invoice_number = self.sudo().search([('invoice_number', '=', self.invoice_number), ('id', '!=', self._origin.id)])
+            invoice_number = self.sudo().search([('invoice_number', '=', self.invoice_number),
+                                                 ('id', '!=', self._origin.id), ('company_id', '=', self.company_id.id)])
             if invoice_number:
                 raise UserError(_('Invoice Number must be Unique!!'))
 
