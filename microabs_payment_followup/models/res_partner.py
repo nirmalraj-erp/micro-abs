@@ -20,9 +20,9 @@ class PartnerPaymentDetails(models.Model):
         if self.docs_to_ids:
             self.docs_to = False
             for i in self.docs_to_ids:
-                if self.docs_to:
+                if self.docs_to and i.email:
                     self.docs_to = self.docs_to + i.email + ", "
-                else:
+                elif i.email:
                     self.docs_to = i.email + ", "
         else:
             self.docs_to = False
@@ -32,9 +32,9 @@ class PartnerPaymentDetails(models.Model):
         if self.docs_cc_ids:
             self.docs_cc = False
             for i in self.docs_cc_ids:
-                if self.docs_cc:
+                if self.docs_cc and i.email:
                     self.docs_cc = self.docs_cc + i.email + ", "
-                else:
+                elif i.email:
                     self.docs_cc = i.email + ", "
         else:
             self.docs_cc = False
@@ -44,9 +44,9 @@ class PartnerPaymentDetails(models.Model):
         if self.payment_to_ids:
             self.payment_to = False
             for i in self.payment_to_ids:
-                if self.payment_to:
+                if self.payment_to and i.email:
                     self.payment_to = self.payment_to + i.email + ", "
-                else:
+                elif i.email:
                     self.payment_to = i.email + ", "
         else:
             self.payment_to = False
@@ -56,9 +56,9 @@ class PartnerPaymentDetails(models.Model):
         if self.payment_cc_ids:
             self.payment_cc = False
             for i in self.payment_cc_ids:
-                if self.payment_cc:
+                if self.payment_cc and i.email:
                     self.payment_cc = self.payment_cc + i.email + ", "
-                else:
+                elif i.email:
                     self.payment_cc = i.email + ", "
         else:
             self.payment_cc = False
