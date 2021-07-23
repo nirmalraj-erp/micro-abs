@@ -544,6 +544,19 @@
             </field>
         </record>
 
+    <!--Enhance Quotation search-->
+    <record id="sale_quotation_form_view_custom_search" model="ir.ui.view">
+            <field name="name">sale.quotation.search.custom.search</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="po_no" string="PO No" />
+                    <field name="freight_forwarder_details" string="FF Details" />
+                </field>
+            </field>
+        </record>
+
     <!--Enhance Invoice search-->
     <record id="account_invoice_form_view_custom_search" model="ir.ui.view">
             <field name="name">account.invoice.search.custom.search</field>
