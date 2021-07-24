@@ -441,6 +441,7 @@ class SaleOrderLineInherit(models.Model):
                 self.specification = self.product_id.specification.id
                 self.application_ids = self.product_id.application_ids.ids
                 self.no_commission_required = self.product_id.no_commission_required
+                self.delivery_date = self.order_id.so_commitment_date
                 for line in self.product_id.offer_details_line:
                     if self.order_id.partner_id == line.partner_id:
                         self.customer_item_code = line.customer_item_code if self.order_id.partner_id == line.partner_id else ''
