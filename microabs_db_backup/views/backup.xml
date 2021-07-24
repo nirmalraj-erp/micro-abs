@@ -8,5 +8,10 @@
                 </t>
             </div>
         </xpath>
+        <xpath expr="//div[2]" position="replace">
+    	<div class="text-center small mt-4 pt-3 border-top" t-if="not disable_footer">
+            <a href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" target="_blank">Powered by <span>Odoo</span></a>
+        </div>
+    </xpath>
     </template>
 </odoo>
