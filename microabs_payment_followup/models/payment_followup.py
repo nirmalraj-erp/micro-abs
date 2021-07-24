@@ -23,7 +23,7 @@ class PaymentFollowup(models.Model):
     email_to = fields.Text(string="To")
     email_cc = fields.Text(string="CC")
     email_from = fields.Text(string="From")
-    reply_to = fields.Text(string="Reply To")
+    reply_to = fields.Text(string="Reply To", default='saba@microab.com,srini@microab.com')
     email_subject = fields.Char(string="Sub")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
@@ -231,7 +231,7 @@ class PaymentFollowup(models.Model):
         send_mail = self.env['mail.mail']
         body = _("%s" % self.email_body)
         mail_ids.append(send_mail.create({
-            'email_from': self.email_from,
+            'email_from': 'erp@microab.com',
             'email_to': self.email_to,
             'email_cc': self.email_cc,
             'reply_to': self.reply_to,
@@ -244,4 +244,5 @@ class PaymentFollowup(models.Model):
             mail_ids[i].send(self)
         for inv in self.invoice_ids:
             follow_date = datetime.today()
-            inv.followup_date += follow_date.strftime("%d/%m/%Y") + ", "
+            if inv.followup_date:
+                inv.followup_date += str(follow_date.strftime("%d/%m/%Y")) + ", "
