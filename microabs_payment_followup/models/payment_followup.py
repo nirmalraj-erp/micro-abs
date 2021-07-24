@@ -65,23 +65,23 @@ class PaymentFollowup(models.Model):
         pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
                                                                       ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
-        message = "<p> <span style='color:green;font-size:14px;font-family:'Serif'>MATTER URGENT!</span> </p>"
+        message = "<p> <span style='font-size:14px;font-family:'Serif'>MATTER URGENT!</span> </p>"
         partner = partner[:-1] if partner else "Customer"
         message += "<p style='font-size:14px;font-family:'Serif''> %s, <br/></p>" % partner
-        message += "<br/><p> <span style='color:green;font-size:14px;font-family:'Serif''>We sincerely thank you for" \
+        message += "<br/><p> <span style='font-size:14px;font-family:'Serif''>We sincerely thank you for" \
                    " your POs and also " \
                    "for the continuous patronage to us.</span> </p>"
         message += " <p style='font-size:14px;font-family:'Serif''>Pl. find the below list of overdue/pending invoices." \
                    " </p>"
         message += "<p style='font-size:14px;font-family:'Serif''> Pl. clear them at the earliest " \
-                   "<span style='color:green;font-size:14px;'> ON TOP PRIORITY </span> " \
+                   "<span style='font-size:14px;'> ON TOP PRIORITY </span> " \
                    "and kindly share swift copy once paid.</p> <br/>"
 
         if overdue_invoices:
             message += "<b> Overdue: </b><br/>"
             for due in overdue_invoices:
                 overdue_days = (today - due.date_due).days
-                message += "<br/><p> <span style='color:green;font-size:14px;font-family:'Serif''>" \
+                message += "<br/><p> <span style='font-size:14px;font-family:'Serif''>" \
                            "Overdue since the past %s days.</span> </p>" % overdue_days
                 message += "<p <span style='color:red;font-size:14px;font-family:'Serif''> " \
                            "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b>" \
@@ -102,7 +102,7 @@ class PaymentFollowup(models.Model):
             message += "<b style='font-size:14px;font-family:'Serif''> Pending Invoices: </b><br/>"
             for pen in pending_invoices:
                 pending_days = -(today - pen.date_due).days
-                message += "<br/><p> <span style='color:green;font-size:14px;'>%s Days to Expiry.</span> </p>" % pending_days
+                message += "<br/><p> <span style='font-size:14px;'>%s Days to Expiry.</span> </p>" % pending_days
                 message += "<p> <b style='font-size:14px;font-family:'Serif''> " \
                            "Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b> </p>" % (
                                pen.invoice_number,
@@ -116,13 +116,13 @@ class PaymentFollowup(models.Model):
             message += "<b style='font-size:14px;font-family:'Serif''> Pending Invoices: </b>"
             message += "<br/> <p style='font-size:14px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
 
-        message += "<p> <span style='color:green;font-size:14px;'>" \
+        message += "<p> <span style='font-size:14px;'>" \
                    "We appreciate your timely response as to WHEN THE OVERDUES WILL BE CLEARED.</span> </p>"
 
         message += "<br/>"
         message += "<p style='font-size:14px;font-family:'Serif''>Regards, </p>"
         message += "<p style='font-size:14px;font-family:'Serif''> ERP Team. <br/></p>"
-        message += "<p> <span style='color:green;font-size:14px;'>%s</span> <br/>" % invoice_id.company_id.name
+        message += "<p> <span style='font-size:14px;'>%s</span> <br/>" % invoice_id.company_id.name
         message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.street if invoice_id.company_id.street else ""
         message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.street2 if invoice_id.company_id.street2 else ""
         message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.city if invoice_id.company_id.city else ""
