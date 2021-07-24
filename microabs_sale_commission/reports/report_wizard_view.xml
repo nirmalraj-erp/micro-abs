@@ -88,7 +88,7 @@
                     <button string="Done" name="action_done" states="draft" type='object' class="oe_highlight"/>
                     <button string="Register Payment" name="%(microabs_sale_commission.action_sale_commission_payment)d"
                             type="action"
-                            attrs="{'invisible': ['|', ('total_due', '=', 0), ('state', '=', 'draft')]}"
+                            attrs="{'invisible': ['|', ('total_due', '=', 0), ('state', 'not in', ('draft', 'revert'))]}"
                             class="oe_highlight"/>
                     <button string="Revert" name="action_revert" states="draft,done" type='object' />
                     <field name="state" widget="statusbar" statusbar_visible="done,draft,revert"/>
