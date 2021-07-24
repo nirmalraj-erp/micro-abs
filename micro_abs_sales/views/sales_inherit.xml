@@ -46,8 +46,8 @@
             <field name="payment_term_id" position="before">
                 <field name="order_type" attrs="{'readonly': [('state', '=', 'sale')]}"/>
                 <field name="res_contact_id" widget= "many2many_tags" attrs="{'readonly': [('state', '=', 'sale')]}"/>
-                <field name="official_contact_id" attrs="{'readonly': [('state', '=', 'sale')]}"/>
-                <field name="official_contact_two_id" attrs="{'readonly': [('state', '=', 'sale')]}"/>
+                <field name="official_contact_id"/>
+                <field name="official_contact_two_id" />
             </field>
             
             <field name="fiscal_position_id" position="after">
