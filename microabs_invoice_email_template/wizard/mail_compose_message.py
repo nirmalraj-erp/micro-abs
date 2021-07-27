@@ -13,9 +13,11 @@ class InvoiceFollowup(models.Model):
         # invoice_ids = self.env['account.invoice'].browse(self._context.get('active_ids'))
         email_to = invoice_ids.partner_id.docs_to
         email_cc = invoice_ids.partner_id.docs_cc
-        email_subject = str(invoice_ids.partner_id.name) + '-' + str(invoice_ids.shipment_mode.name) + 'Shipment' + '-' + 'Inv.' + str(invoice_ids.invoice_number) + '-' + 'PO.' + str(invoice_ids.po_no)
+        email_subject = str(invoice_ids.partner_id.name) + ' ' + '-' + ' ' + str(
+            invoice_ids.shipment_mode.name) + ' ' + 'Shipment' + ' ' + '-' + ' ' + 'Inv.' + ' ' + str(
+            invoice_ids.invoice_number) + ' ' + '-' + ' ' + 'PO.' + ' ' + str(invoice_ids.po_no)
         attachments = self.env['ir.attachment'].search(
-                [('res_id', '=', invoice_ids.id), ('res_model', '=', 'account.invoice')]).ids
+            [('res_id', '=', invoice_ids.id), ('res_model', '=', 'account.invoice')]).ids
         res.update({
             'email_cc': email_cc if email_cc else "",
             'email_to': email_to,
@@ -25,29 +27,25 @@ class InvoiceFollowup(models.Model):
         print('**********************', res)
         partner = ""
         for inv in invoice_ids.partner_id.docs_to_ids:
-            partner += "Mr." + inv.name + "/"
+            partner += inv.title.name + " " + inv.name + "/"
         partner = partner[:-1] if partner else "Customer"
-        message = "Dear %s," % partner
-        message += "<br/><br/>"
-        message += "We send you herewith a copy of our invoice no. <b>%s</b>, %s %s packing list and manufacturer's " \
-                   "certificates of origin, corresponding to the %s shipment of %s's P.O. %s" \
+        message = "<p>Dear  %s, <br/></p>" % partner
+        message += "<p>We send you herewith a copy of our invoice no. <b>%s</b>, %s %s packing list and manufacturer's " \
+                   "certificates of origin, corresponding to the %s shipment of %s's P.O. %s</p>" \
                    % (invoice_ids.invoice_number, invoice_ids.email_shipment_string or '',
                       invoice_ids.bl_no or '',
                       invoice_ids.shipment_mode.name, invoice_ids.partner_id.name, invoice_ids.po_no)
-        message += "<br/><br/>"
-        message += "<p>Regards, <br/>" \
-                   "<b> ERP Team. </b><br/>" \
-                   "%s <br/>" \
-                   "%s, %s<br/>" \
-                   "%s, %s<br/>" \
-                   "%s<br/>" \
-                   "%s<br/>" \
-                   "<u>%s</u></p>" % (invoice_ids.company_id.name, invoice_ids.company_id.street or '',
-                                      invoice_ids.company_id.street2 or '', invoice_ids.company_id.city or '',
-                                      invoice_ids.company_id.state_id.name or '',
-                                      invoice_ids.company_id.country_id.name or '',
-                                      invoice_ids.company_id.phone or '',
-                                      invoice_ids.company_id.website_address or '')
+        # message += "<br/>"
+        message += "<p>Regards,<br/>"
+        message += "<b>ERP Team.</b><br/>"
+        message += "%s <br/>" % invoice_ids.company_id.name
+        message += "%s, <br/>" % invoice_ids.company_id.street if invoice_ids.company_id.street else ""
+        message += "%s, <br/>" % invoice_ids.company_id.street2 if invoice_ids.company_id.street2 else ""
+        message += "%s, <br/>" % invoice_ids.company_id.city if invoice_ids.company_id.city else ""
+        message += "%s, <br/>" % invoice_ids.company_id.state_id.name if invoice_ids.company_id.state_id else ""
+        message += "%s - %s. </p>" % (
+            invoice_ids.company_id.country_id.name if invoice_ids.company_id.country_id else "",
+            invoice_ids.company_id.zip if invoice_ids.company_id.zip else "")
         res.update({
             'email_body': message,
             'invoice_id': invoice_ids.id
