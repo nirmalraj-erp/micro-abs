@@ -67,7 +67,7 @@ class PaymentFollowup(models.Model):
                                                                       ('state', 'in', ('open', 'in_payment'))])
         message = "<p> <span style='font-size:14px;font-family:'Serif'>MATTER URGENT!</span> </p>"
         partner = partner[:-1] if partner else "Customer"
-        message += "<p style='font-size:14px;font-family:'Serif''> %s, <br/></p>" % partner
+        message += "<p style='font-size:14px;font-family:'Serif''>Dear %s, <br/></p>" % partner
         message += "<br/><p> <span style='font-size:14px;font-family:'Serif''>We sincerely thank you for" \
                    " your POs and also " \
                    "for the continuous patronage to us.</span> </p>"
