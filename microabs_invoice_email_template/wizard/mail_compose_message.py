@@ -56,7 +56,7 @@ class InvoiceFollowup(models.Model):
     email_cc = fields.Text('Cc', help="Carbon copy recipients (placeholders may be used here)")
     email_to = fields.Text('To', help="Recipients Address (placeholders may be used here)")
     email_from = fields.Text(string="From")
-    reply_to = fields.Text(string="Reply To")
+    reply_to = fields.Text(string="Reply To", default='saba@microab.com,srini@microab.com')
     email_subject = fields.Char(string="Subject")
     email_body = fields.Html(string="Email")
     email_attachment_ids = fields.Many2many('ir.attachment', string='')
@@ -68,7 +68,7 @@ class InvoiceFollowup(models.Model):
         send_mail = self.env['mail.mail']
         body = _("%s" % self.email_body)
         mail_ids.append(send_mail.create({
-            'email_from': self.email_from,
+            'email_from': 'erp@microab.com',
             'email_to': self.email_to,
             'email_cc': self.email_cc,
             'reply_to': self.reply_to,
