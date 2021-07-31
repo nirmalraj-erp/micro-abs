@@ -244,5 +244,7 @@ class PaymentFollowup(models.Model):
             mail_ids[i].send(self)
         for inv in self.invoice_ids:
             follow_date = datetime.today()
-            if inv.followup_date:
-                inv.followup_date += str(follow_date.strftime("%d/%m/%Y")) + ", "
+            if not inv.followup_date:
+                inv.followup_date = str(follow_date.strftime("%d/%m/%Y"))
+            else:
+                inv.followup_date += ", " + str(follow_date.strftime("%d/%m/%Y"))
