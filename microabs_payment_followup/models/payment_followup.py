@@ -56,7 +56,7 @@ class PaymentFollowup(models.Model):
         })
         partner = ""
         for inv in invoice_id.partner_id.payment_to_ids:
-            partner += invoice_id.partner_id.title.name + " " + inv.name + "/"
+            partner += invoice_id.partner_id.title.name if invoice_id.partner_id.title else " " + " " + inv.name + "/"
 
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),

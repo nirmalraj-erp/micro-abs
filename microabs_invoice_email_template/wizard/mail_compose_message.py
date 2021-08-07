@@ -27,7 +27,7 @@ class InvoiceFollowup(models.Model):
         print('**********************', res)
         partner = ""
         for inv in invoice_ids.partner_id.docs_to_ids:
-            partner += inv.title.name + " " + inv.name + "/"
+            partner += inv.title.name if inv.title else " " + " " + inv.name + "/"
         partner = partner[:-1] if partner else "Customer"
         message = "<p>Dear  %s, <br/></p>" % partner
         message += "<p>We send you herewith a copy of our invoice no. <b>%s</b>, %s %s packing list and manufacturer's " \
