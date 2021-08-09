@@ -65,70 +65,83 @@ class PaymentFollowup(models.Model):
         pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
                                                                       ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
-        message = "<p> <span style='font-size:14px;font-family:'Serif'>MATTER URGENT!</span> </p>"
+        message = "<p> <span style='font-size:12px;font-family:'Serif'>MATTER URGENT!</span> </p>"
         partner = partner[:-1] if partner else "Customer"
-        message += "<p style='font-size:14px;font-family:'Serif''>Dear %s, <br/></p>" % partner
-        message += "<br/><p> <span style='font-size:14px;font-family:'Serif''>We sincerely thank you for" \
+        message += "<p style='font-size:12px;font-family:'Serif''>Dear %s, <br/></p>" % partner
+        message += "<p> <span style='font-size:12px;font-family:'Serif''>We sincerely thank you for" \
                    " your POs and also " \
                    "for the continuous patronage to us.</span> </p>"
-        message += " <p style='font-size:14px;font-family:'Serif''>Pl. find the below list of overdue/pending invoices." \
+        message += " <p style='font-size:12px;font-family:'Serif''>Pl. find the below list of overdue/pending invoices." \
                    " </p>"
-        message += "<p style='font-size:14px;font-family:'Serif''> Pl. clear them at the earliest " \
-                   "<span style='font-size:14px;'> ON TOP PRIORITY </span> " \
-                   "and kindly share swift copy once paid.</p> <br/>"
+        message += "<p style='font-size:12px;font-family:'Serif''> Pl. clear them at the earliest " \
+                   "<span style='font-size:12px;'> ON TOP PRIORITY </span> " \
+                   "and kindly share swift copy once paid.</p>"
 
         if overdue_invoices:
-            message += "<b> Overdue: </b><br/>"
+            message += "<b style='font-size:12px;font-family:'Serif''> Overdue: </b><br/>"
             for due in overdue_invoices:
                 overdue_days = (today - due.date_due).days
-                message += "<br/><p> <span style='font-size:14px;font-family:'Serif''>" \
-                           "Overdue since the past %s days.</span> </p>" % overdue_days
-                message += "<p <span style='color:red;font-size:14px;font-family:'Serif''> " \
+                message += "<span style='font-size:12px;font-family:'Serif''>" \
+                           "Overdue since the past %s days.</span><br/>" % overdue_days
+                message += "<span style='color:red;font-size:12px;font-family:'Serif''> " \
                            "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b>" \
-                           "</span> " \
-                           "</p>" \
+                           "</span> "                           \
                            % (due.invoice_number,
                               due.date_invoice.strftime("%d-%m-%Y"),
                               due.currency_id.name,
                               due.residual,
                               due.date_due.strftime("%d-%m-%Y"),
                               overdue_days)
+
+                message += "<p> <span style='font-size:12px;'>" \
+                           "Pl. clear all the overdue invoices with immediate effect.</span> </p>"
         else:
-            message += "<b style='font-size:14px;font-family:'Serif''> Overdue: </b>"
-            message += "<br/><p style='font-size:14px;font-family:'Serif''> No overdue as on date. </p>"
+            message += "<b style='font-size:12px;font-family:'Serif''> Overdue: </b>"
+            message += "<br/><p style='font-size:12px;font-family:'Serif''> No overdue as on date. </p>"
 
         if pending_invoices:
-            message += "<br/>"
-            message += "<b style='font-size:14px;font-family:'Serif''> Pending Invoices: </b><br/>"
+            message += "<b style='font-size:12px;font-family:'Serif''> Pending Invoices: </b><br/>"
             for pen in pending_invoices:
                 pending_days = -(today - pen.date_due).days
-                message += "<br/><p> <span style='font-size:14px;'>%s Days to Expiry.</span> </p>" % pending_days
-                message += "<p> <b style='font-size:14px;font-family:'Serif''> " \
-                           "Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b> </p>" % (
+                message += "<span style='font-size:12px;font-family:'Serif''>" \
+                           "%s Days to Expiry.</span><br/>" % pending_days
+                message += "<span style='font-size:12px;font-family:'Serif''> " \
+                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b>" \
+                           "</span> " % (
                                pen.invoice_number,
                                pen.date_invoice.strftime("%d-%m-%Y"),
                                pen.currency_id.name,
                                pen.residual,
                                pen.date_due.strftime("%d-%m-%Y"),
                                pending_days)
+                message += "<p> <span style='font-size:12px;'>" \
+                           "Pl. clear all the pending invoices before the due date.</span> </p>"
         else:
-            message += "<br/>"
-            message += "<b style='font-size:14px;font-family:'Serif''> Pending Invoices: </b>"
-            message += "<br/> <p style='font-size:14px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
+            message += "<b style='font-size:12px;font-family:'Serif''> Pending Invoices: </b>"
+            message += "<br/> <p style='font-size:12px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
 
-        message += "<p> <span style='font-size:14px;'>" \
-                   "We appreciate your timely response as to WHEN THE OVERDUES WILL BE CLEARED.</span> </p>"
+        message += "<b style='font-size:12px;font-family:'Serif''> CYBERCRIME ALERT: </b>"
+        message += "<p style='font-size:12px;font-family:'Serif''>Please note that our bank account details have not " \
+                   "changed and will not change.  If you receive an email requesting funds via wire" \
+                   " please contact us immediately in a separate email.  We will never change our " \
+                   "bank details via an email to you.  Thank you in advance for your " \
+                   "attention to this matter.</p>"
+        message += "<b style='font-size:12px;font-family:'Serif''> PL. NOTE: </b>"
+        message += "<p style='font-size:12px;font-family:'Serif''>When there is an overdue payment, " \
+                   "our ERP system will put the Customer’s account under Embargo automatically." \
+                   " In such cases we will not be able to dispatch shipments or accept your " \
+                   "Purchase Orders.</p>"
 
-        message += "<br/>"
-        message += "<p style='font-size:14px;font-family:'Serif''>Regards, </p>"
-        message += "<p style='font-size:14px;font-family:'Serif''> ERP Team. <br/></p>"
-        message += "<p> <span style='font-size:14px;'>%s</span> <br/>" % invoice_id.company_id.name
-        message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.street if invoice_id.company_id.street else ""
-        message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.street2 if invoice_id.company_id.street2 else ""
-        message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.city if invoice_id.company_id.city else ""
-        message += "<p style='font-size:14px;font-family:'Serif''>%s, </p>" % invoice_id.company_id.state_id.name if invoice_id.company_id.state_id else ""
-        message += "<p style='font-size:14px;font-family:'Serif''>%s - %s. </p>" % (invoice_id.company_id.country_id.name if invoice_id.company_id.country_id else "",
-                                  invoice_id.company_id.zip if invoice_id.company_id.zip else "")
+        message += "<p>Regards,<br/>"
+        message += "ERP Team.<br/>"
+        message += "<b>%s</b> <br/>" % invoice_id.company_id.name
+        message += "%s, <br/>" % invoice_id.company_id.street if invoice_id.company_id.street else ""
+        message += "%s, <br/>" % invoice_id.company_id.street2 if invoice_id.company_id.street2 else ""
+        message += "%s, <br/>" % invoice_id.company_id.city if invoice_id.company_id.city else ""
+        message += "%s, <br/>" % invoice_id.company_id.state_id.name if invoice_id.company_id.state_id else ""
+        message += "%s - %s. </p>" % (
+            invoice_id.company_id.country_id.name if invoice_id.company_id.country_id else "",
+            invoice_id.company_id.zip if invoice_id.company_id.zip else "")
         res.update({
             'email_body': message,
             'invoice_id': invoice_id.id
@@ -236,7 +249,7 @@ class PaymentFollowup(models.Model):
             'email_cc': self.email_cc,
             'reply_to': self.reply_to,
             'subject': self.email_subject,
-            'body_html': '''<span  style="font-size:14px"><br/>
+            'body_html': '''<span  style="font-size:12px"><br/>
                         <br/>%s<br/>
                         </span>''' % body,
         }))
