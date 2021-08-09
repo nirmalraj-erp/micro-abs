@@ -4,6 +4,7 @@ from odoo import models, fields, api, _
 class InvoiceFollowup(models.Model):
     _name = 'invoice.followup'
     _description = "Invoice Followup"
+    _inherit = ['mail.thread']
 
     @api.model
     def default_get(self, fields):
@@ -66,7 +67,10 @@ class InvoiceFollowup(models.Model):
     def send_email(self):
         mail_ids = []
         send_mail = self.env['mail.mail']
+        res_ids = self._context.get('active_ids')
+        invoice_ids = self.env["account.invoice"].sudo().browse(res_ids[0])
         body = _("%s" % self.email_body)
+        attachment_ids = self.email_attachment_ids.ids
         mail_ids.append(send_mail.create({
             'email_from': 'erp@microab.com',
             'email_to': self.email_to,
@@ -78,5 +82,6 @@ class InvoiceFollowup(models.Model):
                          <br/>%s<br/>
                          </span>''' % body,
         }))
+        invoice_ids.message_post(body=body, attachment_ids=attachment_ids)
         for i in range(len(mail_ids)):
             mail_ids[i].send(self)
