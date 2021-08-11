@@ -21,9 +21,9 @@ class PaymentFollowup(models.Model):
     currency_id = fields.Many2one("res.currency", string="Currency")
     email_body = fields.Html(string="Email")
     email_to = fields.Text(string="To")
-    email_cc = fields.Text(string="CC")
+    email_cc = fields.Text(string="CC",  default='saba@microab.com,srini@microab.com')
     email_from = fields.Text(string="From")
-    reply_to = fields.Text(string="Reply To", default='saba@microab.com,srini@microab.com')
+    reply_to = fields.Text(string="Reply To")
     email_subject = fields.Char(string="Sub")
     state = fields.Selection([('draft', 'Waiting'), ('sent', 'Email Sent'), ('cancel', 'Cancel')], default="draft",
                              string="Email Status")
