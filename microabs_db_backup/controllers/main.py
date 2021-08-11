@@ -45,3 +45,8 @@ class BackupDatabase(http.Controller):
     def dbbackup(self, **kw):
         request._cr = None
         return self._render_backup_template()
+
+    @http.route('/web/database/selector', type='http', auth="none")
+    def selector(self, **kw):
+        request._cr = None
+        return self._render_backup_template(manage=False)

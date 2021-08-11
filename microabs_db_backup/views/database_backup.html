@@ -165,13 +165,13 @@
                         </div>
                         {% if manage %}
                             <div class="d-flex mt-2">
-                                <!--<button type="button" data-toggle="modal" data-target=".o_database_create" class="btn btn-primary flex-grow-1">Create Database</button>
+<!--                                <button type="button" data-toggle="modal" data-target=".o_database_create" class="btn btn-primary flex-grow-1">Create Database</button>-->
                                 <button type="button" data-toggle="modal" data-target=".o_database_restore" class="btn btn-primary flex-grow-1 ml-2">Restore Database</button>
-                                <button type="button" data-toggle="modal" data-target=".o_database_master" class="btn btn-primary flex-grow-1 ml-2">Set Master Password</button>-->
+<!--                                <button type="button" data-toggle="modal" data-target=".o_database_master" class="btn btn-primary flex-grow-1 ml-2">Set Master Password</button>-->
                             </div>
                         {% else %}
                             <div class="text-center mt-2">
-                                <a href="/web/database/manager">Manage databases</a>
+<!--                                <a href="/web/database/manager">Restore Database</a>-->
                             </div>
                         {% endif %}
                     {% elif list_db %}
@@ -210,6 +210,49 @@
                         </div>
                         <div class="modal-footer">
                             <input type="submit" value="Backup" class="btn btn-primary float-right"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+     <!-- Restore -->
+        <div class="modal fade o_database_restore" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Restore Database</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form id="form_restore_db" role="form" action="/web/database/restore" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            {{ master_input() }}
+                            <div class="form-group">
+                                <label for="backup_file" class="col-form-label">File</label>
+                                <input id="backup_file" type="file" name="backup_file" class="required"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="col-form-label">Database Name</label>
+                                <input id="name" type="text" name="name" class="form-control" required="required" pattern="{{ pattern }}" title="Only alphanumerical characters, underscore, hyphen and dot are allowed"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="copy">This database might have been moved or copied.</label>
+                                <p class="form-text">
+                                    In order to avoid conflicts between databases, Odoo needs to know if this database was moved or copied.<br/>
+                                    If you don't know, answer "This database is a copy".
+                                </p>
+                                <div class="custom-control custom-radio">
+                                    <input id="radio_copy_true" name="copy" type="radio" class="custom-control-input" value="true" checked="1">
+                                    <label for="radio_copy_true" class="custom-control-label">This database is a copy</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="radio_copy_false" name="copy" type="radio" class="custom-control-input" value="false">
+                                    <label for="radio_copy_false" class="custom-control-label">This database was moved</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Continue" class="btn btn-primary float-right"/>
                         </div>
                     </form>
                 </div>
