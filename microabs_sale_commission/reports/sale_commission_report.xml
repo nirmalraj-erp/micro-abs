@@ -20,12 +20,17 @@
                     }
                     </style>
                     <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
-                    <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
-                    <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
-                        <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
-                    <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
-                    <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
-                        <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
+                        <t t-if="o.company_id.company_code == 'HAD'">
+
+                        </t>
+                        <t t-else="">
+                            <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
+                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
+                                <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
+                            <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
+                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                                <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
+                        </t>
                         <br></br>
                         <br></br>
                         <br></br>

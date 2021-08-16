@@ -21,7 +21,7 @@ class PaymentFollowup(models.Model):
     currency_id = fields.Many2one("res.currency", string="Currency")
     email_body = fields.Html(string="Email")
     email_to = fields.Text(string="To")
-    email_cc = fields.Text(string="CC",  default='saba@microab.com,srini@microab.com')
+    email_cc = fields.Text(string="CC", default='saba@microab.com,srini@microab.com')
     email_from = fields.Text(string="From")
     reply_to = fields.Text(string="Reply To")
     email_subject = fields.Char(string="Sub")
@@ -47,18 +47,20 @@ class PaymentFollowup(models.Model):
             else:
                 partner_list.append(i.partner_id.id)
         invoice_id = self.env["account.invoice"].sudo().browse(res_ids[0])
-        email_cc = res.get('email_cc')
+        cc = res.get('email_cc')
+        payment_cc = invoice_id.partner_id.payment_cc if invoice_id.partner_id.payment_cc else "saba@microab.com,srini@microab.com"
+        company = invoice_id.company_id.name if invoice_id.company_id else ''
+        partner = invoice_id.partner_id.name if invoice_id.partner_id else ''
         res.update({
-            'email_to': invoice_id.partner_id.payment_to if invoice_id.partner_id.payment_to else "",
-            'email_cc': email_cc + ',' + invoice_id.partner_id.payment_cc if invoice_id.partner_id.payment_cc else "saba@microab.com,srini@microab.com",
-            'email_subject': invoice_id.company_id.name + " - " + invoice_id.partner_id.name + " - " +
-                             " Overdue and Pending Invoice",
+            'email_to': invoice_id.partner_id.parent_id.payment_to if invoice_id.partner_id.parent_id.payment_to else invoice_id.partner_id.payment_to,
+            'email_cc': str(cc) + ',' + payment_cc,
+            'email_subject': company + " - " + partner + " - " + " Overdue and Pending Invoice",
             "invoice_ids": [(6, 0, invoice_list)]
         })
         partner = ""
         for inv in invoice_id.partner_id.payment_to_ids:
-            partner += invoice_id.partner_id.title.name if invoice_id.partner_id.title else " " + " " + inv.name + "/"
-
+            title = invoice_id.partner_id.title.name if invoice_id.partner_id.title else " "
+            partner += title + " " + inv.name + "/"
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
                                                                       ('id', 'in', invoice_list),
@@ -66,36 +68,37 @@ class PaymentFollowup(models.Model):
         pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
                                                                       ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
-        message = "<p> <span style='font-size:12px;font-family:'Serif'>MATTER URGENT!</span> </p>"
+        message = "<span style='font-size:12px;font-family:'Serif'>MATTER URGENT!</span>"
         partner = partner[:-1] if partner else "Customer"
         message += "<p style='font-size:12px;font-family:'Serif''>Dear %s, <br/></p>" % partner
-        message += "<p> <span style='font-size:12px;font-family:'Serif''>We sincerely thank you for" \
+        message += "<span style='font-size:12px;font-family:'Serif''>We sincerely thank you for" \
                    " your POs and also " \
-                   "for the continuous patronage to us.</span> </p>"
-        message += " <p style='font-size:12px;font-family:'Serif''>Pl. find the below list of overdue/pending invoices." \
-                   " </p>"
-        message += "<p style='font-size:12px;font-family:'Serif''> Pl. clear them at the earliest " \
+                   "for the continuous patronage to us.</span>"
+        message += "<br/> <span style='font-size:12px;font-family:'Serif''>" \
+                   "Pl. find the below list of overdue/pending invoices." \
+                   " </span>"
+        message += "<br/><span style='font-size:12px;font-family:'Serif''> Pl. clear them at the earliest " \
                    "<span style='font-size:12px;'> ON TOP PRIORITY </span> " \
-                   "and kindly share swift copy once paid.</p>"
+                   "and kindly share swift copy once paid.</span><br/><br/>"
 
         if overdue_invoices:
             message += "<b style='font-size:12px;font-family:'Serif''> Overdue: </b><br/>"
             for due in overdue_invoices:
                 overdue_days = (today - due.date_due).days
-                message += "<span style='font-size:12px;font-family:'Serif''>" \
-                           "Overdue since the past %s days.</span><br/>" % overdue_days
-                message += "<span style='color:red;font-size:12px;font-family:'Serif''> " \
-                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b>" \
-                           "</span> "                           \
-                           % (due.invoice_number,
-                              due.date_invoice.strftime("%d-%m-%Y"),
-                              due.currency_id.name,
-                              due.residual,
-                              due.date_due.strftime("%d-%m-%Y"),
-                              overdue_days)
+                message += "<p> <span style='font-size:12px;font-family:'Serif''>" \
+                           "Overdue since the past %s days.</span>" % overdue_days
+                message += "<p> <span style='color:red;font-size:12px;font-family:'Serif''> " \
+                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b></span></p> " % (
+                               due.invoice_number,
+                               due.date_invoice.strftime("%d-%m-%Y"),
+                               due.currency_id.name,
+                               due.residual,
+                               due.date_due.strftime("%d-%m-%Y"),
+                               overdue_days)
 
-                message += "<p> <span style='font-size:12px;'>" \
-                           "Pl. clear all the overdue invoices with immediate effect.</span> </p>"
+            message += "<p> <span style='font-size:12px;'>" \
+                       "<mark background-color: yellow;color: black;> Pl. clear all the overdue invoices with " \
+                       "immediate effect.</mark></span></p>"
         else:
             message += "<b style='font-size:12px;font-family:'Serif''> Overdue: </b>"
             message += "<br/><p style='font-size:12px;font-family:'Serif''> No overdue as on date. </p>"
@@ -104,19 +107,19 @@ class PaymentFollowup(models.Model):
             message += "<b style='font-size:12px;font-family:'Serif''> Pending Invoices: </b><br/>"
             for pen in pending_invoices:
                 pending_days = -(today - pen.date_due).days
-                message += "<span style='font-size:12px;font-family:'Serif''>" \
+                message += "<p> <span style='font-size:12px;font-family:'Serif''>" \
                            "%s Days to Expiry.</span><br/>" % pending_days
-                message += "<span style='font-size:12px;font-family:'Serif''> " \
-                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b>" \
-                           "</span> " % (
+                message += "<p> <span style='font-size:12px;font-family:'Serif''> " \
+                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b></span></p>" % (
                                pen.invoice_number,
                                pen.date_invoice.strftime("%d-%m-%Y"),
                                pen.currency_id.name,
                                pen.residual,
                                pen.date_due.strftime("%d-%m-%Y"),
                                pending_days)
-                message += "<p> <span style='font-size:12px;'>" \
-                           "Pl. clear all the pending invoices before the due date.</span> </p>"
+            message += "<p> <span style='font-size:12px;'>" \
+                       "<mark background-color: yellow;color: black;> " \
+                       "Pl. clear all the pending invoices before the due date.</mark></span> </p>"
         else:
             message += "<b style='font-size:12px;font-family:'Serif''> Pending Invoices: </b>"
             message += "<br/> <p style='font-size:12px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
@@ -158,6 +161,8 @@ class PaymentFollowup(models.Model):
                                                                       ('state', 'in', ('open', 'in_payment'))])
         if pending_invoices:
             for inv in pending_invoices:
+                company = inv.company_id.name if inv.company_id else ''
+                partner = inv.partner_id.name if inv.partner_id else ''
                 res = self.env["payment.followup"].sudo().create({
                     'invoice_id': inv.id,
                     'partner_id': inv.partner_id.id,
@@ -169,8 +174,7 @@ class PaymentFollowup(models.Model):
                     'currency_id': inv.currency_id.id,
                     'email_to': inv.partner_id.payment_to,
                     'email_cc': inv.partner_id.payment_cc,
-                    'email_subject': inv.company_id.name + " - " + inv.partner_id.
-                        name + " - " + " Overdue and Pending Invoice"
+                    'email_subject': company + " - " + partner + " - " + " Overdue and Pending Invoice"
                 })
                 message = "Dear %s, <br/>" % res.partner_id.name
                 message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
@@ -199,6 +203,8 @@ class PaymentFollowup(models.Model):
 
         if overdue_invoices:
             for inv in overdue_invoices:
+                company = inv.company_id.name if inv.company_id else ''
+                partner = inv.partner_id.name if inv.partner_id else ''
                 res = self.env["payment.followup"].sudo().create({
                     'invoice_id': inv.id,
                     'partner_id': inv.partner_id.id,
@@ -210,8 +216,7 @@ class PaymentFollowup(models.Model):
                     'currency_id': inv.currency_id.id,
                     'email_to': inv.partner_id.email,
                     'email_cc': inv.partner_id.payment_cc,
-                    'email_subject': inv.company_id.name if inv.company_id else '' + " - " + inv.partner_id.name if inv.partner_id else '' + " - " + " "
-                                                                                                                                                     "Overdue and Pending Invoice"
+                    'email_subject': company + " - " + partner + " - " + "Overdue and Pending Invoice"
                 })
                 message = "Dear %s, <br/>" % res.partner_id.name
                 message += " <br/> Please find the below list of overdue/pending invoices. <br/>"
