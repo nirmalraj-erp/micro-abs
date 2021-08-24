@@ -59,7 +59,7 @@ class PaymentFollowup(models.Model):
         })
         partner = ""
         for inv in invoice_id.partner_id.payment_to_ids:
-            title = invoice_id.partner_id.title.name if invoice_id.partner_id.title else " "
+            title = invoice_id.partner_id.title.name if invoice_id.partner_id.title else inv.title.name
             partner += title + " " + inv.name + "/"
         today = datetime.now().date()
         overdue_invoices = self.env["account.invoice"].sudo().search([('date_due', '<', str(today)),
@@ -68,27 +68,28 @@ class PaymentFollowup(models.Model):
         pending_invoices = self.env["account.invoice"].sudo().search([('date_due', '>=', str(today)),
                                                                       ('id', '=', invoice_list),
                                                                       ('state', 'in', ('open', 'in_payment'))])
-        message = "<span style='font-size:12px;font-family:'Serif'>MATTER URGENT!</span>"
+        message = "<p style='font-size:15px;'>MATTER URGENT!</p>"
         partner = partner[:-1] if partner else "Customer"
-        message += "<p style='font-size:12px;font-family:'Serif''>Dear %s, <br/></p>" % partner
-        message += "<span style='font-size:12px;font-family:'Serif''>We sincerely thank you for" \
+        message += "<p style='font-size:15px;'>Dear %s,</p>" % partner
+        message += "<span style='font-size:15px;'>We sincerely thank you for" \
                    " your POs and also " \
                    "for the continuous patronage to us.</span>"
-        message += "<br/> <span style='font-size:12px;font-family:'Serif''>" \
+        message += "<br/><span style='font-size:15px;'>" \
                    "Pl. find the below list of overdue/pending invoices." \
                    " </span>"
-        message += "<br/><span style='font-size:12px;font-family:'Serif''> Pl. clear them at the earliest " \
-                   "<span style='font-size:12px;'> ON TOP PRIORITY </span> " \
+        message += "<br/><span style='font-size:15px;'> Pl. clear them at the earliest " \
+                   "<span style='font-size:15px;'> ON TOP PRIORITY </span> " \
                    "and kindly share swift copy once paid.</span><br/><br/>"
 
         if overdue_invoices:
-            message += "<b style='font-size:12px;font-family:'Serif''> Overdue: </b><br/>"
+            message += "<b style='font-size:15px;'><u> OVERDUE INVOICES: <u></b><br/>"
             for due in overdue_invoices:
                 overdue_days = (today - due.date_due).days
-                message += "<p> <span style='font-size:12px;font-family:'Serif''>" \
-                           "Overdue since the past %s days.</span>" % overdue_days
-                message += "<p> <span style='color:red;font-size:12px;font-family:'Serif''> " \
-                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b></span></p> " % (
+                message += "<p> <span style='font-size:15px;'>" \
+                           "Already overdue since the past %s days.</span><br/>" % overdue_days
+                message += "<span style='color:red;font-size:15px;'> " \
+                           "<b>PO. %s Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b></span></p> " % (
+                               due.po_no,
                                due.invoice_number,
                                due.date_invoice.strftime("%d-%m-%Y"),
                                due.currency_id.name,
@@ -96,49 +97,54 @@ class PaymentFollowup(models.Model):
                                due.date_due.strftime("%d-%m-%Y"),
                                overdue_days)
 
-            message += "<p> <span style='font-size:12px;'>" \
-                       "<mark background-color: yellow;color: black;> Pl. clear all the overdue invoices with " \
+            message += "<p> <span style='font-size:15px; background-color: #FFFF00;color: " \
+                       "black;'>" \
+                       "Pl. clear all " \
+                       "the overdue invoices with " \
                        "immediate effect.</mark></span></p>"
+
         else:
-            message += "<b style='font-size:12px;font-family:'Serif''> Overdue: </b>"
-            message += "<br/><p style='font-size:12px;font-family:'Serif''> No overdue as on date. </p>"
+            message += "<b style='font-size:15px;'><u> OVERDUE INVOICES: <u></b><br/>"
+            message += "<br/><p style='font-size:15px;'> No overdue as on date. </p>"
 
         if pending_invoices:
-            message += "<b style='font-size:12px;font-family:'Serif''> Pending Invoices: </b><br/>"
+            message += "<b style='font-size:15px;'><u> PENDING INVOICES: <u></b><br/>"
             for pen in pending_invoices:
                 pending_days = -(today - pen.date_due).days
-                message += "<p> <span style='font-size:12px;font-family:'Serif''>" \
-                           "%s Days to Expiry.</span><br/>" % pending_days
-                message += "<p> <span style='font-size:12px;font-family:'Serif''> " \
-                           "<b> Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b></span></p>" % (
+                message += "<p> <span style='font-size:15px'> This invoice will expire in " \
+                           "%s</span><br/>" % pending_days
+                message += "<span style='font-size:15px;'> " \
+                           "<b>PO. %s Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b></span></p>" % (
+                               pen.po_no,
                                pen.invoice_number,
                                pen.date_invoice.strftime("%d-%m-%Y"),
                                pen.currency_id.name,
                                pen.residual,
                                pen.date_due.strftime("%d-%m-%Y"),
                                pending_days)
-            message += "<p> <span style='font-size:12px;'>" \
-                       "<mark background-color: yellow;color: black;> " \
-                       "Pl. clear all the pending invoices before the due date.</mark></span> </p>"
+            message += "<p> <span style='font-size:15px; background-color: #FFFF00;color: " \
+                       "black;'>" \
+                       "Pl. clear all the pending invoices before the due date.</span> </p>"
         else:
-            message += "<b style='font-size:12px;font-family:'Serif''> Pending Invoices: </b>"
-            message += "<br/> <p style='font-size:12px;font-family:'Serif''> No pending invoices as on date. </p> <br/>"
+            message += "<b style='font-size:15px;'><u> PENDING INVOICES: <u></b><br/>"
+            message += "<br/> <p style='font-size:15px;'> No pending invoices as on date. </p> <br/>"
 
-        message += "<b style='font-size:12px;font-family:'Serif''> CYBERCRIME ALERT: </b>"
-        message += "<p style='font-size:12px;font-family:'Serif''>Please note that our bank account details have not " \
-                   "changed and will not change.  If you receive an email requesting funds via wire" \
-                   " please contact us immediately in a separate email.  We will never change our " \
-                   "bank details via an email to you.  Thank you in advance for your " \
-                   "attention to this matter.</p>"
-        message += "<b style='font-size:12px;font-family:'Serif''> PL. NOTE: </b>"
-        message += "<p style='font-size:12px;font-family:'Serif''>When there is an overdue payment, " \
+        message += "<b style='font-size:15px;color:red;'> CYBERCRIME ALERT: </b>"
+        message += "<p style='font-size:15px;'>Please note that our bank account details have " \
+                   "not changed and will not change. If you receive an email requesting funds " \
+                   "via wire please contact us immediately over phone to Mr. Srini: +91 98840 38805 " \
+                   "or Mr. Saba: +91 984 000 3937. We will never change our bank details via email." \
+                   "In case of any changes, we will courier the hard copy of the bank details to you. " \
+                   "Thank you in advance for your attention on this matter.</p>"
+        message += "<b style='font-size:15px;color:red;'>PAYMENT ALERT</b>"
+        message += "<p style='font-size:15px;'>When there is an overdue payment, " \
                    "our ERP system will put the Customer’s account under Embargo automatically." \
-                   " In such cases we will not be able to dispatch shipments or accept your " \
-                   "Purchase Orders.</p>"
+                   "In such cases we will not be able to dispatch shipments or accept your Purchase Orders. " \
+                   "Hence, always, pl. make the payment on or before the due date.</p>"
 
-        message += "<p>Regards,<br/>"
+        message += "<p style='font-size:15px;'>Regards,<br/>"
         message += "ERP Team.<br/>"
-        message += "<b>%s</b> <br/>" % invoice_id.company_id.name
+        message += "<b style='font-size:15px;'>%s</b> <br/>" % invoice_id.company_id.name
         message += "%s, <br/>" % invoice_id.company_id.street if invoice_id.company_id.street else ""
         message += "%s, <br/>" % invoice_id.company_id.street2 if invoice_id.company_id.street2 else ""
         message += "%s, <br/>" % invoice_id.company_id.city if invoice_id.company_id.city else ""
