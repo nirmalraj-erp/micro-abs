@@ -71,7 +71,7 @@ class PaymentFollowup(models.Model):
         message = "<p style='font-size:15px;'>MATTER URGENT!</p>"
         partner = partner[:-1] if partner else "Customer"
         message += "<p style='font-size:15px;'>Dear %s,</p>" % partner
-        message += "<span style='font-size:15px;'>We sincerely thank you for" \
+        message += "<p><span style='font-size:15px;'>We sincerely thank you for" \
                    " your POs and also " \
                    "for the continuous patronage to us.</span>"
         message += "<br/><span style='font-size:15px;'>" \
@@ -79,7 +79,7 @@ class PaymentFollowup(models.Model):
                    " </span>"
         message += "<br/><span style='font-size:15px;'> Pl. clear them at the earliest " \
                    "<span style='font-size:15px;'> ON TOP PRIORITY </span> " \
-                   "and kindly share swift copy once paid.</span><br/><br/>"
+                   "and kindly share swift copy once paid.</span></p>"
 
         if overdue_invoices:
             message += "<b style='font-size:15px;'><u> OVERDUE INVOICES: <u></b><br/>"
@@ -88,7 +88,7 @@ class PaymentFollowup(models.Model):
                 message += "<p> <span style='font-size:15px;'>" \
                            "Already overdue since the past %s days.</span><br/>" % overdue_days
                 message += "<span style='color:red;font-size:15px;'> " \
-                           "<b>PO. %s Inv. %s dtd. %s for %s %s - Due Date %s, Delay Days %s</b></span></p> " % (
+                           "<b>PO. %s - Inv. %s dtd. %s for %s %s - Due Date %s, Delayed by %s days</b></span></p> " % (
                                due.po_no,
                                due.invoice_number,
                                due.date_invoice.strftime("%d-%m-%Y"),
@@ -112,9 +112,9 @@ class PaymentFollowup(models.Model):
             for pen in pending_invoices:
                 pending_days = -(today - pen.date_due).days
                 message += "<p> <span style='font-size:15px'> This invoice will expire in " \
-                           "%s</span><br/>" % pending_days
+                           "%s days</span><br/>" % pending_days
                 message += "<span style='font-size:15px;'> " \
-                           "<b>PO. %s Inv. %s dtd. %s for %s %s - Due Date %s, Days of Expiry %s</b></span></p>" % (
+                           "<b>PO. %s Inv. %s dtd. %s for %s %s - Due Date %s, %s days to Expire</b></span></p>" % (
                                pen.po_no,
                                pen.invoice_number,
                                pen.date_invoice.strftime("%d-%m-%Y"),
