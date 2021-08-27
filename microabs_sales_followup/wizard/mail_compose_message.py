@@ -17,7 +17,7 @@ class SaleFollowup(models.Model):
         email_subject = 'Order Request Form - %s - %s - %s - %s' % (sales_ids.partner_id.name,
                                                                     sales_ids.partner_id.city,
                                                                     sales_ids.po_no,
-                                                                    sales_ids.po_date.strftime("%d-%m-%Y"))
+                                                                    sales_ids.po_date.strftime("%d-%m-%Y") if sales_ids.po_date else " ")
         attachments = self.env['ir.attachment'].search(
             [('res_id', '=', sales_ids.id), ('res_model', '=', 'sale.order')]).ids
         res.update({
@@ -35,9 +35,9 @@ class SaleFollowup(models.Model):
         message += "<p>Greetings of the day!<br/></p>"
         message += "<p>Pl. find the enclosed PO. %s dtd %s received from %s on %s " \
                    "Our corresponding Order Request Number is %s <br/>Kindly acknowledge the receipt of this order.</p>" \
-                   % (sales_ids.po_no, sales_ids.po_date.strftime("%d-%m-%Y") or '',
-                      sales_ids.partner_id.name or '',
-                      sales_ids.po_received_date.strftime("%d-%m-%Y"), sales_ids.name)
+                   % (sales_ids.po_no, sales_ids.po_date.strftime("%d-%m-%Y") if sales_ids.po_date else " ",
+                      sales_ids.partner_id.name if sales_ids.partner_id.name else " ",
+                      sales_ids.po_received_date.strftime("%d-%m-%Y") if sales_ids.po_received_date else " ", sales_ids.name)
         message += "<p>The delivery week required by the customer is mentioned in the enclosed Order Request form.<br/>"
         message += "Pl. let us know your Delivery week and packing list.<br/>"
         message += "Kindly let us know in case of any queries.</p>"

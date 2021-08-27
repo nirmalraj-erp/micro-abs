@@ -32,6 +32,9 @@
             <button name="action_quotation_send" position="attributes">
                 <attribute name="invisible">1</attribute>
             </button>
+            <button name="action_quotation_send" position="attributes">
+                <attribute name="attrs">{'invisible':[('state','in','sent,sale')]}</attribute>
+            </button>
             <button name="action_quotation_send" position="after">
                 <button name="%(action_sale_followup_mail)d" string="Send Email" type="action" class="oe_highlight" groups="base.group_user"/>
             </button>
