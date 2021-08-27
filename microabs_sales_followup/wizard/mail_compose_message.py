@@ -30,7 +30,6 @@ class SaleFollowup(models.Model):
         partner = ""
         for inv in sales_ids.partner_id.so_email_to_ids:
             title = sales_ids.partner_id.title.name if sales_ids.partner_id.title else inv.title.name
-            print('title', title)
             partner += title + " " + inv.name + "/"
         partner = partner[:-1] if partner else "Customer"
         message = "<p>Dear %s,</p>" % partner
