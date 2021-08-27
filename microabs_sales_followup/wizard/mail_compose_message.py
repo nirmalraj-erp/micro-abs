@@ -29,9 +29,11 @@ class SaleFollowup(models.Model):
         print('**********************', res)
         partner = ""
         for inv in sales_ids.partner_id.so_email_to_ids:
-            partner += inv.title.name if inv.title else " " + " " + inv.name + "/"
+            title = sales_ids.partner_id.title.name if sales_ids.partner_id.title else inv.title.name
+            print('title', title)
+            partner += title + " " + inv.name + "/"
         partner = partner[:-1] if partner else "Customer"
-        message = "<p>Dear  %s, <br/></p>" % partner
+        message = "<p>Dear %s,</p>" % partner
         message += "<p>Greetings of the day!<br/></p>"
         message += "<p>Pl. find the enclosed PO. %s dtd %s received from %s on %s " \
                    "Our corresponding Order Request Number is %s <br/>Kindly acknowledge the receipt of this order.</p>" \
