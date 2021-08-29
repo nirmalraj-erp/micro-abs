@@ -22,12 +22,12 @@
                     <t t-if="o.company_id.company_code == 'HAD'">
                         <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
                          <b style="color:#645379;font-family:Liberation Serif;font-size:20px;text-center;padding-left:30%">HAI - INDIA</b>
-                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:26%">MOBILE : +91 98840 38805</b>
-                        <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:18%">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b>
-                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:18%">+91 98400 03937</b>
-                        <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:20%">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>
-                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:16%">EMAIL: srini@microab.com</b>
-                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:76%">saba@microab.com</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:20%">MOBILE : +91 98840 38805</b>
+                        <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:15%">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:13%">+91 98400 03937</b>
+                        <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:18%">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:9%">EMAIL: srini@microab.com</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:84%">saba@microab.com</b>
                     </t>
                     <t t-else="">
                         <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
