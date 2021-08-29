@@ -19,22 +19,30 @@
                       float: left;
                     }
                     </style>
-                    <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
-                        <t t-if="o.company_id.company_code == 'HAD'">
+                    <t t-if="o.company_id.company_code == 'HAD'">
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                         <b style="color:#645379;font-family:Liberation Serif;font-size:20px;text-center;padding-left:30%">HAI - INDIA</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:26%">MOBILE : +91 98840 38805</b>
+                        <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:18%">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:18%">+91 98400 03937</b>
+                        <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:20%">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:16%">EMAIL: srini@microab.com</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:76%">saba@microab.com</b>
+                    </t>
+                    <t t-else="">
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                        <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
+                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
+                            <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
+                        <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
+                        <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                            <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
+                          <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    </t>
 
-                        </t>
-                        <t t-else="">
-                            <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
-                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
-                                <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
-                            <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
-                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
-                                <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
-                        </t>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        <br></br>
                     </div>
                 </div>
                 <div class="article">
