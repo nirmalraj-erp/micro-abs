@@ -212,7 +212,8 @@
 							<field name="offer_no"/>
 							<field name="offer_date"/>
 							<field name="drawing_no"/>
-							<field name="drawing_attachments_id" filename="name"/>
+							<field name="drawing_attachments_id" filename="file_name"/>
+                            <field name="file_name" invisible="1"/>
 						</tree>
 					</field>
 				</group>

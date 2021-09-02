@@ -49,6 +49,7 @@ class ProductOfferLine(models.Model):
     sequence = fields.Integer(string='Sequence')
     drawing_no = fields.Char(string='Drawing No.')
     drawing_attachments_id = fields.Binary(string='Attachments')
+    file_name = fields.Char('')
                 
 
 class CuttingSpeed(models.Model):
@@ -448,6 +449,18 @@ class SaleOrderLineInherit(models.Model):
                         self.offer_no = line.offer_no if self.order_id.partner_id == line.partner_id else ''
                         self.offer_date = line.offer_date if self.order_id.partner_id == line.partner_id else ''
                         self.drawing_no = line.drawing_no if self.order_id.partner_id == line.partner_id else ''
+                        docs = line.drawing_attachments_id
+                        name = line.file_name
+                        print('*****************', self.order_id.id)
+                        self.env['ir.attachment'].create({
+                            'name': name,
+                            'type': 'binary',
+                            'datas': docs,
+                            'datas_fname': name,
+                            'store_fname': name,
+                            'res_model': 'sale.order',
+                            'res_id': self.order_id.id,
+                        })
                 offer_date = ''
                 if self.offer_date:
                     offer_date = datetime.strftime(self.offer_date, "%d/%m/%Y")
