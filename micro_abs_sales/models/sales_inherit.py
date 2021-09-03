@@ -451,7 +451,7 @@ class SaleOrderLineInherit(models.Model):
                         self.drawing_no = line.drawing_no if self.order_id.partner_id == line.partner_id else ''
                         docs = line.drawing_attachments_id
                         name = line.file_name
-                        print('*****************', self.order_id.id)
+                        sale_line_id = self.env['sale.order'].search([('name', '=', self.order_id.name)])
                         self.env['ir.attachment'].create({
                             'name': name,
                             'type': 'binary',
@@ -459,7 +459,7 @@ class SaleOrderLineInherit(models.Model):
                             'datas_fname': name,
                             'store_fname': name,
                             'res_model': 'sale.order',
-                            'res_id': self.order_id.id,
+                            'res_id': sale_line_id.id,
                         })
                 offer_date = ''
                 if self.offer_date:
