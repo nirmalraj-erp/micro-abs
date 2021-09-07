@@ -18,7 +18,7 @@ class ProductTemplateInherit(models.Model):
     product_size = fields.Char(string='Size')
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     offer_details_line = fields.One2many("product.offer.line", 'offer_line_id', string="Product Order Line")
-    no_commission_required = fields.Boolean("No Commission Required", default=False)
+    no_commission_required = fields.Boolean("No Transport Required", default=False)
     cutting_speed_id = fields.Many2one("cutting.speed", string="Cutting Speed")
 
 
@@ -32,7 +32,7 @@ class ProductProductInherit(models.Model):
     product_size = fields.Many2one('product.size', string='Size')
     product_recess_id = fields.Many2one("product.recess", string="Recess")
     offer_details_line = fields.One2many("product.offer.line", 'offer_line_id', string="Product Order Line")
-    no_commission_required = fields.Boolean("No Commission Required", default=False)
+    no_commission_required = fields.Boolean("No Transport Required", default=False)
     cutting_speed_id = fields.Many2one("cutting.speed", string="Cutting Speed")
 
 
@@ -635,8 +635,8 @@ class ResCompanyInherit(models.Model):
         ('company_code_uniq', 'unique(company_code)', 'Company Code must be a unique.')]
 
     agent = fields.Char("Agent")
-    commission = fields.Float("Commission(%)")
-    commission_agent = fields.Char("Commission Agent")
+    commission = fields.Float("Transport(%)")
+    commission_agent = fields.Char("Transport Agent")
     c_street = fields.Char()
     c_street2 = fields.Char()
     c_zip = fields.Char(change_default=True)

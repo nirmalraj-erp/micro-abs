@@ -11,11 +11,11 @@
     'license': 'AGPL-3',
     'depends': ['sale','account'],
     'data': [
+        'security/ir.model.access.csv',
+        'security/sale_commission_security.xml',
         'views/sales_commission.xml',
         'wizard/commission_invoice.xml',
         'data/ir_sequence_data.xml',
-        'security/ir.model.access.csv',
-        'security/sale_commission_security.xml',
         'reports/sale_commission_report.xml',
         'reports/report_wizard_view.xml',
     ],

@@ -172,6 +172,7 @@
 		name="Commission Invoice"
 		action="action_sale_commission_report"
 		parent="menu_sale_commission"
+              groups="group_commission_privilege"
 		sequence="4"/>
 
     <!--Bank Name Tree View-->
@@ -238,6 +239,7 @@
               name="Beneficiary/Intermediary Bank Details"
               action="action_menu_bank_name_id"
               parent="menu_sale_commission"
+                  groups="group_commission_privilege"
               sequence="12"/>
 
         <!-- Commission Payment History -->
@@ -245,6 +247,7 @@
               name="Commission Payment History"
               action="action_commission_payment_history"
               parent="menu_sale_commission"
+                  groups="group_commission_privilege"
               sequence="15"/>
 
 </odoo>

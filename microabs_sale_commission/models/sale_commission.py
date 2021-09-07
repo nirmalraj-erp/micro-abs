@@ -50,12 +50,12 @@ class SaleOrderCommission(models.Model):
     _inherit = 'sale.order.line'
 
     commission_id = fields.Many2one('commission.master', string='Commission ID')
-    commission_name = fields.Char(string='Commission')
-    no_commission_required = fields.Boolean(string='Is Commission')
-    commission_percentage = fields.Float(string='Commission (%)')
+    commission_name = fields.Char(string='Transport')
+    no_commission_required = fields.Boolean(string='Is Transport')
+    commission_percentage = fields.Float(string='Transport (%)')
     commission_percentage_temp = fields.Float(string='')
-    commission_amount = fields.Float(string='Commission Amount', compute='_get_commission_amount')
-    commission_amount_wod = fields.Float(string='Commission Amount without Discount', compute='_get_commission_amount')
+    commission_amount = fields.Float(string='Transport Amount', compute='_get_commission_amount')
+    commission_amount_wod = fields.Float(string='Transport Amount without Discount', compute='_get_commission_amount')
 
     @api.onchange('product_id')
     def get_commission_details(self):
@@ -102,7 +102,7 @@ class SaleOrderCommissionInherit(models.Model):
         store=True,
     )
     commission_total = fields.Float(
-        string="Commission Amount",
+        string="Transport Amount",
         compute="_compute_commission_total",
         store=True,
     )
@@ -117,13 +117,13 @@ class SaleOrderCommissionInherit(models.Model):
 class AccountInvoiceLineCommission(models.Model):
     _inherit = 'account.invoice.line'
 
-    commission_id = fields.Many2one('commission.master', string='Commission ID')
-    commission_name = fields.Char(string='Commission')
-    commission_percentage = fields.Float(string='Commission (%)')
+    commission_id = fields.Many2one('commission.master', string='Transport ID')
+    commission_name = fields.Char(string='Transport')
+    commission_percentage = fields.Float(string='Transport (%)')
     commission_percentage_temp = fields.Float(string='')
-    commission_amount = fields.Float(string='Commission Amount', compute='_get_commission_amount')
+    commission_amount = fields.Float(string='Transport Amount', compute='_get_commission_amount')
     no_commission_required = fields.Boolean(string='Is Commission')
-    commission_amount_wod = fields.Float(string='Commission Amount without Discount', compute='_get_commission_amount')
+    commission_amount_wod = fields.Float(string='Transport Amount without Discount', compute='_get_commission_amount')
 
     def _get_commission_amount(self):
         """Get the commission amount for the data given. To be called by
@@ -161,7 +161,7 @@ class AccountInvoiceCommissionInherit(models.Model):
     )
 
     commission_total = fields.Float(
-        string="Commission Amount",
+        string="Transport Amount",
         compute="_compute_commission_total",
         store=True,
     )

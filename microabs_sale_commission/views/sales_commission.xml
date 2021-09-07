@@ -115,11 +115,12 @@
         <field name="search_view_id" ref="commission_master_tree_view_id"/>
     </record>
      <!--SALES COMMISSION MAIN MENUS-->
-    <menuitem id="menu_sale_commission" name="Sales Commission" parent="sale.sale_menu_root" sequence="20"/>
+    <menuitem id="menu_sale_commission" name="Sales Commission" parent="sale.sale_menu_root" groups="group_commission_privilege" sequence="20"/>
      <menuitem id="menu_sale_commission_view_id"
               name="Commission Settlements"
               action="action_sale_commission_id"
               parent="menu_sale_commission"
+               groups="group_commission_privilege"
               sequence="2"/>
     <menuitem id="menu_commission_master_view_id"
               name="Commission Master"
