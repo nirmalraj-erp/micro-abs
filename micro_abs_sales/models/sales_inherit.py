@@ -449,18 +449,19 @@ class SaleOrderLineInherit(models.Model):
                         self.offer_no = line.offer_no if self.order_id.partner_id == line.partner_id else ''
                         self.offer_date = line.offer_date if self.order_id.partner_id == line.partner_id else ''
                         self.drawing_no = line.drawing_no if self.order_id.partner_id == line.partner_id else ''
-                        docs = line.drawing_attachments_id
-                        name = line.file_name
-                        sale_line_id = self.env['sale.order'].search([('name', '=', self.order_id.name)])
-                        self.env['ir.attachment'].create({
-                            'name': name,
-                            'type': 'binary',
-                            'datas': docs,
-                            'datas_fname': name,
-                            'store_fname': name,
-                            'res_model': 'sale.order',
-                            'res_id': sale_line_id.id,
-                        })
+                        if line.drawing_attachments_id:
+                            docs = line.drawing_attachments_id
+                            name = line.file_name
+                            sale_line_id = self.env['sale.order'].search([('name', '=', self.order_id.name)])
+                            self.env['ir.attachment'].create({
+                                'name': name,
+                                'type': 'binary',
+                                'datas': docs,
+                                'datas_fname': name,
+                                'store_fname': name,
+                                'res_model': 'sale.order',
+                                'res_id': sale_line_id.id,
+                            })
                 offer_date = ''
                 if self.offer_date:
                     offer_date = datetime.strftime(self.offer_date, "%d/%m/%Y")
