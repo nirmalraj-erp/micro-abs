@@ -107,7 +107,7 @@ class SaleOrderCommissionInherit(models.Model):
         store=True,
     )
     commission_percentage_total = fields.Float(
-        string="Commission Percentage",
+        string="Transport Percentage",
         compute="_compute_commission_total",
         store=True, digits=(12, 3),
 
@@ -166,7 +166,7 @@ class AccountInvoiceCommissionInherit(models.Model):
         store=True,
     )
     commission_percentage_total = fields.Float(
-        string="Commission Percentage",
+        string="Transport Percentage",
         compute="_compute_commission_total",
         store=True, digits=(12, 3),
     )

@@ -13,23 +13,39 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <div class="header">
-                    <div class="first-page" style="border-bottom:1px solid gray">
-                        <style>
-                    img {
-                      float: left;
-                    }
-                    </style>
                     <t t-if="o.company_id.company_code == 'HAD'">
-                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
-                         <b style="color:#645379;font-family:Liberation Serif;font-size:20px;text-center;padding-left:30%">HAI - INDIA</b>
+                        <div class="container">
+                            <div class="float-left">
+                                <img class="mr-3" t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                            </div>
+                            <div class="center">
+                                <b class="ml-5" style="color:#645379;font-family:Liberation Serif;font-size:20px;text-center;">HIA - INDIA</b><br/>
+                                <b class="ml-5" style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b><br/>
+                                <b class="ml-5" style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>
+                            </div>
+                            <div class="float-right">
+                                <b class="ml-3" style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;">MOBILE : +91 98840 38805</b><br/>
+                                <b class="ml-3" style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;">+91 98400 03937</b><br/>
+                                <b class="ml-3" style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;">EMAIL: srini@microab.com</b><br/>
+                                <b class="ml-3" style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;">saba@microab.com</b>
+                            </div>
+                        </div>
+                        <!--<img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                         <b style="color:#645379;font-family:Liberation Serif;font-size:20px;text-center;padding-left:30%">HIA - INDIA</b>
                         <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:20%">MOBILE : +91 98840 38805</b>
                         <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:15%">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b>
                         <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:13%">+91 98400 03937</b>
                         <b style="color:#645379;font-size:12px;font-family:Liberation Serif;text-center;padding-left:18%">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>
                         <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:9%">EMAIL: srini@microab.com</b>
-                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:84%">saba@microab.com</b>
+                        <b style="color:#645379;text-right;font-family:Liberation Serif;font-size:12px;padding-left:84%">saba@microab.com</b>-->
                     </t>
                     <t t-else="">
+                        <div class="first-page" style="border-bottom:1px solid gray">
+                        <style>
+                    img {
+                      float: left;
+                    }
+                    </style>
                         <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
@@ -41,9 +57,8 @@
                     <br></br>
                     <br></br>
                     <br></br>
+                        </div>
                     </t>
-
-                    </div>
                 </div>
                 <div class="article">
                     <style>
