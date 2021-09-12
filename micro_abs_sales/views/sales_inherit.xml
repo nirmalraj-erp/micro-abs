@@ -194,6 +194,7 @@
                 <page name="product_info" string="Product Info">
 				<group>
                 <group>
+					<field name="commission_percentage"/>
 					<field name="product_size"/>
 					<field name="product_recess_id"/>
 					<field name="specification"/>

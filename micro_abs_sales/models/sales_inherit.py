@@ -20,6 +20,7 @@ class ProductTemplateInherit(models.Model):
     offer_details_line = fields.One2many("product.offer.line", 'offer_line_id', string="Product Order Line")
     no_commission_required = fields.Boolean("No Transport Required", default=False)
     cutting_speed_id = fields.Many2one("cutting.speed", string="Cutting Speed")
+    commission_percentage = fields.Float(string='Transport (%)')
 
 
 class ProductProductInherit(models.Model):
@@ -34,6 +35,7 @@ class ProductProductInherit(models.Model):
     offer_details_line = fields.One2many("product.offer.line", 'offer_line_id', string="Product Order Line")
     no_commission_required = fields.Boolean("No Transport Required", default=False)
     cutting_speed_id = fields.Many2one("cutting.speed", string="Cutting Speed")
+    commission_percentage = fields.Float(string='Transport (%)')
 
 
 class ProductOfferLine(models.Model):
@@ -431,6 +433,10 @@ class SaleOrderLineInherit(models.Model):
     @api.onchange('product_id')
     def get_product_line(self):
         """Description line based on Product master - Product Info and Company Code"""
+        if self.order_id.company_id.company_code == 'TKC':
+            if not self.no_commission_required:
+                if self.product_id.commission_percentage:
+                    self.commission_percentage = self.product_id.commission_percentage
         if self.order_id.company_id.company_code == 'HAD':
             self.description = self.product_id.name
         else:
