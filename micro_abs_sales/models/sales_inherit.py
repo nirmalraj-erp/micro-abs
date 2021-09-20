@@ -51,7 +51,7 @@ class ProductOfferLine(models.Model):
     sequence = fields.Integer(string='Sequence')
     drawing_no = fields.Char(string='Drawing No.')
     drawing_attachments_id = fields.Binary(string='Attachments')
-    file_name = fields.Char('')
+    file_name = fields.Char("File Name")
                 
 
 class CuttingSpeed(models.Model):

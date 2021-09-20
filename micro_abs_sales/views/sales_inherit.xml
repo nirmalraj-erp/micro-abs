@@ -205,7 +205,7 @@
                     <field name="operation_id"/>
                     <field name="product_kind"/>
 				</group>
-					<field name="offer_details_line"  widget="one2many_list" mode="tree,kanban">
+					<field name="offer_details_line"  widget="one2many_list" mode="tree">
 						<tree editable="bottom" string="Product Specifications">
 							<field name="sequence" widget="handle"/>
 							<field name="partner_id"/>
@@ -213,8 +213,8 @@
 							<field name="offer_no"/>
 							<field name="offer_date"/>
 							<field name="drawing_no"/>
-							<field name="drawing_attachments_id" filename="file_name"/>
                             <field name="file_name" invisible="1"/>
+							<field name="drawing_attachments_id" filename="file_name" widget="binary" />
 						</tree>
 					</field>
 				</group>
