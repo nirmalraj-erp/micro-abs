@@ -21,11 +21,14 @@ class SaleFollowup(models.Model):
                                                                          "%d-%m-%Y") if sales_ids.po_date else " ")
         attachments = self.env['ir.attachment'].search(
             [('res_id', '=', sales_ids.id), ('res_model', '=', 'sale.order')]).ids
+        template_id = self.env.ref('micro_abs_sales.sale_order_report').id
+        template = self.env['ir.attachment'].browse(template_id)
         res.update({
             'email_cc': email_cc if email_cc else "",
             'email_to': email_to,
             'email_subject': email_subject,
-            'email_attachment_ids': attachments
+            'email_attachment_ids': attachments,
+            'email_report_ids': template
         })
         print('**********************', res)
         partner = ""
@@ -72,6 +75,7 @@ class SaleFollowup(models.Model):
     email_subject = fields.Char(string="Subject")
     email_body = fields.Html(string="Email")
     email_attachment_ids = fields.Many2many('ir.attachment', string='')
+    email_report_ids = fields.Many2many('ir.attachment', string='')
 
     # Email function for sending mails
     @api.multi
@@ -81,7 +85,7 @@ class SaleFollowup(models.Model):
         res_ids = self._context.get('active_ids')
         sale_ids = self.env["sale.order"].sudo().browse(res_ids[0])
         body = _("%s" % self.email_body)
-        attachment_ids = self.email_attachment_ids.ids
+        attachment_ids = self.email_attachment_ids.ids + self.email_report_ids.ids
         mail_ids.append(send_mail.create({
             'email_from': 'erp@microab.com',
             'email_to': self.email_to,

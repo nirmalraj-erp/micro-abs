@@ -10,7 +10,9 @@
     'license': 'AGPL-3',
     'depends': ['sale', 'account', 'base'],
     'data': [
+        'security/ir.model.access.csv',
         'wizard/customer_status_view.xml',
+        'wizard/invoice_customer_details.xml',
         'reports/customer_status_report_view.xml',
     ],
     'demo': [],
