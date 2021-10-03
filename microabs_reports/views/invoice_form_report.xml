@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--ACCOUNT INVOICE LINE TREE INHERIT-->
+		<record id="invoice_view_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.view.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+				<xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='discount']" position="after">
+					<field name="commission_id" invisible="1"/>
+					<field name="commission_name" invisible="1"/>
+					<field name="no_commission_required" invisible="1"/>
+					<field name="commission_percentage"/>
+					<field name="commission_percentage_temp" invisible="1"/>
+					<field name="commission_amount"/>
+                    <field name="commission_amount_wod" invisible="1"/>
+				</xpath>
+                <field name="amount_total" position="after">
+                    <field name="total_taxed" widget="monetary"/>
+                    <field name="commission_percentage_total"/>
+                    <field name="commission_total"
+                           widget="monetary"/>
+                </field>
+			</field>
+		</record>
+
+    <!--SALE ORDER FORM INHERIT-->
+         <record id="view_order_agent_form_inherit" model="ir.ui.view">
+            <field name="name">sale.agent.order.inherit.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="amount_total" position="after">
+                    <field name="total_taxed" widget="monetary"/>
+                    <field name="commission_percentage_total"/>
+                    <field name="commission_total"
+                           widget="monetary"/>
+                </field>
+            </field>
+        </record>
+
+    <!--SALE ORDER LINE TREE INHERIT-->
+		<record id="sale_order_line_commission_inherit" model="ir.ui.view">
+			<field name="name">sale.order.line.inherit</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='discount']" position="after">
+					<field name="commission_id" invisible="1"/>
+					<field name="commission_name" invisible="1"/>
+					<field name="no_commission_required" invisible="1"/>
+					<field name="commission_percentage" attrs="{'readonly': [('no_commission_required', '=', True)]}"/>
+					<field name="commission_percentage_temp" invisible="1"/>
+					<field name="commission_amount"/>
+					<field name="commission_amount_wod" invisible="1"/>
+				</xpath>
+			</field>
+		</record>
+
+     <!--SALES COMMISSION TREE VIEW-->
+    <record id="sale_commission_tree_view_id" model="ir.ui.view">
+        <field name="name">sale.commission.tree.view</field>
+        <field name="model">sale.commission</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Commission List" delete="false" create="false" default_order="id desc"
+                  decoration-success="state=='paid'" decoration-danger="state=='open'"
+                  decoration-muted="state=='revert'">
+                <field name="name" invisible="1"/>
+                <field name="invoice_no"/>
+                <field name="invoice_date"/>
+                <field name="customer_code"/>
+                <field name="customer_id"/>
+                <field name="invoice_amount"/>
+                <field name="actual_received"/>
+                <field name="commission_amount"/>
+                <field name="commission_percentage"/>
+                <field name="commission_percentage_tmp" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="state"/>
+                <field name="com_inv_status" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+      <!--SALES COMMISSION ACTION-->
+    <record id="action_sale_commission_id" model="ir.actions.act_window">
+        <field name="name">Sales Commission List</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.commission</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="sale_commission_tree_view_id"/>
+    </record>
+
+    <!--COMMISSION MASTER TREE VIEW-->
+    <record id="commission_master_tree_view_id" model="ir.ui.view">
+        <field name="name">commission.master.tree.view</field>
+        <field name="model">commission.master</field>
+        <field name="arch" type="xml">
+            <tree string="Commission Master" editable="bottom">
+                <field name="customer_id"/>
+                <field name="commission_percentage"/>
+                <field name="product_id"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+      <!--COMMISSION MASTER ACTION-->
+    <record id="action_commission_master_id" model="ir.actions.act_window">
+        <field name="name">Commission Master</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">commission.master</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="commission_master_tree_view_id"/>
+    </record>
+     <!--SALES COMMISSION MAIN MENUS-->
+    <menuitem id="menu_sale_commission" name="Sales Commission" parent="sale.sale_menu_root" groups="group_commission_privilege" sequence="20"/>
+     <menuitem id="menu_sale_commission_view_id"
+              name="Commission Settlements"
+              action="action_sale_commission_id"
+              parent="menu_sale_commission"
+               groups="group_commission_privilege"
+              sequence="2"/>
+    <menuitem id="menu_commission_master_view_id"
+              name="Commission Master"
+              action="action_commission_master_id"
+              parent="menu_sale_commission"
+              sequence="1"/>
+
+</odoo>

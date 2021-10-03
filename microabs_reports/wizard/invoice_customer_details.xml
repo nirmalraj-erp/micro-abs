@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_invoice_report_pivot" model="ir.ui.view">
+         <field name="name">account.invoice.report.pivot</field>
+         <field name="model">account.invoice.report</field>
+         <field name="arch" type="xml">
+             <pivot string="Invoice Analysis" disable_linking="True">
+                 <field name="categ_id" type="row"/>
+                 <field name="date" type="col"/>
+                 <field name="price_total" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+
+    <!--<record id="view_invoice_customer_form_filter" model="ir.ui.view">
+            <field name="name">Invoice Customer form</field>
+            <field name="model">invoice.customer.form</field>
+            <field name="arch" type="xml">
+                <form string="Report Filters">
+                    <group string="Invoice Report Filters" style="text-align:center;font-size:25%;color:teal"/>
+                        <group col='4'>
+                            <div >
+                                <label for="month" string="From"
+                                       style="font-weight: bold !important;margin-left:50px;margin-right: 0px;"/>
+                                <field name="month" style="width:110px;margin-left:117px"/>
+                                <field name="year" style="width:110px;margin-left: 34px;"/>
+                            </div>
+                            <div>
+                                <label for="month_to" string="To"
+                                       style="font-weight: bold !important;margin-left:50px;margin-right: 0px;"/>
+                                <field name="month_to" style="width:110px;margin-left:117px"/>
+                                <field name="year_to" style="width:110px;margin-left: 34px;"/>
+                            </div>
+                        </group>
+                        <group col='4' style="margin-left:50px;margin-right: 0px;">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    <group col='4' style="margin-left:50px;margin-right: 0px;">
+                            <field name="partner_ids" widget="many2many_tags"/>
+                            <field name="company_id"/>
+                        </group>
+                     <group>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:gray"/>
+                    </group>
+                    <footer>
+                        <div style="text-align:center">
+                            <button name="invoice_pivot_view" string="Execute" type="object" class="btn-success" style='margin-right:16px'/>
+                            <button string="Cancel" class="btn-info" style='margin-right:16px'  special="cancel"/>
+                        </div>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    <record id="action_invoice_customer_form" model="ir.actions.act_window">
+        <field name="name">Invoice Master</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">invoice.customer.form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" eval="False"/>
+    </record>
+        <menuitem id="menu_invoice_customer_form"
+                  action="action_invoice_customer_form"
+                  parent="account.menu_finance_reports"
+                  name="Invoice Report" sequence="20"/>-->
+
+        <record id="view_invoice_wizard" model="ir.ui.view">
+        <field name="name">Customer Status</field>
+        <field name="model">invoice.customer.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Customer Status">
+                <group col='4'>
+                            <div >
+                                <label for="month" string="From"
+                                       style="font-weight: bold !important;margin-left:50px;margin-right: 0px;"/>
+                                <field name="month" style="width:110px;margin-left:117px"/>
+                                <field name="year" style="width:110px;margin-left: 34px;"/>
+                            </div>
+                            <div>
+                                <label for="month_to" string="To"
+                                       style="font-weight: bold !important;margin-left:50px;margin-right: 0px;"/>
+                                <field name="month_to" style="width:110px;margin-left:117px"/>
+                                <field name="year_to" style="width:110px;margin-left: 34px;"/>
+                            </div>
+                        </group>
+                        <group col='4' style="margin-left:50px;margin-right: 0px;">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    <group col='4' style="margin-left:50px;margin-right: 0px;">
+                            <field name="partner_ids" widget="many2many_tags"/>
+                            <field name="company_id"/>
+                        </group>
+                     <group>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:gray"/>
+                    </group>
+                    <footer>
+                        <div style="text-align:center">
+                            <button name="invoice_pivot_view" string="Execute" type="object" class="btn-success" style='margin-right:16px'/>
+                            <button string="Cancel" class="btn-info" style='margin-right:16px'  special="cancel"/>
+                        </div>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+        id="action_invoice_wizard"
+        name="Invoice Analysis Report"
+        res_model="invoice.customer.wizard"
+        src_model="invoice.customer.wizard"
+        view_mode="form"
+        multi="True"
+        target="new"
+        key2="client_action_multi"
+    />
+    <menuitem id="menu_invoice_wizard" action="action_invoice_wizard" parent="account.menu_finance_reports"
+          name="Invoice Analysis Report" sequence="1"/>
+</odoo>

@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_customer_status,customer.status,model_customer_status,base.group_user,1,1,1,1
 access_invoice_customer_form,invoice.customer.form,model_invoice_customer_form,base.group_user,1,1,1,1
+access_invoice_customer_wizard,invoice.customer.wizard,model_invoice_customer_wizard,base.group_user,1,1,1,1
 
