@@ -14,24 +14,40 @@
             <t t-foreach="docs" t-as="o">
                 <div class="header">
                     <t t-if="o.company_id.company_code == 'HAD'">
-                        <div class="first-page">
-                            <div style="display: inline-block;border-bottom:1px solid gray">
-                                <div style="display: inline-block;">
-                                    <img class="mb-5" t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
-                                </div>
-                                <div style="display: inline-block;">
-                                    <b style="color:#645379;padding-left:200px;font-family:Liberation Serif;font-size:20px;text-center;">HIA - INDIA</b><br/>
-                                    <b style="color:#645379;font-size:12px;padding-left:100px;font-family:Liberation Serif;text-center;">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b><br/>
-                                    <b style="color:#645379;font-size:12px;padding-left:130px;font-family:Liberation Serif;text-center;">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>
-                                </div>
-                                <div style="display: inline-block;">
-                                    <b style="color:#645379;padding-left:65px;text-right;font-family:Liberation Serif;font-size:12px;">MOBILE : +91 98840 38805</b><br/>
-                                    <b style="color:#645379;padding-left:100px;text-right;font-family:Liberation Serif;font-size:12px;">+91 98400 03937</b><br/>
-                                    <b style="color:#645379;padding-left:65px;text-right;font-family:Liberation Serif;font-size:12px;">EMAIL: srini@microab.com</b><br/>
-                                    <b style="color:#645379;padding-left:100px;text-right;font-family:Liberation Serif;font-size:12px;">saba@microab.com</b>
-                                </div>
-                            </div>
+                        <div class="first-page" style="border-bottom:1px solid gray">
+                            <style>
+                        img {
+                          float: left;
+                        }
+                        </style>
+                            <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="80px" style="vertical-align:middle;margin:2px 0px"/>
+                            <span style="color:#645379;;font-family:Liberation Serif;font-size:20px;padding-left:2px"><b>HIA - INDIA</b></span>
+                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:37%"><i class="fa fa-mobile" style="color:#0444a6"/>
+                                <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
+                            <span style="font-size:12px;font-family:Liberation Serif;padding-left:2px"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
+                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:7%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                                <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
+                            <br/>
+                            <br/>
                         </div>
+<!--                        <div class="first-page">-->
+<!--                            <div style="display: inline-block;border-bottom:1px solid gray">-->
+<!--                                <div style="display: inline-block;">-->
+<!--                                    <img class="mb-5" t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>-->
+<!--                                </div>-->
+<!--                                <div style="display: inline-block;">-->
+<!--                                    <b style="color:#645379;padding-left:200px;font-family:Liberation Serif;font-size:16px;text-center;">HIA - INDIA</b><br/>-->
+<!--                                    <b style="color:#645379;font-size:12px;padding-left:100px;font-family:Liberation Serif;text-center;">PLOT NO. 19, KAMARAJAR ROAD, RAMAKRISHNA NAGAR</b><br/>-->
+<!--                                    <b style="color:#645379;font-size:12px;padding-left:130px;font-family:Liberation Serif;text-center;">ALWARTHIRUNAGAR, CHENNAI - 600 087, INDIA</b>-->
+<!--                                </div>-->
+<!--                                <div style="display: inline-block;">-->
+<!--                                    <b style="color:#645379;padding-left:65px;text-right;font-family:Liberation Serif;font-size:12px;">MOBILE : +91 98840 38805</b><br/>-->
+<!--                                    <b style="color:#645379;padding-left:100px;text-right;font-family:Liberation Serif;font-size:12px;">+91 98400 03937</b><br/>-->
+<!--                                    <b style="color:#645379;padding-left:65px;text-right;font-family:Liberation Serif;font-size:12px;">EMAIL: srini@microab.com</b><br/>-->
+<!--                                    <b style="color:#645379;padding-left:100px;text-right;font-family:Liberation Serif;font-size:12px;">saba@microab.com</b>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </t>
                     <t t-else="">
                         <div class="first-page" style="border-bottom:1px solid gray">
@@ -40,29 +56,25 @@
                       float: left;
                     }
                     </style>
-                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="100px"/>
+                        <img t-if="o.company_id.com_logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.com_logo)" width="70px" style="vertical-align:middle;margin:2px 0px"/>
                         <span style="color:#0444a6;font-family:Liberation Serif;font-size:20px"><b>Micro Abrasive Technologies</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:15%"><i class="fa fa-mobile" style="color:#0444a6"/>
                             <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
                         <span style="font-size:12px;font-family:Liberation Serif;"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
                         <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:10%"><i class="fa fa-mobile" style="color:#0444a6;"/>
                             <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
-                          <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
+                            <br/>
+                            <br/>
+                            <br/>
                         </div>
                     </t>
+                    <p  style="text-align:center;"><u><strong>COMMISSION INVOICE</strong></u></p>
                 </div>
-                <div class="article">
+                <div class="article" style="padding-bottom:2px">
                     <style>
-                        th,td,tr .table{border-collapse:collapse; font-family:Liberation Serif; border-1px solid black; padding-top:1px;padding-left:2px; padding-right:2px; padding-bottom:2px}
+                        th,td,tr .table{border-collapse:collapse; font-family:Liberation Serif; border-1px solid black; padding-left:2px; padding-right:2px; padding-bottom:2px}
                      </style>
-                    <table  width="100%" style="font-size:18px;" >
-                        <tr>
-                           <td  style="text-align:center;width:100%"><u><strong>COMMISSION INVOICE</strong></u></td>
-                        </tr>
-                    </table>
+
                     <table width="100%" style="font-size:13px;border-spacing: 0px 1px;border-collapse: separate" >
                         <tr>
                            <td class="table-primary" style="text-align:left;width:15%"><strong>Invoice No</strong></td>
