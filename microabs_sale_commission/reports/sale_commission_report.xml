@@ -25,10 +25,12 @@
                             <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:37%"><i class="fa fa-mobile" style="color:#0444a6"/>
                                 <b>+91 98840 38805,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>srini@microab.com</b></span><br/>
                             <span style="font-size:12px;font-family:Liberation Serif;padding-left:2px"><b>19 Kamarajar Salai, Alwarthirunagar,Chennai 600087</b></span>
-                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:7%"><i class="fa fa-mobile" style="color:#0444a6;"/>
+                            <span style="text-right;font-family:Liberation Serif;font-size:12px;padding-left:9%"><i class="fa fa-mobile" style="color:#0444a6;"/>
                                 <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
                             <br/>
                             <br/>
+                             <hr style="border-bottom:1px solid gray"/>
+                            <p  style="text-align:center;"><u><strong>COMMISSION INVOICE</strong></u></p>
                         </div>
 <!--                        <div class="first-page">-->
 <!--                            <div style="display: inline-block;border-bottom:1px solid gray">-->
@@ -50,7 +52,7 @@
 <!--                        </div>-->
                     </t>
                     <t t-else="">
-                        <div class="first-page" style="border-bottom:1px solid gray">
+                        <div class="first-page">
                         <style>
                     img {
                       float: left;
@@ -65,10 +67,10 @@
                             <b>+91 98400 03937,</b> <i class="fa fa-envelope" style="color:#0444a6"/> <b>saba@microab.com</b></span>
                             <br/>
                             <br/>
-                            <br/>
+                            <hr style="border-bottom:1px solid gray"/>
+                            <p  style="text-align:center;"><u><strong>COMMISSION INVOICE</strong></u></p>
                         </div>
                     </t>
-                    <p  style="text-align:center;"><u><strong>COMMISSION INVOICE</strong></u></p>
                 </div>
                 <div class="article" style="padding-bottom:2px">
                     <style>
@@ -191,7 +193,7 @@
                              <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:7%;">
                                 <strong><center>Customer Code</center></strong>
                              </th>
-                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:33%;">
+                             <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:36%;">
                                 <strong><center>Customer Name</center></strong>
                              </th>
                              <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
@@ -203,7 +205,7 @@
                              <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:10%;">
                                 <strong><center>Commission (<span t-field="o.company_id.currency_id.currency_unit_label"/>)</center></strong>
                              </th>
-                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:8%;">
+                            <th style="border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;width:5%;">
                                 <strong><center>% AGE</center></strong>
                              </th>
                         </thead>
@@ -224,7 +226,7 @@
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:7%;10px;padding-left:2px;text-align:center">
                                         <span t-esc="line.customer_id.customer_code.name"/>
                                     </td>
-                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:33%;text-align:left;padding-right:2px;">
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:36%;text-align:left;padding-right:2px;">
                                         <span t-esc="line.customer_id.display_name"/>
                                     </td>
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
@@ -236,7 +238,7 @@
                                     <td style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;">
                                        <span t-esc="'%.2f'% line.commission_amount"/>
                                     </td>
-                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:8%;text-align:center;padding-right:2px;">
+                                    <td style="border-right:1px solid black;border-bottom:1px solid black;width:5%;text-align:center;padding-right:2px;">
                                         <span t-esc="line.commission_percentage"/>
                                     </td>
                                 </tr>
