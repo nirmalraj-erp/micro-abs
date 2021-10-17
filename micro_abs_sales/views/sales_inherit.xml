@@ -469,9 +469,9 @@
                             <field name="current_account_no"/>
                         </group>
                             <group>
-                                <field name="signature" widget='image' class="oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                                <field name="signature" widget='image' class="oe_avatar"/>
                                 <field name="contact"/>
-                                <field name="com_logo" widget='image' class="oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                                <field name="com_logo" widget='image' class="oe_avatar"/>
                             </group>
                         </group>
                     </page>
