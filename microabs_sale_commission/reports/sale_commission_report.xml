@@ -261,7 +261,7 @@
                             </td>
                             <td class="table-warning"  style="border-right:1px solid black;border-bottom:1px solid black;width:10%;text-align:right;padding-right:2px;"><br/>
                              <strong> <t t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line))" /></strong>
-                            </td><br/>
+                            </td>
                         </tr>
                     </table>
                     <table>
@@ -271,7 +271,7 @@
                     </table>
                     <table style="width: 100%;font-size:13px;">
                         <tr  style="width: 100%;font-size:13px;">
-                            <strong style="font-size:13px;">TOTAL COMMISSONS PAYABLE IN <span t-field="o.company_id.currency_id.name"/>: </strong>&#160; <span style="font-size:13px;" t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line)) "/>&#160;(<span style="font-size:13px;" t-esc="o.amount_to_text(sum(l.commission_amount for l in o.commission_line))"/><span style="font-size:13px;">&#160;Only)</span><br/>
+                            <strong style="font-size:13px;">TOTAL COMMISSONS PAYABLE IN <span t-field="o.company_id.currency_id.name"/>: </strong>&#160; <span style="font-size:13px;" t-esc="'%.2f'%(sum(l.commission_amount for l in o.commission_line)) "/>&#160;(<span style="font-size:13px;" t-esc="o.amount_to_text(sum(l.commission_amount for l in o.commission_line))"/><span style="font-size:13px;">&#160;Only)</span>
                         </tr>
                         <tr>
                             <br/>
