@@ -8,6 +8,7 @@ from odoo.exceptions import UserError, ValidationError
 
 class SaleCommissionReportWizard(models.Model):
     _name = "sale.commission.report"
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Sale Commission Report Wizard"
 
     # def get_currency(self):
