@@ -428,7 +428,7 @@ class SaleOrderLineInherit(models.Model):
                 print(d)
                 wkno = date(int(d[0]), int(d[1]), int(d[2])).isocalendar()[1]
                 print(wkno)
-                line.wkno = wkno + 1
+                line.wkno = wkno
 
     @api.onchange('product_id')
     def get_product_line(self):
