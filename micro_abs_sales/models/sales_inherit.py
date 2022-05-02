@@ -137,8 +137,6 @@ class ResPartnerInherit(models.Model):
     pan_no = fields.Char(string='PAN Number')
     commission_percentage = fields.Float(string='Transport (%)')
     commission_percentage_temp = fields.Float(string='')
-    sale_order_count = fields.Integer(compute='_compute_sale_order_count',
-                                      string='# of Sales Order', store=True)
 
 
 class SaleOrderInherit(models.Model):
