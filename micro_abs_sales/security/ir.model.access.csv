@@ -29,3 +29,4 @@ access_docs_address,docs.address,model_docs_address,base.group_user,1,1,1,0
 access_docs_address,docs.address,model_docs_address,sales_team.group_sale_manager,1,1,1,1
 access_cutting_speed,cutting.speed,model_cutting_speed,base.group_user,1,1,1,0
 access_cutting_speed,cutting.speed,model_cutting_speed,sales_team.group_sale_manager,1,1,1,1
+access_inactive_customer_list,inactive.customer.list,model_inactive_customer_list,sales_team.group_sale_manager,1,1,1,1

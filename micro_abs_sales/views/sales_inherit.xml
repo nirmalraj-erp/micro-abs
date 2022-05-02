@@ -644,4 +644,61 @@
         <field name='interval_type'>hours</field>
         <field name="numbercall">-1</field>
     </record>
+
+    <!--  Cron job for creating customer monthly inactive sale  -->
+    <record id="inactive_customer_sale_report" model="ir.cron">
+        <field name="name">Inactive Customer Sale Report</field>
+        <field name="model_id" ref="model_inactive_customer_list"/>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="code">model.create_inactive_customer_record()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>months</field>
+        <field name="numbercall">-1</field>
+    </record>
+
+    <record id="view_inactive_customer_form" model="ir.ui.view">
+		<field name="name">inactive.customer.list.form</field>
+        <field name="model">inactive.customer.list</field>
+        <field name="arch" type="xml">
+            <form string="Inactive customer log" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id"/>
+                             <field name="create_date"/>
+                        </group>
+                        <group>
+                            <field name="customer_file" filename="name"/>
+                            <field name="name" invisible="1" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+        </record>
+
+     <record id="view_inactive_customer_tree" model="ir.ui.view">
+		<field name="name">inactive.customer.list.tree</field>
+        <field name="model">inactive.customer.list</field>
+        <field name="arch" type="xml">
+            <tree string="Customer List" create="false" default_order="id desc">
+                <field name="create_date"/>
+                <field name="company_id"/>
+                <field name="customer_file" filename="name"/>
+                <field name="name" invisible="1" />
+            </tree>
+        </field>
+	    </record>
+
+    <record id="action_inactive_customer" model="ir.actions.act_window">
+            <field name="name">Inactive Customer List</field>
+            <field name="res_model">inactive.customer.list</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_inactive_customer_tree"/>
+        </record>
+
+    <menuitem action="action_inactive_customer" id="automate_scheduler_inactive_cust_id"
+              parent="sale.sale_order_menu" name="Inactive Customer List" sequence="20"/>
+
 </odoo>

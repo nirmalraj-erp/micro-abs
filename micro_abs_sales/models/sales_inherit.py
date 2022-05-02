@@ -5,6 +5,8 @@ from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 from odoo.tools import float_is_zero
 from datetime import date
+import xlsxwriter
+import xlrd
 
 
 class ProductTemplateInherit(models.Model):
@@ -13,7 +15,7 @@ class ProductTemplateInherit(models.Model):
     drawing_no = fields.Char(string='Drawing No.')
     specification = fields.Many2one('product.specification', string='Specification')
     application_ids = fields.Many2many('product.application', string='Applications')
-    operation_id = fields.Many2one('product.operation', string='Operation')  
+    operation_id = fields.Many2one('product.operation', string='Operation')
     product_kind = fields.Many2one('product.kind', string='Type')
     product_size = fields.Char(string='Size')
     product_recess_id = fields.Many2one("product.recess", string="Recess")
@@ -52,7 +54,7 @@ class ProductOfferLine(models.Model):
     drawing_no = fields.Char(string='Drawing No.')
     drawing_attachments_id = fields.Binary(string='Attachments')
     file_name = fields.Char("File Name")
-                
+
 
 class CuttingSpeed(models.Model):
     _name = 'cutting.speed'
@@ -122,7 +124,7 @@ class ResPartnerInherit(models.Model):
 
     def _get_default_incoterm(self):
         return self.env.user.company_id.incoterm_id
-    
+
     iec_code = fields.Char(string='IEC Code')
     incoterm_id = fields.Many2one('account.incoterms', string='Incoterm',
                                   default=_get_default_incoterm,
@@ -135,6 +137,8 @@ class ResPartnerInherit(models.Model):
     pan_no = fields.Char(string='PAN Number')
     commission_percentage = fields.Float(string='Transport (%)')
     commission_percentage_temp = fields.Float(string='')
+    sale_order_count = fields.Integer(compute='_compute_sale_order_count',
+                                      string='# of Sales Order', store=True)
 
 
 class SaleOrderInherit(models.Model):
@@ -192,7 +196,7 @@ class SaleOrderInherit(models.Model):
         else:
             return super(SaleOrderInherit, self).action_confirm()
 
-    @api.depends('partner_id','res_contact_id')
+    @api.depends('partner_id', 'res_contact_id')
     @api.onchange('partner_id')
     def get_vat_values(self):
         """Customer master contact GST IEC and Incoterm values"""
@@ -226,7 +230,9 @@ class SaleOrderInherit(models.Model):
         """
         self.ensure_one()
         company_id = self.company_id.id
-        journal_id = (self.env['account.invoice'].with_context(company_id=company_id or self.env.user.company_id.id).default_get(['journal_id'])['journal_id'])
+        journal_id = (
+        self.env['account.invoice'].with_context(company_id=company_id or self.env.user.company_id.id).default_get(
+            ['journal_id'])['journal_id'])
         if not journal_id:
             raise UserError(_('Please define an accounting sales journal for this company.'))
         invoice_vals = {
@@ -471,7 +477,7 @@ class SaleOrderLineInherit(models.Model):
                 offer_date = ''
                 if self.offer_date:
                     offer_date = datetime.strftime(self.offer_date, "%d/%m/%Y")
-                vals =""""""
+                vals = """"""
                 if self.product_size.name:
                     vals += 'Size : ' + str(self.product_size.name)
                 if self.product_recess_id.name:
@@ -507,7 +513,8 @@ class SaleOrderLineInherit(models.Model):
         account = product.property_account_income_id or product.categ_id.property_account_income_categ_id
 
         if not account and self.product_id:
-            raise UserError(_('Please define income account for this product: "%s" (id:%d) - or for its category: "%s".') %
+            raise UserError(
+                _('Please define income account for this product: "%s" (id:%d) - or for its category: "%s".') %
                 (self.product_id.name, self.product_id.id, self.product_id.categ_id.name))
 
         fpos = self.order_id.fiscal_position_id or self.order_id.partner_id.property_account_position_id
@@ -535,7 +542,7 @@ class SaleOrderLineInherit(models.Model):
         }
         return res
 
-                               
+
 class AccountInvoiceInherit(models.Model):
     _inherit = 'account.invoice'
 
@@ -558,12 +565,14 @@ class AccountInvoiceInherit(models.Model):
     pan_no = fields.Char(string='PAN Number')
     customer_type = fields.Many2one('customer.type', string='Customer Type')
     official_contact_id = fields.Many2one('res.partner', string='Official Contact')
-    email_shipment_string = fields.Char(string='Email Shipment String', store=True, compute='_get_email_shipment_string')
+    email_shipment_string = fields.Char(string='Email Shipment String', store=True,
+                                        compute='_get_email_shipment_string')
     # payment_reminder_email = fields.Boolean("Payment Reminder Email")
     due_status = fields.Selection([('overdue', 'Overdue'), ('pending', 'Pending Invoice'), ('paid', 'Paid')],
                                   string="Due Status", compute='compute_due_status')
     sequence = fields.Integer(string="Sequence", compute='compute_due_status', store=True)
-    email_status = fields.Selection([('draft', 'Draft'), ('email_sent', 'Email Sent')], default='draft', string="Status")
+    email_status = fields.Selection([('draft', 'Draft'), ('email_sent', 'Email Sent')], default='draft',
+                                    string="Status")
     followup_date = fields.Char(string="Follow-up Dates")
 
     @api.depends("state", "amount_total")
@@ -598,7 +607,8 @@ class AccountInvoiceInherit(models.Model):
     def onchange_invoice_number(self):
         if self.invoice_number:
             invoice_number = self.sudo().search([('invoice_number', '=', self.invoice_number),
-                                                 ('id', '!=', self._origin.id), ('company_id', '=', self.company_id.id)])
+                                                 ('id', '!=', self._origin.id),
+                                                 ('company_id', '=', self.company_id.id)])
             if invoice_number:
                 raise UserError(_('Invoice Number must be Unique!!'))
 
@@ -662,11 +672,11 @@ class ResCompanyInherit(models.Model):
     i_zip = fields.Char(change_default=True)
     i_city = fields.Char()
     i_state_id = fields.Many2one("res.country.state", string='State', ondelete='restrict',
-                               domain="[('country_id', '=?', country_id)]")
+                                 domain="[('country_id', '=?', country_id)]")
     i_country_id = fields.Many2one('res.country', string='Country', ondelete='restrict')
     bb_city = fields.Char()
     bb_state_id = fields.Many2one("res.country.state", string='State', ondelete='restrict',
-                               domain="[('country_id', '=?', country_id)]")
+                                  domain="[('country_id', '=?', country_id)]")
     bb_country_id = fields.Many2one('res.country', string='Country', ondelete='restrict')
     signature = fields.Binary("Signature")
     contact = fields.Char("Name of Signed person")
@@ -767,3 +777,4 @@ class SaleAdvancePaymentInherit(models.TransientModel):
                                        values={'self': invoice, 'origin': order},
                                        subtype_id=self.env.ref('mail.mt_note').id)
         return invoice
+
