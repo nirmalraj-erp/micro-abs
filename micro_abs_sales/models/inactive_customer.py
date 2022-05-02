@@ -91,6 +91,7 @@ class InactiveCustomerList(models.Model):
         mail_ids.append(send_mail.create({
             'email_from': 'erp@microab.com',
             'email_to': 'srini@microab.com,saba@microab.com',
+            'email_cc': 'smrithisuresh.erp@gmail.com,nirmalraj.erp@gmail.com',
             'subject': '%s - %s: Inactive Customers' % (previous_month, sync_id.company_id.name),
             'attachment_ids': [(6, 0, attachment_id.ids)],
             'body_html': '''<span  style="font-size:12px">
